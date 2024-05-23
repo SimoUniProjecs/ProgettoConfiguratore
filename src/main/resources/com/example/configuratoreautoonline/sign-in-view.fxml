@@ -17,7 +17,7 @@
       <TextField fx:id="ProvinciaField" layoutX="81.0" layoutY="246.0" promptText="Provincia" AnchorPane.leftAnchor="50.0" AnchorPane.rightAnchor="50.0" />
       <TextField fx:id="CivicoField" layoutX="81.0" layoutY="283.0" promptText="Civico" AnchorPane.leftAnchor="50.0" AnchorPane.rightAnchor="50.0" />
       <PasswordField fx:id="passwordField" layoutX="81.0" layoutY="320.0" promptText="Password" AnchorPane.leftAnchor="50.0" AnchorPane.rightAnchor="50.0" />
-      <Label fx:id="passwordErrorLabel" layoutX="50.0" layoutY="359.0" prefHeight="33.0" prefWidth="160.0" style="-fx-text-fill: red;" text="" wrapText="true" />
+      <Label fx:id="passwordErrorLabel" layoutX="50.0" layoutY="359.0" prefHeight="33.0" prefWidth="160.0" style="-fx-text-fill: #c90808;" text="" wrapText="true" />
       <Button fx:id="BtnAccedi" layoutX="128.0" layoutY="401.0" mnemonicParsing="false" onAction="#onSubmit" text="ACCEDI" AnchorPane.leftAnchor="50.0" AnchorPane.rightAnchor="50.0" />
    </children>
 </AnchorPane>

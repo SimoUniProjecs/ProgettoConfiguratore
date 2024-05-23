@@ -38,8 +38,6 @@ public class HomeController {
         this.stage = stage;
     }
 
-
-
     @FXML
     private void handleSwitchToViewLoginClick(ActionEvent event) {
         showDialog("login-view.fxml");
