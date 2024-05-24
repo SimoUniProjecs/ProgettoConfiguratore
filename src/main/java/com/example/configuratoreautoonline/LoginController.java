@@ -31,7 +31,6 @@ public class LoginController {
             return false;
         }
         if (passwordValida(email)) {
-            // Ottieni le informazioni dell'utente dal JSON
             try {
                 UserSession session = UserSession.getInstance();
                 JsonNode userInfo = getUserInfo(email);
@@ -40,22 +39,15 @@ public class LoginController {
                     String nomeVal = getNodeValue(userInfo, "nome");
                     String cognomeVal = getNodeValue(userInfo, "cognome");
                     String telefonoVal = getNodeValue(userInfo, "telefono");
-                    String indirizzoVal = getNodeValue(userInfo, "indirizzo");
+                    String viaVal = getNodeValue(userInfo, "indirizzo");
+                    String codiceFiscale = getNodeValue(userInfo, "codiceFiscale");
+                    String citta = getNodeValue(userInfo, "citta");
+                    String provincia = getNodeValue(userInfo, "provincia");
+                    String civicoStr = getNodeValue(userInfo, "civico");
+                    int civico = civicoStr.isEmpty() ? -1 : Integer.parseInt(civicoStr);  // Gestione del valore vuoto
                     int permessiVal = userInfo.has("permessi") ? userInfo.get("permessi").asInt() : -1;
 
-                    session.aggiungiTutto(
-                            emailVal,
-                            nomeVal,
-                            cognomeVal,
-                            telefonoVal,
-                            "", // assuming codiceFiscale is not available in JSON
-                            indirizzoVal,
-                            "", // assuming provincia is not available in JSON
-                            indirizzoVal, // You might need to correct this if it's not accurate
-                            -1, // assuming civico is not available in JSON
-                            permessiVal
-                    );
-                    HomeController.loggato = true;
+                    login(emailVal, nomeVal, cognomeVal, telefonoVal, codiceFiscale, citta, viaVal, provincia, civico, permessiVal);
 
                     // Chiudi la finestra di login
                     Stage stage = (Stage) emailField.getScene().getWindow();
@@ -67,16 +59,6 @@ public class LoginController {
                     alert.setHeaderText(null);
                     alert.setContentText("Login effettuato correttamente");
                     alert.showAndWait();
-
-                    // Carica la finestra principale
-                    Stage primaryStage = new Stage();
-                    FXMLLoader loader = new FXMLLoader(getClass().getResource("Home-view.fxml"));
-                    Parent root = loader.load();
-                    HomeController homeController = loader.getController();
-                    homeController.setStage(primaryStage);
-                    primaryStage.setScene(new Scene(root));
-                    primaryStage.setTitle("Pagina Principale");
-                    primaryStage.show();
 
                     return true;
                 }
@@ -117,5 +99,22 @@ public class LoginController {
             messageLbl.setText("Password errata");
             return false;
         }
+    }
+
+    protected void login(String email, String nome, String cognome, String telefono, String codiceFiscale, String citta, String via, String provincia, int civico, int permessi)   {
+        UserSession session = UserSession.getInstance();
+        session.aggiungiTutto(
+                email,
+                nome,
+                cognome,
+                telefono,
+                codiceFiscale,
+                citta,
+                via,
+                provincia,
+                civico,
+                permessi
+        );
+        HomeController.loggato = true;
     }
 }
