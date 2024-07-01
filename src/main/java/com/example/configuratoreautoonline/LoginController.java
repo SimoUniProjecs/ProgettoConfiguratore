@@ -1,5 +1,6 @@
 package com.example.configuratoreautoonline;
 
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -101,7 +102,7 @@ public class LoginController {
         }
     }
 
-    protected void login(String email, String nome, String cognome, String telefono, String codiceFiscale, String citta, String via, String provincia, int civico, int permessi)   {
+    protected void login(String email, String nome, String cognome, String telefono, String codiceFiscale, String citta, String via, String provincia, int civico, int permessi) {
         UserSession session = UserSession.getInstance();
         session.aggiungiTutto(
                 email,
@@ -115,6 +116,22 @@ public class LoginController {
                 civico,
                 permessi
         );
-        HomeController.loggato = true;
+
+        // Imposta l'utente come loggato nella sessione
+        session.setLoggato(true);
+
+        System.out.println("Login effettuato con successo");
+        System.out.println("Utente: " + nome + " " + cognome);
+        System.out.println("Stato di loggato: " + session.isLoggato());
+
+        // Chiude la finestra di login corrente
+        Stage stage = (Stage) emailField.getScene().getWindow();
+        Event.fireEvent(stage, new UserLoginEvent());
+        stage.close();
+
+        // Potenzialmente notifica altri componenti del cambiamento di stato
+        // Questo richiede che altri componenti 'osservino' lo stato di UserSession
     }
+
+
 }

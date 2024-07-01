@@ -45,9 +45,9 @@
     <children>
         <MenuBar VBox.vgrow="NEVER">
             <menus>
-                <Menu mnemonicParsing="false" text="Accedi">
+                <Menu fx:id="loginVisibilityMenu" mnemonicParsing="false" text="Accedi">
                     <items>
-                        <MenuItem fx:id="switchToViewSingIn" mnemonicParsing="false" onAction="#handleSwitchToViewSingInClick" text="Sing In" />
+                        <MenuItem fx:id="switchToViewSingIn" mnemonicParsing="false" onAction="#handleSwitchToViewSignInClick" text="Sing In" />
                         <MenuItem fx:id="switchToViewLogin" mnemonicParsing="false" onAction="#handleSwitchToViewLoginClick" text="Login" />
                     </items>
                 </Menu>
@@ -60,7 +60,7 @@
                     </items>
                 </Menu>
                 <Menu mnemonicParsing="false" text="Vendi" />
-                <Menu mnemonicParsing="false" text="Utente">
+                <Menu fx:id="userNameMenu" mnemonicParsing="false" text="Utente">
                     <items>
                         <MenuItem fx:id="vediDettagliUtente" mnemonicParsing="false" onAction="#handleViewUserDetailsClick" text="Dettagli Utente" />
                     </items>

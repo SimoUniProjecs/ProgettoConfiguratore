@@ -5,7 +5,8 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.image.Image;
@@ -16,8 +17,6 @@ import java.util.Objects;
 
 public class HomeController {
     @FXML
-    public static boolean loggato;
-    @FXML
     private MenuItem switchToViewLogin;
     @FXML
     private ImageView audiImageView;
@@ -26,11 +25,15 @@ public class HomeController {
     @FXML
     private ImageView alfaImageView;
     @FXML
-    private MenuItem switchToViewSingIn;
+    private MenuItem switchToViewSignIn;
     @FXML
     private MenuItem vediDettagliUtente;
     @FXML
-    private Menu userMenu;
+    private Label userNameLabel;
+    @FXML
+    private Menu userNameMenu;
+    @FXML
+    private Menu loginVisibilityMenu;
 
     private Stage stage;
 
@@ -40,36 +43,27 @@ public class HomeController {
 
     @FXML
     private void handleSwitchToViewLoginClick(ActionEvent event) {
-        showDialog("login-view.fxml");
+        showDialog("/com/example/configuratoreautoonline/login-view.fxml");
     }
 
     @FXML
-    private void handleSwitchToViewSingInClick(ActionEvent event) {
+    private void handleSwitchToViewSignInClick(ActionEvent event) {
         showSignInDialog();
     }
 
     @FXML
     private void handleViewUserDetailsClick(ActionEvent event) {
-        System.out.println("View User Details clicked");
-        changeScene("user-details.fxml");
+        showDialog("/com/example/configuratoreautoonline/user-details.fxml");
     }
 
     private void changeScene(String fxmlFile) {
         try {
-            System.out.println("Changing scene to: " + fxmlFile);
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlFile));
             Parent root = loader.load();
-
-            // Recupera il controller della nuova scena se necessario
-            UserDetailsController userDetailsController = loader.getController();
-            userDetailsController.setStage(stage); // Passa lo stage se necessario
-
             stage.setScene(new Scene(root));
             stage.show();
         } catch (Exception e) {
-            e.printStackTrace();
-            System.err.println("Error loading FXML file: " + fxmlFile);
-            // Puoi aggiungere un messaggio di errore per l'utente qui
+            showAlert("Error loading scene", "Cannot load scene from file: " + fxmlFile);
         }
     }
 
@@ -77,62 +71,82 @@ public class HomeController {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlFile));
             Parent root = loader.load();
-
             Stage dialogStage = new Stage();
             dialogStage.initOwner(stage);
             dialogStage.setScene(new Scene(root));
             dialogStage.show();
         } catch (Exception e) {
-            e.printStackTrace();
-            // Puoi aggiungere un messaggio di errore per l'utente qui
+            showAlert("Error", "Cannot open the dialog, please check your configuration.");
         }
     }
 
     private void showSignInDialog() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("sign-in-view.fxml"));
-            Parent root = loader.load();
-            SignInController controller = loader.getController();
-            Stage dialogStage = new Stage();
-            dialogStage.initOwner(stage);
-            controller.setStage(dialogStage);
-            dialogStage.setScene(new Scene(root));
-            dialogStage.setTitle("Registrazione Utente");
-            dialogStage.show();
-        } catch (Exception e) {
-            e.printStackTrace();
-            // Puoi aggiungere un messaggio di errore per l'utente qui
-        }
+        showDialog("/com/example/configuratoreautoonline/sign-in-view.fxml");
+    }
+
+    public void handleLoginSuccessful() {
+        updateMenuVisibility();
     }
 
     @FXML
     public void initialize() {
         updateMenuVisibility();
+        loadImages();
+
+        // Aggiungi listener per aggiornare la visibilità del menu e la label del nome utente
+        UserSession.getInstance().loggatoProperty().addListener((obs, wasLoggato, isNowLoggato) -> {
+            updateMenuVisibility();
+            updateUserNameLabel();
+        });
+
+        // Imposta il binding per la label del nome utente
+        //userNameLabel.textProperty().bind(UserSession.getInstance().nomeProperty());
     }
 
-    public void loadImages() {
+    void loadImages() {
+        loadImage(audiImageView, "/img/LOGHI/Audi-Logo_2016.svg.png");
+        loadImage(bmwImageView, "/img/LOGHI/BMW.svg.png");
+        loadImage(alfaImageView, "/img/LOGHI/alfa.svg.png");
+    }
+
+    private void loadImage(ImageView imageView, String path) {
         try {
-            Image audiImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/img/LOGHI/Audi-Logo_2016.svg.png")));
-            audiImageView.setImage(audiImage);
-
-            Image bmwImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/img/LOGHI/BMW.svg.png")));
-            bmwImageView.setImage(bmwImage);
-
-            Image alfaImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/img/LOGHI/alfa.svg.png")));
-            alfaImageView.setImage(alfaImage);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            // Gestisci l'errore, ad esempio mostrando un'immagine di default o un messaggio di errore
+            Image image = new Image(Objects.requireNonNull(getClass().getResourceAsStream(path)));
+            imageView.setImage(image);
+        } catch (NullPointerException e) {
+            showAlert("Loading Error", "Failed to load image: " + path);
         }
     }
 
     public void updateMenuVisibility() {
         UserSession session = UserSession.getInstance();
         if (vediDettagliUtente != null) {
-            vediDettagliUtente.setVisible(session.getAccesso());
-        } else {
-            System.out.println("vediDettagliUtente is null");
+            vediDettagliUtente.setVisible(session.isLoggato());
         }
+        if(userNameMenu != null) {
+            userNameMenu.setVisible(session.isLoggato());
+        }
+        if(loginVisibilityMenu != null) {
+            loginVisibilityMenu.setVisible(!session.isLoggato());
+        }
+    }
+
+    private void updateUserNameLabel() {
+        if (UserSession.getInstance().isLoggato()) {
+            userNameLabel.setVisible(true);
+            // Rimuovi il binding prima di impostare il testo manualmente
+            userNameLabel.textProperty().unbind();
+            userNameLabel.setText(UserSession.getInstance().getNome());
+        } else {
+            userNameLabel.setVisible(false);
+        }
+    }
+
+    private void showAlert(String title, String content) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(content);
+        alert.showAndWait();
     }
 }

@@ -1,21 +1,37 @@
 package com.example.configuratoreautoonline;
 
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
+
 public class UserSession {
     private static UserSession instance;
+    private SimpleBooleanProperty loggato;
+    private SimpleStringProperty email;
+    private SimpleStringProperty nome;
+    private SimpleStringProperty cognome;
+    private SimpleIntegerProperty permessi;
+    private SimpleStringProperty numero;
+    private SimpleStringProperty codiceFiscale;
+    private SimpleStringProperty citta;
+    private SimpleStringProperty via;
+    private SimpleIntegerProperty civico;
+    private SimpleStringProperty provincia;
 
-    private boolean accessoEseguito = false;
-    private String email;
-    private String nome;
-    private String cognome;
-    private int permessi;
-    private String numero;
-    private String codiceFiscale;
-    private String citta;
-    private String via;
-    private int civico;
-    private String provincia;
-
-    private UserSession() { }
+    private UserSession() {
+        loggato = new SimpleBooleanProperty(false);
+        email = new SimpleStringProperty();
+        nome = new SimpleStringProperty();
+        cognome = new SimpleStringProperty();
+        permessi = new SimpleIntegerProperty();
+        numero = new SimpleStringProperty();
+        codiceFiscale = new SimpleStringProperty();
+        citta = new SimpleStringProperty();
+        via = new SimpleStringProperty();
+        civico = new SimpleIntegerProperty();
+        provincia = new SimpleStringProperty();
+    }
 
     public static UserSession getInstance() {
         if (instance == null) {
@@ -26,66 +42,127 @@ public class UserSession {
 
     // Getters e Setters per le informazioni utente
     public String getEmail() {
-        return email;
+        return email.get();
     }
 
-    public void aggiungiTutto(String email, String nome, String cognome, String numero, String codiceFiscale, String citta, String via, String provincia, int civico, int permessi  )    {
-        this.email = email;
-        this.nome = nome;
-        this.cognome = cognome;
-        this.numero = numero;
-        this.codiceFiscale = codiceFiscale;
-        this.citta = citta;
-        this.civico = civico;
-        this.permessi = permessi;
-        this.via = via;
-        this.provincia = provincia;
-        this.accessoEseguito = true;
-    }
-
-    public boolean getAccesso() {
-        return accessoEseguito;
-    }
-
-    public void disconnetti()   {
-        accessoEseguito = false;
+    public void setEmail(String email) {
+        this.email.set(email);
     }
 
     public String getNome() {
-        return nome;
+        return nome.get();
+    }
+
+    public void setNome(String nome) {
+        this.nome.set(nome);
+    }
+
+    public String getCognome() {
+        return cognome.get();
+    }
+
+    public void setCognome(String cognome) {
+        this.cognome.set(cognome);
+    }
+
+    public int getPermessi() {
+        return permessi.get();
+    }
+
+    public void setPermessi(int permessi) {
+        this.permessi.set(permessi);
     }
 
     public String getNumero() {
-        return numero;
+        return numero.get();
     }
 
-    public String getCodiceFiscale()    {
-        return codiceFiscale;
+    public void setNumero(String numero) {
+        this.numero.set(numero);
     }
 
-    public String getCitta()    {
-        return citta;
+    public String getCodiceFiscale() {
+        return codiceFiscale.get();
     }
 
-    public String getCognome()  {
-        return cognome;
+    public void setCodiceFiscale(String codiceFiscale) {
+        this.codiceFiscale.set(codiceFiscale);
     }
 
-    public String getVia()  {
-        return via;
+    public String getCitta() {
+        return citta.get();
     }
 
-    public int getCivico()   {
-        return civico;
+    public void setCitta(String citta) {
+        this.citta.set(citta);
     }
 
-    public String getProvincia()    {
-        return provincia;
+    public String getVia() {
+        return via.get();
     }
 
-    public int getPermessi()    {
-        return permessi;
+    public void setVia(String via) {
+        this.via.set(via);
     }
 
-    //DA AGGIUNGERE OPPORTUNI SETTERS
+    public int getCivico() {
+        return civico.get();
+    }
+
+    public void setCivico(int civico) {
+        this.civico.set(civico);
+    }
+
+    public String getProvincia() {
+        return provincia.get();
+    }
+
+    public void setProvincia(String provincia) {
+        this.provincia.set(provincia);
+    }
+
+    public boolean isLoggato() {
+        return loggato.get();
+    }
+
+    public void setLoggato(boolean loggato) {
+        this.loggato.set(loggato);
+    }
+
+    public BooleanProperty loggatoProperty() {
+        return loggato;
+    }
+
+    public SimpleStringProperty nomeProperty() {
+        return nome;
+    }
+
+    public void aggiungiTutto(String email, String nome, String cognome, String numero, String codiceFiscale, String citta, String via, String provincia, int civico, int permessi) {
+        setEmail(email);
+        setNome(nome);
+        setCognome(cognome);
+        setNumero(numero);
+        setCodiceFiscale(codiceFiscale);
+        setCitta(citta);
+        setVia(via);
+        setProvincia(provincia);
+        setCivico(civico);
+        setPermessi(permessi);
+        setLoggato(true);
+    }
+
+
+    public void disconnetti() {
+        setEmail("");
+        setNome("");
+        setCognome("");
+        setNumero("");
+        setCodiceFiscale("");
+        setCitta("");
+        setVia("");
+        setProvincia("");
+        setCivico(0);
+        setPermessi(0);
+        setLoggato(false);
+    }
 }

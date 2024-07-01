@@ -2,12 +2,8 @@ package com.example.configuratoreautoonline;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
-import javafx.stage.Stage;
 
 public class UserDetailsController {
-
-    @FXML
-    private Stage stage;
     @FXML
     private Label emailLabel;
     @FXML
@@ -43,9 +39,5 @@ public class UserDetailsController {
         provinciaLabel.setText(session.getProvincia());
         civicoLabel.setText(String.valueOf(session.getCivico()));
         permessiLabel.setText(String.valueOf(session.getPermessi()));
-    }
-
-    public void setStage(Stage stage) {
-        this.stage = stage;
     }
 }

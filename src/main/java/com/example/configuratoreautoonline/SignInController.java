@@ -52,38 +52,32 @@ public class SignInController {
     }
 
     @FXML
-    protected void onSubmit() throws IOException {
-        String nome = nomeField.getText();
-        String cognome = cognomeField.getText();
-        String password = passwordField.getText();
-        String email = emailField.getText();
-        String telefono = TelefonoField.getText();
-        String codiceFiscale = CodiceFiscaleField.getText();
-        String citta = CittaField.getText();
-        String via = ViaField.getText();
-        String provincia = ProvinciaField.getText();
-        int civico = Integer.parseInt(CivicoField.getText());
+    protected void onSubmit() {
+        try {
+            String nome = nomeField.getText();
+            String cognome = cognomeField.getText();
+            String password = passwordField.getText();
+            String email = emailField.getText();
+            String telefono = TelefonoField.getText();
+            String codiceFiscale = CodiceFiscaleField.getText();
+            String citta = CittaField.getText();
+            String via = ViaField.getText();
+            String provincia = ProvinciaField.getText();
+            int civico = Integer.parseInt(CivicoField.getText());
 
-        if (passwordValida(password) && controlloEmail(email) && !campoVuotoPresente()) {
-            aggiungiUtente(nome, cognome, password, email, codiceFiscale, citta, via, provincia, civico, telefono);
+            if (!campoVuotoPresente() && passwordValida(password) && controlloEmail(email)) {
+                aggiungiUtente(nome, cognome, password, email, codiceFiscale, citta, via, provincia, civico, telefono);
 
-            // Chiudi il dialogo
-            if (stage != null) {
-                stage.close();
+                // Close the dialog and show a success message
+                if (stage != null) {
+                    stage.close();
+                }
+                new Alert(Alert.AlertType.INFORMATION, "Sei Registrato Correttamente", ButtonType.OK).showAndWait();
+            } else {
+                passwordErrorLabel.setText("Controllare gli errori nei campi.");
             }
-
-            // Mostra un popup di successo
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Successo");
-            alert.setHeaderText(null);
-            alert.setContentText("Sei Registrato Correttamente");
-            alert.showAndWait();
-        } else if (!controlloEmail(email)) {
-            passwordErrorLabel.setText("La mail non è valida. Riprova.");
-        } else if (!passwordValida(password)) {
-            passwordErrorLabel.setText("La password non è valida. Riprova.");
-        } else {
-            passwordErrorLabel.setText("Completare tutti i campi. Riprova.");
+        } catch (Exception e) {
+            new Alert(Alert.AlertType.ERROR, "Errore nel salvataggio dei dati: " + e.getMessage(), ButtonType.OK).showAndWait();
         }
     }
 
@@ -91,34 +85,22 @@ public class SignInController {
         return nomeField.getText().isEmpty() || cognomeField.getText().isEmpty() || CodiceFiscaleField.getText().isEmpty() || CittaField.getText().isEmpty() || ProvinciaField.getText().isEmpty() || ViaField.getText().isEmpty() || CivicoField.getText().isEmpty() || TelefonoField.getText().isEmpty();
     }
 
-    private void aggiungiUtente(String nome, String cognome, String password, String email, String codiceFiscale, String citta, String via, String provincia, int civico, String telefono) throws IOException {
-
+    private void aggiungiUtente(String nome, String cognome, String password, String email, String codiceFiscale, String citta, String via, String provincia, int civico, String telefono) {
         ObjectMapper mapper = new ObjectMapper();
         File file = new File("public/res/data/datiUtenti.json");
 
-        // Leggi il file JSON esistente
-        ObjectNode root = (ObjectNode) mapper.readTree(file);
-        ArrayNode utenti = (ArrayNode) root.get("datiUtenti");
+        try {
+            // Leggi il file JSON esistente o crea uno nuovo se non esiste
+            ObjectNode root;
+            if (file.exists()) {
+                root = (ObjectNode) mapper.readTree(file);
+            } else {
+                root = mapper.createObjectNode();
+                root.set("datiUtenti", mapper.createArrayNode());
+            }
+            ArrayNode utenti = (ArrayNode) root.get("datiUtenti");
 
-        // Sovrascrivi il file JSON con i nuovi dati
-        mapper.writeValue(file, root);
-
-        // Faccio fare direttamente il login all'utente con i dati appena inseriti
-        LoginController lg = new LoginController();
-        System.out.print("Email: " + email);
-        System.out.print(" Controllo PSW: " + passwordValida(email));
-        System.out.print("Password: " + password);
-        System.out.print(" Controllo EMAIL: " + controlloEmail(email));
-        if (!(passwordValida(password) && controlloEmail(email))) {
-            // Mostra un popup di errore
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Errore di Login");
-            alert.setHeaderText(null);
-            alert.setContentText("C'è stato un problema nel LOGIN, Riprovare");
-            alert.showAndWait();
-        }else{
-            lg.login(email, nome, cognome, telefono, codiceFiscale, citta, via, provincia, civico, 1 );
-            // Crea un nuovo utente
+            // Crea un nuovo utente e aggiungi al JSON array
             ObjectNode utente = mapper.createObjectNode();
             utente.put("nome", nome);
             utente.put("cognome", cognome);
@@ -133,8 +115,10 @@ public class SignInController {
             utente.put("idConfigurazione", -1);
             utente.put("telefono", telefono);
 
-            // Aggiungi il nuovo utente all'array di utenti
             utenti.add(utente);
+            mapper.writeValue(file, root);
+        } catch (IOException e) {
+            e.printStackTrace();  // Improve error handling based on your application needs
         }
     }
 

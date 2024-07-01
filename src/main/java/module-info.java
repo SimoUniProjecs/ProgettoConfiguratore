@@ -8,4 +8,6 @@ module com.example.configuratoreautoonline {
 
     opens com.example.configuratoreautoonline to javafx.fxml;
     exports com.example.configuratoreautoonline;
+    exports Classi;
+    opens Classi to javafx.fxml;
 }
