@@ -15,9 +15,9 @@ import java.io.IOException;
 
 public class LoginController {
     @FXML
-    private TextField emailField;
+    TextField emailField;
     @FXML
-    private PasswordField passwordField;
+    PasswordField passwordField;
     @FXML
     private Label messageLbl;
 
@@ -54,13 +54,6 @@ public class LoginController {
                     Stage stage = (Stage) emailField.getScene().getWindow();
                     stage.close();
 
-                    // Mostra un popup di successo
-                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                    alert.setTitle("Successo");
-                    alert.setHeaderText(null);
-                    alert.setContentText("Login effettuato correttamente");
-                    alert.showAndWait();
-
                     return true;
                 }
             } catch (IOException e) {
@@ -90,7 +83,6 @@ public class LoginController {
     private String getNodeValue(JsonNode node, String key) {
         return node.has(key) ? node.get(key).asText() : "";
     }
-
     @FXML
     protected boolean passwordValida(String email) {
         ControlloPassword controllaPassword = new ControlloPassword();
@@ -101,7 +93,6 @@ public class LoginController {
             return false;
         }
     }
-
     protected void login(String email, String nome, String cognome, String telefono, String codiceFiscale, String citta, String via, String provincia, int civico, int permessi) {
         UserSession session = UserSession.getInstance();
         session.aggiungiTutto(
@@ -120,9 +111,12 @@ public class LoginController {
         // Imposta l'utente come loggato nella sessione
         session.setLoggato(true);
 
-        System.out.println("Login effettuato con successo");
-        System.out.println("Utente: " + nome + " " + cognome);
-        System.out.println("Stato di loggato: " + session.isLoggato());
+            // Mostra un popup di successo
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Successo");
+            alert.setHeaderText(null);
+            alert.setContentText("Login effettuato correttamente");
+            alert.showAndWait();
 
         // Chiude la finestra di login corrente
         Stage stage = (Stage) emailField.getScene().getWindow();
@@ -132,6 +126,4 @@ public class LoginController {
         // Potenzialmente notifica altri componenti del cambiamento di stato
         // Questo richiede che altri componenti 'osservino' lo stato di UserSession
     }
-
-
 }

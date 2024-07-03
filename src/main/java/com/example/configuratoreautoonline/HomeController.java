@@ -1,5 +1,9 @@
 package com.example.configuratoreautoonline;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -13,9 +17,12 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.Objects;
 
 public class HomeController {
+    public MenuItem logout;
     @FXML
     private MenuItem switchToViewLogin;
     @FXML
@@ -98,17 +105,16 @@ public class HomeController {
             updateMenuVisibility();
             updateUserNameLabel();
         });
-
-        // Imposta il binding per la label del nome utente
-        //userNameLabel.textProperty().bind(UserSession.getInstance().nomeProperty());
     }
 
+    // Carica le immagini dei loghi delle marche
     void loadImages() {
         loadImage(audiImageView, "/img/LOGHI/Audi-Logo_2016.svg.png");
         loadImage(bmwImageView, "/img/LOGHI/BMW.svg.png");
         loadImage(alfaImageView, "/img/LOGHI/alfa.svg.png");
     }
 
+    // Carica le 3 immagini dei loghi delle marche
     private void loadImage(ImageView imageView, String path) {
         try {
             Image image = new Image(Objects.requireNonNull(getClass().getResourceAsStream(path)));
@@ -133,20 +139,85 @@ public class HomeController {
 
     private void updateUserNameLabel() {
         if (UserSession.getInstance().isLoggato()) {
-            userNameLabel.setVisible(true);
+            this.userNameLabel.setVisible(true);
             // Rimuovi il binding prima di impostare il testo manualmente
-            userNameLabel.textProperty().unbind();
-            userNameLabel.setText(UserSession.getInstance().getNome());
+            this.userNameLabel.textProperty().unbind();
+            this.userNameLabel.setText(UserSession.getInstance().getNome());
         } else {
-            userNameLabel.setVisible(false);
+            this.userNameLabel.setVisible(false);
         }
+
+        System.out.println(UserSession.getInstance());
     }
 
+    // Stampare gli errori
     private void showAlert(String title, String content) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle(title);
         alert.setHeaderText(null);
         alert.setContentText(content);
         alert.showAndWait();
+
+    }
+
+    //effettua il logout
+    public void handleLogoutClick(ActionEvent actionEvent) {
+        // Clear the user session
+        UserSession.getInstance().setLoggato(false);
+    }
+
+    // Se utente vuole sloggarsi e rimuovere dal JSON il suo userame
+    public void handleEliminaUtenteClick(ActionEvent actionEvent) {
+        // Clear the user session
+        UserSession.getInstance().setLoggato(false);
+
+        rimuoviUtente(UserSession.getInstance().getEmail());
+
+        // Show a success popup
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Rimozione con Successo");
+        alert.setHeaderText(null);
+        alert.setContentText("Utente rimosso con successo");
+        alert.showAndWait();
+    }
+
+    // Rimuovi l'utente con l'email specificata dal file JSON
+    private void rimuoviUtente(String email) {
+        ObjectMapper mapper = new ObjectMapper();
+        File file = new File("public/res/data/datiUtenti.json");
+
+        try {
+            // Leggi il file JSON esistente o esce se non esiste
+            if (!file.exists()) {
+                System.out.println("File datiUtenti.json non trovato.");
+                return;
+            }
+
+            // Leggi il JSON dal file
+            ObjectNode root = (ObjectNode) mapper.readTree(file);
+            ArrayNode utenti = (ArrayNode) root.get("datiUtenti");
+
+            // Cerca e rimuovi l'utente con l'email specificata
+            boolean utenteTrovato = false;
+            for (int i = 0; i < utenti.size(); i++) {
+                JsonNode utente = utenti.get(i);
+                if (utente.get("email").asText().equals(email)) {
+                    utenti.remove(i);
+                    utenteTrovato = true;
+                    break;
+                }
+            }
+
+            // Se l'utente è stato trovato e rimosso, riscrivi il file JSON
+            if (utenteTrovato) {
+                mapper.writeValue(file, root);
+                System.out.println("Utente rimosso con successo.");
+            } else {
+                System.out.println("Utente non trovato.");
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();  // Migliora la gestione degli errori in base alle necessità dell'applicazione
+        }
     }
 }

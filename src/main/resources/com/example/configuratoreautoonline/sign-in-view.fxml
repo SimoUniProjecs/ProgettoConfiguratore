@@ -5,20 +5,29 @@
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
 
-<AnchorPane prefHeight="490.0" prefWidth="260.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.configuratoreautoonline.SignInController">
+<StackPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.configuratoreautoonline.SignInController">
    <children>
-      <TextField fx:id="nomeField" layoutX="81.0" layoutY="22.0" promptText="Nome" AnchorPane.leftAnchor="50.0" AnchorPane.rightAnchor="50.0" />
-      <TextField fx:id="cognomeField" layoutX="81.0" layoutY="59.0" promptText="Cognome" AnchorPane.leftAnchor="50.0" AnchorPane.rightAnchor="50.0" />
-      <TextField fx:id="emailField" layoutX="50.0" layoutY="95.0" promptText="Email" AnchorPane.leftAnchor="50.0" AnchorPane.rightAnchor="50.0" />
-      <TextField fx:id="CodiceFiscaleField" layoutX="50.0" layoutY="180.0" promptText="Codice Fiscale" AnchorPane.leftAnchor="50.0" AnchorPane.rightAnchor="50.0" />
-      <TextField fx:id="CittaField" layoutX="50.0" layoutY="215.0" promptText="Città" AnchorPane.leftAnchor="50.0" AnchorPane.rightAnchor="50.0" />
-      <TextField fx:id="ViaField" layoutX="50.0" layoutY="252.0" promptText="Via" AnchorPane.leftAnchor="50.0" AnchorPane.rightAnchor="50.0" />
-      <TextField fx:id="ProvinciaField" layoutX="50.0" layoutY="288.0" promptText="Provincia" AnchorPane.leftAnchor="50.0" AnchorPane.rightAnchor="50.0" />
-      <TextField fx:id="CivicoField" layoutX="50.0" layoutY="325.0" promptText="Civico" AnchorPane.leftAnchor="50.0" AnchorPane.rightAnchor="50.0" />
-      <PasswordField fx:id="passwordField" layoutX="50.0" layoutY="362.0" promptText="Password" AnchorPane.leftAnchor="50.0" AnchorPane.rightAnchor="50.0" />
-      <Label fx:id="passwordErrorLabel" layoutX="50.0" layoutY="401.0" prefHeight="33.0" prefWidth="160.0" style="-fx-text-fill: #c90808;" text="" wrapText="true" />
-      <Button fx:id="BtnAccedi" layoutX="50.0" layoutY="443.0" mnemonicParsing="false" onAction="#onSubmit" text="ACCEDI" AnchorPane.leftAnchor="50.0" AnchorPane.rightAnchor="50.0" />
-      <TextField fx:id="TelefonoField" layoutX="50.0" layoutY="135.0" promptText="Telefono" />
+      <AnchorPane fx:id="rootAnchorPane" prefHeight="490.0" prefWidth="260.0">
+         <children>
+            <!-- Use VBox to ensure vertical centering and flexible layout -->
+            <VBox alignment="CENTER" spacing="10.0" AnchorPane.topAnchor="0.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+               <TextField fx:id="nomeField" promptText="Nome" maxWidth="200.0"/>
+               <TextField fx:id="cognomeField" promptText="Cognome" maxWidth="200.0"/>
+               <TextField fx:id="emailField" promptText="Email" maxWidth="200.0"/>
+               <TextField fx:id="TelefonoField" promptText="Telefono" maxWidth="200.0"/>
+               <TextField fx:id="CodiceFiscaleField" promptText="Codice Fiscale" maxWidth="200.0"/>
+               <TextField fx:id="CittaField" promptText="Città" maxWidth="200.0"/>
+               <TextField fx:id="ViaField" promptText="Via" maxWidth="200.0"/>
+               <TextField fx:id="ProvinciaField" promptText="Provincia" maxWidth="200.0"/>
+               <TextField fx:id="CivicoField" promptText="Civico" maxWidth="200.0"/>
+               <PasswordField fx:id="passwordField" promptText="Password" maxWidth="200.0"/>
+               <Label fx:id="passwordErrorLabel" style="-fx-text-fill: #c90808;" text="" wrapText="true" maxWidth="200.0"/>
+               <Button fx:id="BtnAccedi" onAction="#onSubmit" text="ACCEDI" maxWidth="200.0"/>
+            </VBox>
+         </children>
+      </AnchorPane>
    </children>
-</AnchorPane>
+</StackPane>

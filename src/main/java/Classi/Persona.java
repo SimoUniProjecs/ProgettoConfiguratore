@@ -11,10 +11,10 @@ public abstract class Persona {
     public Persona(String nome, String cognome, String codiceFiscale, String email, int telefono, Indirizzo indirizzo) {
         this.nome = nome;
         this.cognome = cognome;
-        this.telefono = telefono;
-        this.indirizzo = indirizzo;
         this.codiceFiscale = codiceFiscale;
         this.email = email;
+        this.telefono = telefono;
+        this.indirizzo = indirizzo;
     }
 
     public Indirizzo getIndirizzo() {
@@ -24,6 +24,7 @@ public abstract class Persona {
     public int getTelefono() {
         return telefono;
     }
+
     public String getNome() {
         return nome;
     }

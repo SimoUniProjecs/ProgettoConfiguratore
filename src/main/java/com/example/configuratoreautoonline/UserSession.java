@@ -129,6 +129,7 @@ public class UserSession {
         this.loggato.set(loggato);
     }
 
+
     public BooleanProperty loggatoProperty() {
         return loggato;
     }
@@ -145,6 +146,7 @@ public class UserSession {
         setCodiceFiscale(codiceFiscale);
         setCitta(citta);
         setVia(via);
+        System.out.println("Cjttà" + citta + getCitta() + "\n" + "Via" + via + getVia() + "\n Nome" + getNome());
         setProvincia(provincia);
         setCivico(civico);
         setPermessi(permessi);

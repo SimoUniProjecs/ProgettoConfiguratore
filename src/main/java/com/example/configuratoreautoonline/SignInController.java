@@ -4,6 +4,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
@@ -63,28 +66,54 @@ public class SignInController {
             String citta = CittaField.getText();
             String via = ViaField.getText();
             String provincia = ProvinciaField.getText();
-            int civico = Integer.parseInt(CivicoField.getText());
+            int civico;
 
-            if (!campoVuotoPresente() && passwordValida(password) && controlloEmail(email)) {
+            // Controllo che non sia vuoto il campo
+            if(CivicoField.getText().isEmpty()){
+                civico = -1;
+            } else {
+                civico = Integer.parseInt(CivicoField.getText());
+            }
+
+            if (!campoVuotoPresente() && passwordValida(password) && controlloEmail(email)) { // se ci sono tutti i campi e soddisfano i requisiti
                 aggiungiUtente(nome, cognome, password, email, codiceFiscale, citta, via, provincia, civico, telefono);
 
-                // Close the dialog and show a success message
-                if (stage != null) {
-                    stage.close();
+                // Esegui il login automatico
+                autoLogin(email, password);
+
+                // Chiudi la finestra di registrazione se il login automatico è completato correttamente
+                if (this.stage != null) {
+                    this.stage.close();
                 }
-                new Alert(Alert.AlertType.INFORMATION, "Sei Registrato Correttamente", ButtonType.OK).showAndWait();
+
             } else {
-                passwordErrorLabel.setText("Controllare gli errori nei campi.");
+                // Differenzio i tipi di errori possibili
+                if (campoVuotoPresente()) {
+                    passwordErrorLabel.setText("Riempire i campi vuoti.");
+                }else if(!passwordValida(password)){
+                    passwordErrorLabel.setText("La password deve essere di almeno 8 caratteri, contenere una maiuscola e un numero.");
+                }else if (!controlloEmail(email)){
+                    passwordErrorLabel.setText("Email non valida.");
+                }else if(!CodiceFiscaleField.getText().matches("^[A-Z]{6}[0-9]{2}[A-Z][0-9]{2}[A-Z][0-9]{3}[A-Z]$")){
+                    passwordErrorLabel.setText("Codice fiscale non valido.");
+                }else if(!TelefonoField.getText().matches("^[0-9]{10}$")) {
+                    passwordErrorLabel.setText("Telefono non valido.");
+                } else if(!CivicoField.getText().matches("^[0-9]{1,4}$")){
+                    passwordErrorLabel.setText("Civico non valido.");
+                }
             }
         } catch (Exception e) {
+            e.printStackTrace();
             new Alert(Alert.AlertType.ERROR, "Errore nel salvataggio dei dati: " + e.getMessage(), ButtonType.OK).showAndWait();
         }
     }
 
+    // Controlla se ci sono campi vuoti
     private boolean campoVuotoPresente() {
-        return nomeField.getText().isEmpty() || cognomeField.getText().isEmpty() || CodiceFiscaleField.getText().isEmpty() || CittaField.getText().isEmpty() || ProvinciaField.getText().isEmpty() || ViaField.getText().isEmpty() || CivicoField.getText().isEmpty() || TelefonoField.getText().isEmpty();
+        return nomeField.getText().isEmpty() || cognomeField.getText().isEmpty() || CodiceFiscaleField.getText().isEmpty() || CittaField.getText().isEmpty() || ProvinciaField.getText().isEmpty() || ViaField.getText().isEmpty() || CivicoField.getText().isEmpty() || TelefonoField.getText().isEmpty() || passwordField.getText().isEmpty() || emailField.getText().isEmpty();
     }
 
+    // Aggiungi un nuovo utente al file JSON
     private void aggiungiUtente(String nome, String cognome, String password, String email, String codiceFiscale, String citta, String via, String provincia, int civico, String telefono) {
         ObjectMapper mapper = new ObjectMapper();
         File file = new File("public/res/data/datiUtenti.json");
@@ -121,12 +150,13 @@ public class SignInController {
             e.printStackTrace();  // Improve error handling based on your application needs
         }
     }
-
+    // Controlla se la password soddisfa i requisiti
     protected boolean passwordValida(String password) {
         ControlloPassword controlloPassword = new ControlloPassword();
         return controlloPassword.formatoCorretto(password);
     }
 
+    // Controlla se l'email è già presente nel file JSON
     @FXML
     protected boolean controlloEmail(String email) {
         if (EmailValidator.emailPresente(email)) {
@@ -137,5 +167,37 @@ public class SignInController {
             return false;
         }
         return true;
+    }
+
+    // Effettua il login automatico dopo la registrazione
+    private void autoLogin(String email, String password) {
+        try {
+            // Carica il file FXML del LoginController
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/configuratoreautoonline/login-view.fxml"));
+            Parent root = loader.load();
+
+            // Ottieni il controller del Login e imposta i campi necessari
+            LoginController loginController = loader.getController();
+
+            // Assegna i valori al LoginController
+            loginController.emailField.setText(email);
+            loginController.passwordField.setText(password);
+
+            // Imposta la nuova scena sullo stage
+            Scene scene = new Scene(root);
+            Stage loginStage = new Stage();
+            loginStage.setScene(scene);
+
+            // Prova ad effettuare il login
+            loginController.controlloEmail();
+
+            // Puoi chiudere l'attuale finestra di registrazione se necessario
+            if (this.stage != null) {
+                this.stage.close();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            new Alert(Alert.AlertType.ERROR, "Errore durante il login automatico: " + e.getMessage(), ButtonType.OK).showAndWait();
+        }
     }
 }
