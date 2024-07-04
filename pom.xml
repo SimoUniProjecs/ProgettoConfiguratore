@@ -17,10 +17,9 @@
     <dependencies>
         <dependency>
             <groupId>com.itextpdf</groupId>
-            <artifactId>itext7-core</artifactId>
+            <artifactId>itextpdf</artifactId>
             <version>7.2.1</version>
         </dependency>
-
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-controls</artifactId>
