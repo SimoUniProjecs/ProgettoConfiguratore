@@ -4,6 +4,9 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import javafx.animation.Animation;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -16,6 +19,7 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
+import javafx.util.Duration; // Assicurati di importare correttamente Duration
 
 import java.io.File;
 import java.io.IOException;
@@ -43,6 +47,10 @@ public class HomeController {
     private Menu loginVisibilityMenu;
 
     private Stage stage;
+    @FXML
+    private ImageView bigImageView;
+    @FXML
+    private Timeline timeline;
 
     public void setStage(Stage stage) {
         this.stage = stage;
@@ -51,6 +59,44 @@ public class HomeController {
     @FXML
     private void handleSwitchToViewLoginClick(ActionEvent event) {
         showDialog("/com/example/configuratoreautoonline/login-view.fxml");
+    }
+    @FXML
+    private void handlePopUpDipendent(ActionEvent event){
+        showDialog("/com/example/configuratoreautoonline/gestisci-dipendenti.fxml");
+    }
+    @FXML
+    private void initializeImageSlider() {
+        // Array di URL delle immagini per lo slider
+        String[] imageUrls = {
+                "/img/ALFA/GIULIA/colore_grigio.png",
+                "/img/ALFA/GIULIA/colore_grigio_cerchi_grandi.png",
+                "/img/ALFA/GIULIA/colore_rosso.png",
+                "/img/ALFA/GIULIA/colore_rosso_cerchi_grandi.png",
+                "/img/ALFA/GIULIA/colore_nero.png",
+                "/img/ALFA/GIULIA/colore_nero_cerchi_grandi.png",
+      };
+
+        // Indice iniziale dell'array delle immagini
+        int[] index = {0};
+
+        // Timeline per cambiare l'immagine ogni 5 secondi
+        timeline = new Timeline(new KeyFrame(Duration.seconds(5), event -> {
+            try {
+                // Carica l'immagine successiva
+                Image nextImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream(imageUrls[index[0]])));
+                bigImageView.setImage(nextImage);
+
+                // Incrementa l'indice per la prossima immagine
+                index[0] = (index[0] + 1) % imageUrls.length;
+            } catch (NullPointerException e) {
+                    // Incrementa l'indice per la prossima immagine
+                    index[0] = (index[0] + 1) % imageUrls.length;
+                    System.out.println("Errore nel caricamento dell'immagine con indice: " + index[0]);
+            }
+        }));
+
+        timeline.setCycleCount(Animation.INDEFINITE); // Esecuzione indefinita della Timeline
+        timeline.play(); // Avvia la Timeline
     }
 
     @FXML
@@ -105,6 +151,9 @@ public class HomeController {
             updateMenuVisibility();
             updateUserNameLabel();
         });
+
+        // Inizializza e avvia il cambio delle immagini ogni 5 secondi
+        initializeImageSlider();
     }
 
     // Carica le immagini dei loghi delle marche
@@ -156,7 +205,7 @@ public class HomeController {
         alert.setTitle(title);
         alert.setHeaderText(null);
         alert.setContentText(content);
-        alert.showAndWait();
+        alert.show();
 
     }
 
