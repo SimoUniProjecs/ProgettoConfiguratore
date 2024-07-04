@@ -5,32 +5,16 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 
-public class UserSession {
+public class UserSession extends PersonSession {
     private static UserSession instance;
     private SimpleBooleanProperty loggato;
-    private SimpleStringProperty email;
-    private SimpleStringProperty nome;
-    private SimpleStringProperty cognome;
     private SimpleIntegerProperty permessi;
-    private SimpleStringProperty numero;
-    private SimpleStringProperty codiceFiscale;
-    private SimpleStringProperty citta;
-    private SimpleStringProperty via;
-    private SimpleIntegerProperty civico;
-    private SimpleStringProperty provincia;
 
-    private UserSession() {
+    public UserSession() {
+        super();
         loggato = new SimpleBooleanProperty(false);
-        email = new SimpleStringProperty();
-        nome = new SimpleStringProperty();
-        cognome = new SimpleStringProperty();
         permessi = new SimpleIntegerProperty();
-        numero = new SimpleStringProperty();
-        codiceFiscale = new SimpleStringProperty();
-        citta = new SimpleStringProperty();
-        via = new SimpleStringProperty();
-        civico = new SimpleIntegerProperty();
-        provincia = new SimpleStringProperty();
+
     }
 
     public static UserSession getInstance() {
@@ -40,37 +24,12 @@ public class UserSession {
         return instance;
     }
 
-    // Getters e Setters per le informazioni utente
-    public String getEmail() {
-        return email.get();
-    }
-
-    public void setEmail(String email) {
-        this.email.set(email);
-    }
-
-    public String getNome() {
-        return nome.get();
-    }
-
-    public void setNome(String nome) {
-        this.nome.set(nome);
-    }
-
-    public String getCognome() {
-        return cognome.get();
-    }
-
-    public void setCognome(String cognome) {
-        this.cognome.set(cognome);
-    }
-
     public int getPermessi() {
         return permessi.get();
     }
 
-    public void setPermessi(int permessi) {
-        this.permessi.set(permessi);
+    public void setPermessi() {
+        this.permessi.set(1);
     }
     public boolean isLoggato() {
         return loggato.get();
@@ -83,17 +42,8 @@ public class UserSession {
     }
 
     public void aggiungiTutto(String email, String nome, String cognome, String numero, String codiceFiscale, String citta, String via, String provincia, int civico, int permessi) {
-        setEmail(email);
-        setNome(nome);
-        setCognome(cognome);
-        setNumero(numero);
-        setCodiceFiscale(codiceFiscale);
-        setCitta(citta);
-        setVia(via);
-        System.out.println("Cjttà" + citta + getCitta() + "\n" + "Via" + via + getVia() + "\n Nome" + getNome());
-        setProvincia(provincia);
-        setCivico(civico);
-        setPermessi(permessi);
+        super.aggiungiTutto(email, nome, cognome, numero, codiceFiscale, citta, via, provincia, civico);
+        setPermessi();
         setLoggato(true);
     }
 
@@ -108,7 +58,7 @@ public class UserSession {
         setVia("");
         setProvincia("");
         setCivico(0);
-        setPermessi(0);
+        setPermessi();
         setLoggato(false);
     }
 }
