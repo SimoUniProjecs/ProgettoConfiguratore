@@ -47,7 +47,6 @@ public class UserSession extends PersonSession {
         setLoggato(true);
     }
 
-
     public void disconnetti() {
         setEmail("");
         setNome("");

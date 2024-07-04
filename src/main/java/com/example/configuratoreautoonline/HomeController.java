@@ -45,7 +45,8 @@ public class HomeController {
     private Menu userNameMenu;
     @FXML
     private Menu loginVisibilityMenu;
-
+    @FXML
+    private MenuItem gestisciDipendenti;
     private Stage stage;
     @FXML
     private ImageView bigImageView;
@@ -183,6 +184,9 @@ public class HomeController {
         }
         if(loginVisibilityMenu != null) {
             loginVisibilityMenu.setVisible(!session.isLoggato());
+        }
+        if(gestisciDipendenti!=null)    {
+            gestisciDipendenti.setVisible(session.getPermessi()==7);
         }
     }
 
