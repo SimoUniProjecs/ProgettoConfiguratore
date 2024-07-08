@@ -137,33 +137,33 @@ public class CarConfiguratorController {
         switch (marca) {
             case "BMW":
                 if (modello.equals("M2")) {
-                    colori.add("Azzurro");
-                    colori.add("Grigio");
-                    colori.add("Rosso");
+                    colori.add("colore_azzurro");
+                    colori.add("colore_grigio");
+                    colori.add("colore_rosso");
                 } else if (modello.equals("XM")) {
                     colori.add("Base");
                 }
                 break;
             case "AUDI":
                 if (modello.equals("RS3")) {
-                    colori.add("Nero");
-                    colori.add("Grigio");
-                    colori.add("Giallo");
+                    colori.add("colore_nero");
+                    colori.add("colore_grigio");
+                    colori.add("colore_giallo");
                 } else if (modello.equals("RS4")) {
-                    colori.add("Bianco");
-                    colori.add("Blu");
-                    colori.add("Grigio");
+                    colori.add("colore_bianco");
+                    colori.add("colore_blu");
+                    colori.add("colore_grigio");
                 }
                 break;
             case "ALFA":
                 if (modello.equals("GIULIA")) {
-                    colori.add("Verde");
-                    colori.add("Grigio");
-                    colori.add("Rosso");
+                    colori.add("colore_verde");
+                    colori.add("colore_grigio");
+                    colori.add("colore_rosso");
                 } else if (modello.equals("STELVIO")) {
-                    colori.add("Rosso");
-                    colori.add("Blu");
-                    colori.add("Verde");
+                    colori.add("colore_rosso");
+                    colori.add("colore_blu");
+                    colori.add("colore_verde");
                 }
                 break;
         }

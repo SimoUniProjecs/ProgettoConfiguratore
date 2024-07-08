@@ -1,5 +1,6 @@
 package Classi;
 
+
 import java.util.Arrays;
 import java.util.List;
 
@@ -8,8 +9,8 @@ import java.util.List;
 public class DecisionTree {
     Nodo root;
 
-    Boolean finestriniOscurati = false;
-
+    Boolean [] optionals = new Boolean[5];
+    String[] optiString = {"_A", "_B", "_C", "_D", "_E"}; // leggerlo da datiModelliAuto.json
     // Metodo per addestrare l'albero
     public void train(Nodo root) {
         this.root = root;
@@ -76,8 +77,11 @@ public class DecisionTree {
                 path.append("/");
             }
         }
-        if(finestriniOscurati == true ) {
-            path.append("F");
+        for(int i=0; i<5; i++){
+            if(optionals[i] == true){
+
+                path.append(optiString[i]);
+            }
         }
         return path.toString();
     }
