@@ -1,0 +1,67 @@
+{
+  "datiAutoUsate": [
+    {
+      "bmw": [
+        {
+          "modelli": [
+            {
+              "M2": {
+                "optionals": [
+                  "_vetri_oscurati",
+                  "_cerchi_grandi"
+                ]
+              },
+              "XM": {
+                "optionals": [
+                  "_cerchi_base",
+                  "_cerchi_rossi"
+                ]
+              }
+            }
+          ]
+        }
+      ],
+      "audi": [
+        {
+          "modelli": [
+            {
+              "RS3": {
+                "optionals": [
+                  "_cerchi_neri",
+                  "_vetri_oscurati"
+                ]
+              },
+              "RS4": {
+                "optionals": [
+
+                  "_cerchi_neri",
+                  "_vetri_oscurati"
+                ]
+              }
+            }
+          ]
+        }
+      ],
+      "alfa Romeo": [
+        {
+          "modelli": [
+            {
+              "GIULIA": {
+                "optionals": [
+                  "_cerchi_grandi",
+                  "_pastiglie_rosse"
+                ]
+              },
+              "STELVIO": {
+                "optionals": [
+                  "_cerchi_grandi",
+                  "_pastiglie_rosse"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

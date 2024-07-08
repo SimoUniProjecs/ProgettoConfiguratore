@@ -27,12 +27,12 @@
         <!-- Campi di testo per l'inserimento delle informazioni -->
         <TextField fx:id="marcaTxt" maxWidth="160.0" promptText="Inserisci Marca" />
         <TextField fx:id="modelloTxt" maxWidth="160.0" promptText="Inserisci Modello" />
-        <DatePicker fx:id="imatricolazione" maxWidth="160.0" promptText="Data immatricolazione" />
+        <DatePicker fx:id="immatricolazione" maxWidth="160.0" promptText="Data immatricolazione" />
         <TextField fx:id="kmTxt" maxWidth="160.0" promptText="Inserisci km" />
         <TextField fx:id="proprietariTxt" maxWidth="160.0" promptText="Numero proprietari" />
 
         <Label text="Stato del veicolo:" />
-        <ChoiceBox fx:id="proprietariChoiceBox" prefWidth="160.0">
+        <ChoiceBox fx:id="statoChoiceBox" prefWidth="160.0">
             <items>
                 <FXCollections fx:factory="observableArrayList">
                     <String fx:value="1" />
@@ -51,7 +51,7 @@
 
         <Label text="Cambio:" />
         <!-- ChoiceBox per il tipo di trasmissione -->
-        <ChoiceBox fx:id="trasmissioneChoiceBox" prefWidth="160.0">
+        <ChoiceBox fx:id="trasmissioniChoiceBox" prefWidth="160.0">
             <items>
                 <FXCollections fx:factory="observableArrayList">
                     <String fx:value="Manuale" />
@@ -75,6 +75,6 @@
         </ChoiceBox>
 
 
-        <Button fx:id="btnPreventivo" mnemonicParsing="false" text="RICHIEDI PREVENTIVO" />
+        <Button fx:id="btnPreventivo" mnemonicParsing="false" onAction="#richiediPreventivo" text="RICHIEDI PREVENTIVO" />
     </VBox>
 </VBox>

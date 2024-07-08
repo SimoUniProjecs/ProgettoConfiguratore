@@ -1,26 +1,14 @@
 {"datiAutoUsate": [
 {
-        "marca": "Toyota",
-        "modello": "Corolla",
-        "alimentazione": "Ibrida",
-        "Cambio": "Manuale",
-        "anno": 2015,
-        "km": 102327,
-        "proprietari:": 2,
-        "condizioni": 3,
-        "prezzo": 9000
-},
+    "bmw": [{
 
-  {
-    "marca": "Mercedes-Benz",
-    "modello": "classe S",
-    "alimentazione": "Benzina",
-    "Cambio": "Automatico",
-    "anno": 2020,
-    "km": 82900,
-    "proprietari:": 1,
-    "condizioni": 4,
-    "prezzo": 105999
+    }],
+    "audi": [{
+
+    }],
+    "alfa Romeo": [{
+
+    }]
 
   }
 ]}
