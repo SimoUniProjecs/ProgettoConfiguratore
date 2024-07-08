@@ -290,7 +290,7 @@ public class HomeController {
             loginVisibilityMenu.setVisible(!session.isLoggato());
         }
         if(gestisciDipendenti!=null)    {
-            gestisciDipendenti.setVisible(session.getPermessi()==7);
+            gestisciDipendenti.setVisible(session.getPermessi()==3);
         }
     }
 

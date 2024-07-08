@@ -8,7 +8,9 @@ import javafx.beans.property.SimpleStringProperty;
 public class UserSession extends PersonSession {
     private static UserSession instance;
     private SimpleBooleanProperty loggato;
+
     private SimpleIntegerProperty permessi;
+
 
     public UserSession() {
         super();
@@ -28,8 +30,8 @@ public class UserSession extends PersonSession {
         return permessi.get();
     }
 
-    public void setPermessi() {
-        this.permessi.set(1);
+    public void setPermessi(int permessi) {
+        this.permessi.set(permessi);
     }
     public boolean isLoggato() {
         return loggato.get();
@@ -42,8 +44,7 @@ public class UserSession extends PersonSession {
     }
 
     public void aggiungiTutto(String email, String nome, String cognome, String numero, String codiceFiscale, String citta, String via, String provincia, int civico, int permessi) {
-        super.aggiungiTutto(email, nome, cognome, numero, codiceFiscale, citta, via, provincia, civico);
-        setPermessi();
+        super.aggiungiTutto(email, nome, cognome, numero, codiceFiscale, citta, via, provincia, civico, permessi);
         setLoggato(true);
     }
 
@@ -57,7 +58,7 @@ public class UserSession extends PersonSession {
         setVia("");
         setProvincia("");
         setCivico(0);
-        setPermessi();
+        setPermessi(0);
         setLoggato(false);
     }
 }

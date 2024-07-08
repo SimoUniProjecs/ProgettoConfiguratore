@@ -40,7 +40,7 @@ public class LoginController {
                     String nomeVal = getNodeValue(userInfo, "nome");
                     String cognomeVal = getNodeValue(userInfo, "cognome");
                     String telefonoVal = getNodeValue(userInfo, "telefono");
-                    String viaVal = getNodeValue(userInfo, "indirizzo");
+                    String viaVal = getNodeValue(userInfo, "via");
                     String codiceFiscale = getNodeValue(userInfo, "codiceFiscale");
                     String citta = getNodeValue(userInfo, "citta");
                     String provincia = getNodeValue(userInfo, "provincia");

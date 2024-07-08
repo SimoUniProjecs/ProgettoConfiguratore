@@ -1,10 +1,11 @@
 package com.example.configuratoreautoonline;
 
+import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 
 public abstract class PersonSession {
-   // private static PersonSession instance;
+    // private static PersonSession instance;
     private SimpleStringProperty email;
     private SimpleStringProperty nome;
     private SimpleStringProperty cognome;
@@ -14,6 +15,8 @@ public abstract class PersonSession {
     private SimpleStringProperty via;
     private SimpleIntegerProperty civico;
     private SimpleStringProperty provincia;
+
+    private SimpleIntegerProperty permessi;
 
     public PersonSession() {
         email = new SimpleStringProperty();
@@ -100,8 +103,15 @@ public abstract class PersonSession {
         this.provincia.set(provincia);
     }
 
+    public void setPermessi(int permessi) {
+        this.permessi.set(permessi);
+    }
 
-    public void aggiungiTutto(String email, String nome, String cognome, String numero, String codiceFiscale, String citta, String via, String provincia, int civico) {
+    public int getPermessi() {
+        return permessi.get();
+    }
+
+    public void aggiungiTutto(String email, String nome, String cognome, String numero, String codiceFiscale, String citta, String via, String provincia, int civico, int permessi) {
         setEmail(email);
         setNome(nome);
         setCognome(cognome);
@@ -109,8 +119,10 @@ public abstract class PersonSession {
         setCodiceFiscale(codiceFiscale);
         setCitta(citta);
         setVia(via);
+        System.out.println("Cjttà" + citta + getCitta() + "\n" + "Via" + via + getVia() + "\n Nome" + getNome());
         setProvincia(provincia);
         setCivico(civico);
+        setPermessi(permessi);
     }
 
 }
