@@ -112,17 +112,16 @@ public class DecisionTree {
 
         Stelvio.addBranch(coloreRosso, coloreBlu, coloreVerde);
 
+        RS3.addBranch(new Nodo("Nero", RS3), new Nodo("Grigio", RS3), new Nodo("Giallo", RS3));
+        RS4.addBranch(new Nodo("Bianco", RS4), new Nodo("Blu", RS4), new Nodo("Grigio", RS4));
 
-        Nodo coloreGiallo = new Nodo("Giallo", RS3);
-        coloreGrigio = new Nodo("Grigio", RS3);
-        Nodo coloreNero = new Nodo("Nero", RS3);
-        RS3.addBranch(coloreNero, coloreGiallo, coloreGrigio);
+        Nodo M2 = new Nodo("M2", bmw);
+        Nodo XM = new Nodo("XM", bmw);
 
-        Nodo coloreBianco = new Nodo("Bianco", RS4);
-        coloreGrigio = new Nodo("Grigio", RS4);
-        coloreBlu = new Nodo("Blu", RS4);
-        RS3.addBranch(coloreBianco, coloreBlu, coloreGrigio);
-        // Creazione dell'albero di decisione
+        bmw.addBranch(M2,XM);
+
+        M2.addBranch(new Nodo("Azzurro", M2), new Nodo("Grigio", M2), new Nodo("Rosso", M2));
+        XM.addBranch(new Nodo("Base", XM));
         DecisionTree tree = new DecisionTree();
         tree.train(root);
         tree.printTree();

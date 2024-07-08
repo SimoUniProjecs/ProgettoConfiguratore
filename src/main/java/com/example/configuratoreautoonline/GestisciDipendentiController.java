@@ -5,6 +5,7 @@ import javafx.scene.control.*;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import javafx.stage.Stage;
 
 import java.io.File;
 import java.io.IOException;
@@ -40,9 +41,20 @@ public class GestisciDipendentiController {
                         break;
                     }
                 }
-                System.out.println("Aggiornato permessi");
+
+                // Mostra un popup di successo
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Successo");
+                alert.setHeaderText(null);
+                alert.setContentText("permessi modificati correttamente");
+                alert.showAndWait();
+
                 // Save the updated data back to the file
                 mapper.writerWithDefaultPrettyPrinter().writeValue(file, root);
+
+                // Chiudi la finestra di modificare permessi
+                Stage stage = (Stage) numberFieldGD.getScene().getWindow();
+                stage.close();
 
             } catch (IOException e) {
                 e.printStackTrace();

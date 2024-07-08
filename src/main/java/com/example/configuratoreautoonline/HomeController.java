@@ -296,14 +296,10 @@ public class HomeController {
 
     private void updateUserNameLabel() {
         if (UserSession.getInstance().isLoggato()) {
-            this.userNameLabel.setVisible(true);
             // Rimuovi il binding prima di impostare il testo manualmente
             this.userNameLabel.textProperty().unbind();
             this.userNameLabel.setText(UserSession.getInstance().getNome());
-        } else {
-            this.userNameLabel.setVisible(false);
         }
-
         System.out.println(UserSession.getInstance());
     }
 
