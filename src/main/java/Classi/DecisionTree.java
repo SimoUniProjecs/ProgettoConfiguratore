@@ -6,6 +6,8 @@ import java.util.List;
 public class DecisionTree {
     Nodo root;
 
+    Boolean finestriniOscurati = false;
+
     // Metodo per addestrare l'albero
     public void train(Nodo root) {
         this.root = root;
@@ -72,8 +74,13 @@ public class DecisionTree {
                 path.append("/");
             }
         }
+        if(finestriniOscurati == true ) {
+            path.append("F");
+        }
         return path.toString();
     }
+
+
 
 
     // Esempio di utilizzo

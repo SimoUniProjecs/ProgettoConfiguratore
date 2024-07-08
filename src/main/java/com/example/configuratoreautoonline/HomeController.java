@@ -197,6 +197,11 @@ public class HomeController {
         showDialog("/com/example/configuratoreautoonline/user-details.fxml");
     }
 
+    @FXML
+    private void handleOpenConfiguratore(ActionEvent event ){
+        changeScene("/com/example/configuratoreautoonline/configuratore.fxml");
+    }
+
     private void changeScene(String fxmlFile) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlFile));

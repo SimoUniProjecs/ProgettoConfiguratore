@@ -32,6 +32,20 @@ public class CarConfiguratorController {
 
     @FXML
     private void onMarcaSelected(ActionEvent event) {
+    }
+
+    @FXML
+    private void onModelloSelected(ActionEvent event)   {
+
+    }
+
+    @FXML
+    private void onColoreSelected(ActionEvent event)    {
+
+    }
+
+    @FXML
+    private void onConfiguraButtonClicked(ActionEvent event)    {
 
     }
 

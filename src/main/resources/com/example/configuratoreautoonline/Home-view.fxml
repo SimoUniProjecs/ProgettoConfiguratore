@@ -16,11 +16,11 @@
                     </items>
                 </Menu>
                 <Menu mnemonicParsing="false" text="Compra" />
-                <Menu mnemonicParsing="false" text="Configura">
+                <Menu  mnemonicParsing="false" text="Configura">
                     <items>
-                        <MenuItem mnemonicParsing="false" text="Audi" />
-                        <MenuItem mnemonicParsing="false" text="BMW" />
-                        <MenuItem mnemonicParsing="false" text="Alfa Romeo" />
+                        <MenuItem onAction="#handleOpenConfiguratore" mnemonicParsing="false" text="Audi" />
+                        <MenuItem onAction="#handleOpenConfiguratore" mnemonicParsing="false" text="BMW" />
+                        <MenuItem onAction="#handleOpenConfiguratore" mnemonicParsing="false" text="Alfa Romeo" />
                     </items>
                 </Menu>
                 <Menu fx:id="userNameMenu" mnemonicParsing="false" text="Utente">
