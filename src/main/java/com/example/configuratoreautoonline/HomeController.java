@@ -141,14 +141,12 @@ public class HomeController {
                 "/img/BMW/XM/cerchi_base_pastiglie_rosse.png",
                 "/img/BMW/XM/cerchi_base.png",
                 "/img/BMW/XM/cerchi_rossi.png",
-                "/img/BMW/XM/impianto_audio_base.png",
-                "/img/BMW/XM/impianto_audio_HarmanCardon.png",
                 "/img/BMW/XM/pastiglie_rosse_cerchi_grandi.png"
         };
 
         // Indice iniziale dell'array delle immagini
         Random random = new Random();
-        int[] index = {random.nextInt(0, imageUrls.length)};
+        int index = random.nextInt(0, imageUrls.length);
 
         // Carico la prima immagine iniziale
         try {
@@ -158,23 +156,22 @@ public class HomeController {
 
         } catch (NullPointerException e) {
             // Incrementa l'indice per la prossima immagine
-            index[0] = (index[0] + 1) % imageUrls.length;
-            System.out.println("Errore nel caricamento dell'immagine con indice: " + index[0]);
+            index = random.nextInt(0, imageUrls.length);
+            System.out.println("Errore nel caricamento dell'immagine con indice: " + index);
         }
 
         // Timeline per cambiare l'immagine ogni 5 secondi
         timeline = new Timeline(new KeyFrame(Duration.seconds(3), event -> {
+            int inDex = -1;
             try {
+                inDex = random.nextInt(0, imageUrls.length);
+
                 // Carica l'immagine successiva
-                Image nextImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream(imageUrls[index[0]])));
+                Image nextImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream(imageUrls[inDex])));
                 bigImageView.setImage(nextImage);
 
-                // Incrementa l'indice per la prossima immagine
-                index[0] = (index[0] + 1) % imageUrls.length;
             } catch (NullPointerException e) {
-                    // Incrementa l'indice per la prossima immagine
-                    index[0] = (index[0] + 1) % imageUrls.length;
-                    System.out.println("Errore nel caricamento dell'immagine con indice: " + index[0]);
+                    System.out.println("Errore nel caricamento dell'immagine con indice: " + inDex);
             }
         }));
 
