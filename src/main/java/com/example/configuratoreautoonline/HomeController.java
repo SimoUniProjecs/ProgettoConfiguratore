@@ -19,11 +19,12 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
-import javafx.util.Duration; // Assicurati di importare correttamente Duration
+import javafx.util.Duration;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.Objects;
+import java.util.Random;
 
 public class HomeController {
     public MenuItem logout;
@@ -150,7 +151,8 @@ public class HomeController {
         };
 
         // Indice iniziale dell'array delle immagini
-        int[] index = {0};
+        Random random = new Random();
+        int[] index = {random.nextInt(0, imageUrls.length)};
 
         // Carico la prima immagine iniziale
         try {
