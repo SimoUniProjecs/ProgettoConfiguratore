@@ -100,6 +100,10 @@ public class DecisionTree {
 
         Giulia.addBranch(coloreRosso, coloreGrigio, coloreVerde);
 
+        Nodo RS3 = new Nodo("RS3", audi);
+        Nodo RS4 = new Nodo("RS4", audi);
+
+        audi.addBranch(RS3,RS4);
 
         coloreRosso = new Nodo("Rosso", Stelvio);
         Nodo coloreBlu = new Nodo("Blu", Stelvio);
@@ -108,6 +112,16 @@ public class DecisionTree {
 
         Stelvio.addBranch(coloreRosso, coloreBlu, coloreVerde);
 
+
+        Nodo coloreGiallo = new Nodo("Giallo", RS3);
+        coloreGrigio = new Nodo("Grigio", RS3);
+        Nodo coloreNero = new Nodo("Nero", RS3);
+        RS3.addBranch(coloreNero, coloreGiallo, coloreGrigio);
+
+        Nodo coloreBianco = new Nodo("Bianco", RS4);
+        coloreGrigio = new Nodo("Grigio", RS4);
+        coloreBlu = new Nodo("Blu", RS4);
+        RS3.addBranch(coloreBianco, coloreBlu, coloreGrigio);
         // Creazione dell'albero di decisione
         DecisionTree tree = new DecisionTree();
         tree.train(root);
