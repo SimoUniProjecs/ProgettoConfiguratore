@@ -233,16 +233,39 @@ public class HomeController {
         updateMenuVisibility();
         loadImages();
 
+        pannelloAncora.sceneProperty().addListener((obs, oldScene, newScene) -> {
+            if (newScene != null) {
+                newScene.widthProperty().addListener((observable, oldValue, newValue) -> updateLayout(newScene.getWidth(), newScene.getHeight()));
+                newScene.heightProperty().addListener((observable, oldValue, newValue) -> updateLayout(newScene.getWidth(), newScene.getHeight()));
+            }
+        });
+
         // Aggiungi listener per aggiornare la visibilità del menu e la label del nome utente
         UserSession.getInstance().loggatoProperty().addListener((obs, wasLoggato, isNowLoggato) -> {
             updateMenuVisibility();
             updateUserNameLabel();
         });
 
-
-
+        pannelloAncora.widthProperty().addListener((obs, oldVal, newVal) -> resizeBigImage());
+        pannelloAncora.heightProperty().addListener((obs, oldVal, newVal) -> resizeBigImage());
         // Inizializza e avvia il cambio delle immagini ogni 5 secondi
         initializeImageSlider();
+    }
+
+    private void resizeBigImage() {
+        double width = pannelloAncora.getWidth() - 20; // 10 pixels padding on each side
+        double height = pannelloAncora.getHeight() - 210; // Adjust for other components and padding
+
+        bigImageView.setFitWidth(width);
+        bigImageView.setFitHeight(height);
+    }
+
+    private void updateLayout(double width, double height) {
+        // Calculate the new sizes and positions based on the scene size
+        double newWidth = width - 20; // Example margin
+        double newHeight = (height - 210) * 0.5; // Example calculations for the big image view
+        bigImageView.setFitWidth(newWidth);
+        bigImageView.setFitHeight(newHeight);
     }
 
     // Carica le immagini dei loghi delle marche
