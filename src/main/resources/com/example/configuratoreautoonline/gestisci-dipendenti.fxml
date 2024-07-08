@@ -3,8 +3,10 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.control.Button?>
 
-<GridPane xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.configuratoreautoonline.UserDetailsController">
+<?import javafx.scene.control.TextField?>
+<GridPane xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.configuratoreautoonline.GestisciDipendentiController">
     <padding>
         <Insets top="20" right="20" bottom="20" left="20"/>
     </padding>
@@ -12,8 +14,10 @@
     <vgap>10</vgap>
 
     <Label text="Email:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
-    <Label fx:id="emailFieldGD" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+    <TextField fx:id="emailFieldGD" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
 
     <Label text="Permessi:" GridPane.rowIndex="9" GridPane.columnIndex="0"/>
-    <Label fx:id="numberFieldGD" GridPane.rowIndex="9" GridPane.columnIndex="1"/>
+    <TextField fx:id="numberFieldGD" GridPane.rowIndex="9" GridPane.columnIndex="1"/>
+
+    <Button fx:id="BtnAggiungi" onAction="#handleSubmit" text="AGGIUNGI" maxWidth="200.0"/>
 </GridPane>
