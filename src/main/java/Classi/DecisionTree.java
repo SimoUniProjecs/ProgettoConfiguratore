@@ -59,7 +59,7 @@ public class DecisionTree {
             }
             return predictRecursive(next, nodePath, index+1);
         } else {
-            return "Errore: Nodo senza figli nel percorso";
+            return buildPath(nodePath, index);
         }
     }
 
@@ -94,23 +94,18 @@ public class DecisionTree {
 
         alfa.addBranch(Stelvio, Giulia);
 
-        Nodo coloreRosso = new Nodo("Rosso", Giulia);
-        Nodo coloreGrigio = new Nodo("Grigio", Giulia);
-        Nodo coloreVerde = new Nodo("Verde", Giulia);
 
-        Giulia.addBranch(coloreRosso, coloreGrigio, coloreVerde);
+
+        Giulia.addBranch(new Nodo("Verde", Giulia), new Nodo("Grigio", Giulia), new Nodo("Verde", Giulia));
 
         Nodo RS3 = new Nodo("RS3", audi);
         Nodo RS4 = new Nodo("RS4", audi);
 
         audi.addBranch(RS3,RS4);
 
-        coloreRosso = new Nodo("Rosso", Stelvio);
-        Nodo coloreBlu = new Nodo("Blu", Stelvio);
-        coloreVerde = new Nodo("Verde", Stelvio);
 
 
-        Stelvio.addBranch(coloreRosso, coloreBlu, coloreVerde);
+        Stelvio.addBranch(new Nodo("Rosso", Stelvio),new Nodo("Blu", Stelvio), new Nodo("Verde", Stelvio));
 
         RS3.addBranch(new Nodo("Nero", RS3), new Nodo("Grigio", RS3), new Nodo("Giallo", RS3));
         RS4.addBranch(new Nodo("Bianco", RS4), new Nodo("Blu", RS4), new Nodo("Grigio", RS4));
@@ -128,7 +123,7 @@ public class DecisionTree {
 
 
 
-        List<String> nodePath = Arrays.asList("img","ALFA", "GIULIA", "Rosso");
+        List<String> nodePath = Arrays.asList("img", "ALFA", "GIULIA", "Verde");
         System.out.println(nodePath);
         String path = tree.predict(nodePath);
         if (path.startsWith("Errore")) {
