@@ -155,6 +155,8 @@ public class HomeController {
             updateUserNameLabel();
         });
 
+
+
         // Inizializza e avvia il cambio delle immagini ogni 5 secondi
         initializeImageSlider();
     }
