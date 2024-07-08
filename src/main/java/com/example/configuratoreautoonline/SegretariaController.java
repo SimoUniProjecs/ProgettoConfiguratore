@@ -1,5 +1,6 @@
 package com.example.configuratoreautoonline;
 
+import Classi.DecisionTree;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 
@@ -56,7 +57,7 @@ public class SegretariaController {
 
     // Aggiunge un'auto al catalogo
     boolean aggiungiAlCatalogo(){
-        // Aggiungi l'auto al catalogo
-        return true;
+        DecisionTree tree = new DecisionTree();
+        return true; // TODO: Implementare
     }
 }

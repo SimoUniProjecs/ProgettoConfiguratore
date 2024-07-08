@@ -1,6 +1,5 @@
 package com.example.configuratoreautoonline;
 
-import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 
@@ -110,10 +109,8 @@ public abstract class PersonSession {
         setCodiceFiscale(codiceFiscale);
         setCitta(citta);
         setVia(via);
-        System.out.println("Cjttà" + citta + getCitta() + "\n" + "Via" + via + getVia() + "\n Nome" + getNome());
         setProvincia(provincia);
         setCivico(civico);
-
     }
 
 }

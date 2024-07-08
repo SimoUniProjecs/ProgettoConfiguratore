@@ -9,7 +9,6 @@ import javafx.stage.Stage;
 public class HomeApplication extends Application {
 
     private Stage stage;
-
     @Override
     public void start(Stage primaryStage) throws Exception {
         this.stage = primaryStage;

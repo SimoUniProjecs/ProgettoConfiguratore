@@ -18,6 +18,7 @@ import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -36,6 +37,9 @@ public class HomeController {
     private ImageView bmwImageView;
     @FXML
     private ImageView alfaImageView;
+
+    @FXML
+    private AnchorPane pannelloAncora;
     @FXML
     private MenuItem switchToViewSignIn;
     @FXML
@@ -86,8 +90,6 @@ public class HomeController {
                 "/img/AUDI/RS3/colore_verde_cerchi_neri.png",
                 "/img/AUDI/RS3/colore_verde_vetri_oscurati.png",
                 "/img/AUDI/RS3/colore_verde.png",
-                "/img/AUDI/RS3/interno_base.png",
-                "/img/AUDI/RS3/interno_pelle.png",
                 "/img/AUDI/RS4/colore_bianco_cerchi_neri.png",
                 "/img/AUDI/RS4/colore_bianco_vetri_oscurati_cerchi_neri.png",
                 "/img/AUDI/RS4/colore_bianco_vetri_oscurati.png",
@@ -100,8 +102,6 @@ public class HomeController {
                 "/img/AUDI/RS4/colore_grigio_cerchi_neri.png",
                 "/img/AUDI/RS4/colore_grigio_vetri_oscurati.png",
                 "/img/AUDI/RS4/colore_grigio.png",
-                "/img/AUDI/RS4/interno_base.png",
-                "/img/AUDI/RS4/interno_pelle.png",
                 "/img/ALFA/GIULIA/colore_grigio_cerchi_grandi_pastiglie_rosse.png",
                 "/img/ALFA/GIULIA/colore_grigio_cerchi_grandi.png",
                 "/img/ALFA/GIULIA/colore_grigio_pastiglie_rosse.png",
@@ -126,8 +126,6 @@ public class HomeController {
                 "/img/ALFA/STELVIO/colore_verde_pastigile_rosse.png",
                 "/img/ALFA/STELVIO/colore_verde_pastiglie_rosse_cerchi_grandi.png",
                 "/img/ALFA/STELVIO/colore_verde.png",
-                "/img/ALFA/STELVIO/interno_base.png",
-                "/img/ALFA/STELVIO/interno_pelle.png",
                 "/img/BMW/M2/colore_azzurro_cerchi_grandi_vetri_oscurati.png",
                 "/img/BMW/M2/colore_azzurro_cerchi_grandi.png",
                 "/img/BMW/M2/colore_azzurro_vetri_oscurati.png",
@@ -140,8 +138,6 @@ public class HomeController {
                 "/img/BMW/M2/colore_rosso_cerchi_grandi.png",
                 "/img/BMW/M2/colore_rosso_vetri_oscurati.png",
                 "/img/BMW/M2/colore_rosso.png",
-                "/img/BMW/M2/interni_base.png",
-                "/img/BMW/M2/interni_pelle.png",
                 "/img/BMW/XM/cerchi_base_pastiglie_rosse.png",
                 "/img/BMW/XM/cerchi_base.png",
                 "/img/BMW/XM/cerchi_rossi.png",
@@ -321,7 +317,6 @@ public class HomeController {
         alert.setHeaderText(null);
         alert.setContentText(content);
         alert.show();
-
     }
 
     //effettua il logout

@@ -1,5 +1,8 @@
 package Classi;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class DecisionTree {
     Nodo root;
 
@@ -44,7 +47,7 @@ public class DecisionTree {
     // Esempio di utilizzo
     public static void main(String[] args) {
         // Costruzione manuale dell'albero per la selezione degli optional di una macchina
-        Nodo root = new Nodo("root", null);
+        Nodo root = new Nodo("img", null);
 
         Nodo bmw = new Nodo("BMW", root);
         Nodo audi = new Nodo("AUDI", root);
