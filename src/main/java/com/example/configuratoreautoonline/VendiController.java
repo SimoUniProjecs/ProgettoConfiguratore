@@ -86,6 +86,15 @@ public class VendiController {
         }
     }
 
+    private Integer safelyParseInteger(String input) {
+        try {
+            return Integer.parseInt(input);
+        } catch (NumberFormatException e) {
+            System.err.println("Invalid number format: " + input);
+            return null; // Return null or handle accordingly
+        }
+    }
+
     @FXML
     private void richiediPreventivo(ActionEvent event) {
         if (isValidInput()) {
@@ -121,25 +130,27 @@ public class VendiController {
                 auto.put("km", kmTxt.getText());
 
                 // Gestione dell'input per il campo proprietari
-                try {
-                    Integer proprietari = Integer.valueOf(proprietariTxt.getText());
-                    auto.put("proprietari", proprietari);
-                } catch (NumberFormatException e) {
-                    // Gestione nel caso in cui il testo non possa essere convertito in Integer
-                    System.err.println("Errore nella conversione di proprietariTxt in Integer: " + e.getMessage());
-                    // Decidi come gestire l'input non valido
-                    return;  // Esco dal metodo in caso di errore, puoi decidere di gestirlo diversamente
+                Integer proprietari = safelyParseInteger(proprietariTxt.getText());
+                if (proprietari == null) {
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setTitle("Errore Input");
+                    alert.setHeaderText(null);
+                    alert.setContentText("Il numero di proprietari deve essere un valore numerico valido.");
+                    alert.show();
+                    return;
                 }
+                auto.put("proprietari", proprietari);
 
                 // Gestione dell'input per il campo condizioni (statoChoiceBox)
-                try {
-                    Integer condizioni = statoChoiceBox.getValue();
-                    auto.put("condizioni", condizioni);
-                } catch (NullPointerException e) {
-                    System.err.println("StatoChoiceBox non è stato selezionato correttamente: " + e.getMessage());
-                    return;  // Esco dal metodo in caso di errore, puoi decidere di gestirlo diversamente
+                if (statoChoiceBox.getValue() == null) {
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setTitle("Errore Input");
+                    alert.setHeaderText(null);
+                    alert.setContentText("Selezionare uno stato dall'elenco.");
+                    alert.show();
+                    return;
                 }
-
+                auto.put("condizioni", statoChoiceBox.getValue());
                 auto.put("prezzo", -1);
                 autoUsate.add(auto);
                 mapper.writeValue(file, root);
