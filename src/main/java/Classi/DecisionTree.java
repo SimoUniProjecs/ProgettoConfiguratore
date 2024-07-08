@@ -101,18 +101,22 @@ public class DecisionTree {
 
         alfa.addBranch(Stelvio, Giulia);
 
+        Nodo VerdeGiulia = new Nodo("Verde", Giulia);
+        Nodo GrigioGiulia = new Nodo("Grigio", Giulia);
+        Nodo RossoGiulia = new Nodo("Rosso", Giulia);
 
-
-        Giulia.addBranch(new Nodo("Verde", Giulia), new Nodo("Grigio", Giulia), new Nodo("Verde", Giulia));
+        Giulia.addBranch(VerdeGiulia, GrigioGiulia, RossoGiulia);
 
         Nodo RS3 = new Nodo("RS3", audi);
         Nodo RS4 = new Nodo("RS4", audi);
 
-        audi.addBranch(RS3,RS4);
+        audi.addBranch(RS3, RS4);
 
+        Nodo RossoStelvio = new Nodo("Rosso", Stelvio);
+        Nodo BluStelvio = new Nodo("Blu", Stelvio);
+        Nodo VerdeStelvio = new Nodo("Verde", Stelvio);
 
-
-        Stelvio.addBranch(new Nodo("Rosso", Stelvio),new Nodo("Blu", Stelvio), new Nodo("Verde", Stelvio));
+        Stelvio.addBranch(RossoStelvio, BluStelvio, VerdeStelvio);
 
         RS3.addBranch(new Nodo("Nero", RS3), new Nodo("Grigio", RS3), new Nodo("Giallo", RS3));
         RS4.addBranch(new Nodo("Bianco", RS4), new Nodo("Blu", RS4), new Nodo("Grigio", RS4));
@@ -120,18 +124,23 @@ public class DecisionTree {
         Nodo M2 = new Nodo("M2", bmw);
         Nodo XM = new Nodo("XM", bmw);
 
-        bmw.addBranch(M2,XM);
+        bmw.addBranch(M2, XM);
 
         M2.addBranch(new Nodo("Azzurro", M2), new Nodo("Grigio", M2), new Nodo("Rosso", M2));
         XM.addBranch(new Nodo("Base", XM));
+
+        // Aggiungi nodi "RuoteGrandi" e "RuoteBase" per ogni colore
+        for (Nodo colore : new Nodo[]{VerdeGiulia, GrigioGiulia, RossoGiulia, RossoStelvio, BluStelvio, VerdeStelvio}) {
+            colore.addBranch(new Nodo("RuoteGrandi", colore), new Nodo("RuoteBase", colore));
+        }
         DecisionTree tree = new DecisionTree();
         tree.train(root);
         tree.printTree();
 
 
 
-        List<String> nodePath = Arrays.asList("img", "ALFA", "GIULIA", "Verde");
-        System.out.println(nodePath);
+        List<String> nodePath = Arrays.asList("img", "ALFA", "GIULIA", "Verde", "RuoteBase");
+        //System.out.println(nodePath);
         String path = tree.predict(nodePath);
         if (path.startsWith("Errore")) {
             System.out.println(path);
