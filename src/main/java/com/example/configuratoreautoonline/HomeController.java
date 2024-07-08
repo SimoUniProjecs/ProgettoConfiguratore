@@ -44,8 +44,6 @@ public class HomeController {
     @FXML
     private MenuItem vediDettagliUtente;
     @FXML
-    private Label userNameLabel;
-    @FXML
     private Menu userNameMenu;
     @FXML
     private Menu VendiMenu;
@@ -248,7 +246,6 @@ public class HomeController {
         // Aggiungi listener per aggiornare la visibilità del menu e la label del nome utente
         UserSession.getInstance().loggatoProperty().addListener((obs, wasLoggato, isNowLoggato) -> {
             updateMenuVisibility();
-            updateUserNameLabel();
         });
 
         pannelloAncora.widthProperty().addListener((obs, oldVal, newVal) -> resizeBigImage());
@@ -306,14 +303,7 @@ public class HomeController {
         }
     }
 
-    private void updateUserNameLabel() {
-        if (UserSession.getInstance().isLoggato()) {
-            // Rimuovi il binding prima di impostare il testo manualmente
-            this.userNameLabel.textProperty().unbind();
-            this.userNameLabel.setText(UserSession.getInstance().getNome());
-        }
-        System.out.println(UserSession.getInstance());
-    }
+
 
     // Stampare gli errori
     private void showAlert(String title, String content) {

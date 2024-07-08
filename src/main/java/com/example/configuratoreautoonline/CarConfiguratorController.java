@@ -6,7 +6,10 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -27,27 +30,11 @@ public class CarConfiguratorController {
     @FXML
     private Label resultLabel;
 
+    @FXML
+    private ImageView carImageView;
+
     private DecisionTree tree;
-    //private Nodo root;
-
-    @FXML
-    private void onMarcaSelected(ActionEvent event) {
-    }
-
-    @FXML
-    private void onModelloSelected(ActionEvent event)   {
-
-    }
-
-    @FXML
-    private void onColoreSelected(ActionEvent event)    {
-
-    }
-
-    @FXML
-    private void onConfiguraButtonClicked(ActionEvent event)    {
-
-    }
+    //private Nodo root
 
     @FXML
     public void initialize() {
@@ -62,40 +49,62 @@ public class CarConfiguratorController {
     }
 
     @FXML
-    private void onMarcaSelected() {
+    private void onMarcaSelected(ActionEvent event) {
         String selectedMarca = marcaComboBox.getValue();
         if (selectedMarca != null) {
             List<String> modelli = getModelliForMarca(selectedMarca);
             modelloComboBox.setItems(FXCollections.observableArrayList(modelli));
             modelloComboBox.setDisable(false);
-            modelloComboBox.getSelectionModel().clearSelection();
-            coloreComboBox.setDisable(true);
-            ruoteComboBox.setDisable(true);
+
+            // Seleziona automaticamente il primo modello
+            if (!modelli.isEmpty()) {
+                modelloComboBox.setValue(modelli.get(0));
+                onModelloSelected(null); // Chiamata diretta per aggiornare il seguente ComboBox
+            }
         }
     }
 
+
+
+
     @FXML
-    private void onModelloSelected() {
+    private void onModelloSelected(ActionEvent event) {
         String selectedMarca = marcaComboBox.getValue();
         String selectedModello = modelloComboBox.getValue();
         if (selectedModello != null) {
             List<String> colori = getColoriForModello(selectedMarca, selectedModello);
             coloreComboBox.setItems(FXCollections.observableArrayList(colori));
             coloreComboBox.setDisable(false);
-            coloreComboBox.getSelectionModel().clearSelection();
-            ruoteComboBox.setDisable(true);
+
+            // Seleziona automaticamente il primo colore disponibile
+            if (!colori.isEmpty()) {
+                coloreComboBox.setValue(colori.get(0));
+                onColoreSelected(null); // Chiamata diretta per aggiornare il seguente ComboBox
+            }
         }
     }
 
+
+
+
     @FXML
-    private void onColoreSelected() {
+    private void onColoreSelected(ActionEvent event) {
         String selectedColore = coloreComboBox.getValue();
         if (selectedColore != null) {
             List<String> ruote = Arrays.asList("RuoteGrandi", "RuoteBase");
             ruoteComboBox.setItems(FXCollections.observableArrayList(ruote));
             ruoteComboBox.setDisable(false);
+
+            // Seleziona automaticamente il primo tipo di ruote disponibile
+            if (!ruote.isEmpty()) {
+                ruoteComboBox.setValue(ruote.get(0));
+                updateImage(); // Aggiorna l'immagine in base alle selezioni complete
+            }
         }
     }
+
+
+
 
     @FXML
     private void onConfiguraButtonClicked() {
@@ -112,6 +121,18 @@ public class CarConfiguratorController {
             resultLabel.setText("Errore: Seleziona tutte le opzioni");
         }
     }
+
+    private void updateImage() {
+        if (marcaComboBox.getValue() != null && modelloComboBox.getValue() != null &&
+                coloreComboBox.getValue() != null && ruoteComboBox.getValue() != null) {
+            List<String> nodePath = Arrays.asList("img", marcaComboBox.getValue(), modelloComboBox.getValue(), coloreComboBox.getValue(), ruoteComboBox.getValue());
+            String path = tree.predict(nodePath);
+            resultLabel.setText("Percorso configurazione: " + path);
+            loadImage(path);
+        }
+    }
+
+
 
     private List<String> getModelliForMarca(String marca) {
         List<String> modelli = new ArrayList<>();
@@ -131,6 +152,18 @@ public class CarConfiguratorController {
         }
         return modelli;
     }
+
+    private void loadImage(String imagePath) {
+        try {
+            File file = new File(imagePath);
+            Image image = new Image(file.toURI().toString());
+            carImageView.setImage(image);
+        } catch (Exception e) {
+            carImageView.setImage(null);
+            resultLabel.setText("Errore: Immagine non trovata");
+        }
+    }
+
 
     private List<String> getColoriForModello(String marca, String modello) {
         List<String> colori = new ArrayList<>();

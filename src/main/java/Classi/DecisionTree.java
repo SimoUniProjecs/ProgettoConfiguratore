@@ -12,9 +12,13 @@ public class DecisionTree {
     Boolean [] optionals = new Boolean[5];
     String[] optiString = {"_A", "_B", "_C", "_D", "_E"}; // leggerlo da datiModelliAuto.json
     // Metodo per addestrare l'albero
+
+
     public void train(Nodo root) {
         this.root = root;
     }
+
+
 
     // Metodo per stampare l'intero albero
     public void printTree() {
