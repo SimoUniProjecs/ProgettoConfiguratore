@@ -49,6 +49,8 @@ public class HomeController {
     @FXML
     private Menu userNameMenu;
     @FXML
+    private Menu VendiMenu;
+    @FXML
     private Menu loginVisibilityMenu;
     @FXML
     private MenuItem gestisciDipendenti;
@@ -70,6 +72,12 @@ public class HomeController {
     private void handlePopUpDipendent(ActionEvent event){
         showDialog("/com/example/configuratoreautoonline/gestisci-dipendenti.fxml");
     }
+
+    @FXML
+    private void handleVendiClick(ActionEvent event) {
+        changeScene("/com/example/configuratoreautoonline/vendi.fxml");
+    }
+
     @FXML
     private void initializeImageSlider() {
         // Array di URL delle immagini per lo slider

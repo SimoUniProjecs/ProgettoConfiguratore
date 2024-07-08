@@ -23,12 +23,12 @@
                         <MenuItem mnemonicParsing="false" text="Alfa Romeo" />
                     </items>
                 </Menu>
-                <Menu mnemonicParsing="false" text="Vendi" />
                 <Menu fx:id="userNameMenu" mnemonicParsing="false" text="Utente">
                     <items>
                         <MenuItem fx:id="vediDettagliUtente" mnemonicParsing="false" onAction="#handleViewUserDetailsClick" text="Dettagli Utente" />
                     </items>
                     <items>
+                        <MenuItem mnemonicParsing="false" onAction="#handleVendiClick" text="Vendi autovettura" />
                         <MenuItem fx:id="logout" mnemonicParsing="false" onAction="#handleLogoutClick" text="Logout" />
                         <MenuItem fx:id="eliminaUtente" mnemonicParsing="false" onAction="#handleEliminaUtenteClick" text="Elimina Utente" />
                         <MenuItem fx:id="gestisciDipendenti" mnemonicParsing="false" onAction="#handlePopUpDipendent" text="Gestisci Dipendente" />
