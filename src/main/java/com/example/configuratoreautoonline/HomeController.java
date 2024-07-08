@@ -69,12 +69,14 @@ public class HomeController {
     private void initializeImageSlider() {
         // Array di URL delle immagini per lo slider
         String[] imageUrls = {
+                "/img/AUDI/RS3/colore_nero.png",
                 "/img/ALFA/GIULIA/colore_grigio.png",
-                "/img/ALFA/GIULIA/colore_grigio_cerchi_grandi.png",
+                "/img/BMW/M2/colore_azzurro.png",
                 "/img/ALFA/GIULIA/colore_rosso.png",
+                "/img/BMW/XM/pastiglie_rosse_cerchi_grandi.png",
+                "/img/AUDI/RS4/colore_bianco_vetri_oscurati_cerchi_neri.png",
                 "/img/ALFA/GIULIA/colore_rosso_cerchi_grandi.png",
-                "/img/ALFA/GIULIA/colore_nero.png",
-                "/img/ALFA/GIULIA/colore_nero_cerchi_grandi.png",
+                "/img/ALFA/STELVIO/colore_blu.png",
       };
 
         // Indice iniziale dell'array delle immagini
@@ -158,7 +160,7 @@ public class HomeController {
     }
 
     // Carica le immagini dei loghi delle marche
-    void loadImages() {
+    public void loadImages() {
         loadImage(audiImageView, "/img/LOGHI/Audi-Logo_2016.svg.png");
         loadImage(bmwImageView, "/img/LOGHI/BMW.svg.png");
         loadImage(alfaImageView, "/img/LOGHI/alfa.svg.png");

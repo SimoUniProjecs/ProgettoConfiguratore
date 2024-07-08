@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
@@ -50,7 +51,7 @@
                         <Font size="18.0" />
                     </font>
                 </Label>
-                <HBox alignment="CENTER" AnchorPane.topAnchor="50.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" spacing="10.0">
+                <HBox alignment="CENTER" AnchorPane.topAnchor="50.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" spacing="10.0">
                     <children>
                         <ImageView fx:id="audiImageView" fitWidth="200.0" fitHeight="150.0" pickOnBounds="true" preserveRatio="true">
                             <image>
@@ -70,22 +71,11 @@
                     </children>
                 </HBox>
                 <!-- ImageView per l'immagine grande -->
-                <ImageView fx:id="bigImageView" AnchorPane.topAnchor="200.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.bottomAnchor="10.0">
+                <!-- ImageView per l'immagine grande -->
+                <!-- ImageView per l'immagine grande -->
+                <!-- ImageView per l'immagine grande -->
+                <ImageView fx:id="bigImageView" AnchorPane.topAnchor="200.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.bottomAnchor="10.0">
                     <preserveRatio>true</preserveRatio>
-                    <fitWidth>
-                        <DoubleBinding>
-                            <bind>
-                                <AnchorPane.prefWidth />
-                            </bind>
-                        </DoubleBinding>
-                    </fitWidth>
-                    <fitHeight>
-                        <DoubleBinding>
-                            <bind>
-                                <AnchorPane.prefHeight />
-                            </bind>
-                        </DoubleBinding>
-                    </fitHeight>
                 </ImageView>
             </children>
         </AnchorPane>
