@@ -82,8 +82,20 @@ public class HomeController {
         // Indice iniziale dell'array delle immagini
         int[] index = {0};
 
+        // Carico la prima immagine iniziale
+        try {
+            // Carica l'immagine successiva
+            Image nextImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream(imageUrls[(imageUrls.length-1) / 2])));
+            bigImageView.setImage(nextImage);
+
+        } catch (NullPointerException e) {
+            // Incrementa l'indice per la prossima immagine
+            index[0] = (index[0] + 1) % imageUrls.length;
+            System.out.println("Errore nel caricamento dell'immagine con indice: " + index[0]);
+        }
+
         // Timeline per cambiare l'immagine ogni 5 secondi
-        timeline = new Timeline(new KeyFrame(Duration.seconds(5), event -> {
+        timeline = new Timeline(new KeyFrame(Duration.seconds(3), event -> {
             try {
                 // Carica l'immagine successiva
                 Image nextImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream(imageUrls[index[0]])));
