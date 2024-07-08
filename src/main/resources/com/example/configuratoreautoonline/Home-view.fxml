@@ -45,14 +45,15 @@
                 </Label>
                 <HBox alignment="CENTER" spacing="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="50.0">
                     <children>
-                        <ImageView fx:id="audiImageView" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
-                            <image>
-                                <Image url="@../../../img/LOGHI/Audi-Logo_2016.svg.png" />
-                            </image>
-                        </ImageView>
+
                         <ImageView fx:id="bmwImageView" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
                             <image>
                                 <Image url="@../../../img/LOGHI/BMW.svg.png" />
+                            </image>
+                        </ImageView>
+                        <ImageView fx:id="audiImageView" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="@../../../img/LOGHI/Audi-Logo_2016.svg.png" />
                             </image>
                         </ImageView>
                         <ImageView fx:id="alfaImageView" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
