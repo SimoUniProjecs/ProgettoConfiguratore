@@ -10,6 +10,7 @@ public class DecisionTree {
     public void train(Nodo root) {
         this.root = root;
     }
+
     // Metodo per stampare l'intero albero
     public void printTree() {
         printNode(root, "", true);
@@ -25,24 +26,55 @@ public class DecisionTree {
         }
     }
     // Metodo per fare previsioni e ottenere il percorso completo
-    /*public String predict(Map<String, String> input) {
-        Nodo node = root;
-        StringBuilder path = new StringBuilder();
+    public String predict(List<String> nodePath) {
+        return predictRecursive(root, nodePath, 0);
+    }
 
-        while (!node.isLeaf()) {
-            path.append(node.part).append("/");
-            String answer = input.get(node.part);
-            node = node.branches.stream()
-                    .filter(branch -> branch.part.equals(answer))
-                    .findFirst()
-                    .orElse(null);
-            if (node == null) {
-                return "Unknown"; // Gestione del caso in cui non esiste un ramo corrispondente
+    private String predictRecursive(Nodo node, List<String> nodePath, int index) {
+        // Se l'indice è uguale alla dimensione della lista nodePath, siamo arrivati alla fine del percorso desiderato
+        if (index == nodePath.size()) {
+            // Verifica se il nodo corrente è una foglia
+            if (node.isLeaf()) {
+                return buildPath(nodePath, index - 1); // Costruisci il percorso completo fino a questo punto
+            } else {
+                return "Errore: Il percorso richiesto non raggiunge una foglia";
             }
         }
-        path.append(node.part); // Aggiungi l'ultima parte (foglia)
-        return path.toString();*/
-    //}
+
+        // Verifica se il nodo corrente ha il part corretto
+        if (!node.part.equals(nodePath.get(index))) {
+            return "Errore: Nodo non trovato nel percorso";
+        }
+
+        // Prosegui nella ricerca nei rami
+        if (!node.branches.isEmpty()) {
+            // Cerca il prossimo nodo nella lista nodePath tra i figli del nodo corrente
+            String nextNode = nodePath.get(index + 1);
+            Nodo next = node.branches.stream()
+                    .filter(branch -> branch.part.equals(nextNode))
+                    .findFirst()
+                    .orElse(null);
+            if (next == null) {
+                return "Errore: Figlio non trovato nel percorso";
+            }
+            return predictRecursive(next, nodePath, index+1);
+        } else {
+            return "Errore: Nodo senza figli nel percorso";
+        }
+    }
+
+
+    private String buildPath(List<String> nodePath, int endIndex) {
+        StringBuilder path = new StringBuilder();
+        for (int i = 0; i <= endIndex; i++) {
+            path.append(nodePath.get(i));
+            if (i < endIndex) {
+                path.append("/");
+            }
+        }
+        return path.toString();
+    }
+
 
     // Esempio di utilizzo
     public static void main(String[] args) {
@@ -83,9 +115,15 @@ public class DecisionTree {
 
 
 
+        List<String> nodePath = Arrays.asList("img","ALFA", "GIULIA", "Rosso");
+        System.out.println(nodePath);
+        String path = tree.predict(nodePath);
+        if (path.startsWith("Errore")) {
+            System.out.println(path);
+        } else {
+            System.out.println("Path: " + path);
+        }
 
-       /* String path = tree.predict(input);
-        System.out.println("Path: " + path); // Output: Tipo di Carburante/Benzina/Cambio Automatico/Rosso*/
     }
 }
 
