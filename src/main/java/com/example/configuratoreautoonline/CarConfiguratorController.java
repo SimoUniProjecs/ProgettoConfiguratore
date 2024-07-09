@@ -39,6 +39,7 @@ public class CarConfiguratorController {
     private CheckBox vetriCheck;
     @FXML
     private CheckBox cerchiCheck;
+    @FXML
     private CheckBox pinzeCheck;
     @FXML
     private CheckBox internoCheck;
@@ -92,6 +93,15 @@ public class CarConfiguratorController {
             motorizzazioneComboBox.setDisable(true);
             motorizzazioneComboBox.getItems().clear();
             carImageView.setImage(null);
+
+            // Deve prima scegliere il resto
+            vetriCheck.setDisable(true);
+            cerchiCheck.setDisable(true);
+            pinzeCheck.setDisable(true);
+            internoCheck.setDisable(true);
+            impiantoAudioCheck.setDisable(true);
+            abbonamentoCheck.setDisable(true);
+
             resultLabel.setText("");
         }
     }
@@ -182,6 +192,13 @@ public class CarConfiguratorController {
             List<String> motori = getMotorizzazioniForModello(selectedMarca, selectedModello);
             motorizzazioneComboBox.setItems(FXCollections.observableArrayList(motori));
             motorizzazioneComboBox.setDisable(false);
+
+            vetriCheck.setDisable(false);
+            cerchiCheck.setDisable(false);
+            pinzeCheck.setDisable(false);
+            internoCheck.setDisable(false);
+            impiantoAudioCheck.setDisable(false);
+            abbonamentoCheck.setDisable(false);
         }
     }
 
