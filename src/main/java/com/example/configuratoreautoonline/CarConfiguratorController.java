@@ -42,6 +42,8 @@ public class CarConfiguratorController {
     @FXML
     private CheckBox pinzeCheck;
     @FXML
+    private CheckBox cerchiScuriCheck;
+    @FXML
     private CheckBox internoCheck;
     @FXML
     private CheckBox impiantoAudioCheck;
@@ -97,6 +99,7 @@ public class CarConfiguratorController {
             // Deve prima scegliere il resto
             vetriCheck.setDisable(true);
             cerchiCheck.setDisable(true);
+            cerchiScuriCheck.setDisable(true);
             pinzeCheck.setDisable(true);
             internoCheck.setDisable(true);
             impiantoAudioCheck.setDisable(true);
@@ -193,12 +196,49 @@ public class CarConfiguratorController {
             motorizzazioneComboBox.setItems(FXCollections.observableArrayList(motori));
             motorizzazioneComboBox.setDisable(false);
 
-            vetriCheck.setDisable(false);
-            cerchiCheck.setDisable(false);
-            pinzeCheck.setDisable(false);
-            internoCheck.setDisable(false);
-            impiantoAudioCheck.setDisable(false);
-            abbonamentoCheck.setDisable(false);
+            List<String> optionals = getOptionalsForModello(selectedMarca, selectedModello);
+
+            if (optionals.contains("vetri oscurati")) {
+                vetriCheck.setDisable(false);
+              }else {
+                vetriCheck.setDisable(true);
+            }
+
+            if (optionals.contains("cerchi maggiorati")) {
+                cerchiCheck.setDisable(false);
+            }else {
+                cerchiCheck.setDisable(true);
+            }
+
+            if (optionals.contains("cerchi neri")) {
+                cerchiScuriCheck.setDisable(false);
+            }else {
+                cerchiScuriCheck.setDisable(true);
+            }
+
+            if (optionals.contains("freni rossi")) {
+                pinzeCheck.setDisable(false);
+            }else {
+                pinzeCheck.setDisable(true);
+            }
+
+            if (optionals.contains("interni pelle")) {
+                internoCheck.setDisable(false);
+            }else {
+                internoCheck.setDisable(true);
+            }
+
+            if (optionals.contains("impianto audio HarmanCardon")) {
+                impiantoAudioCheck.setDisable(false);
+            }else {
+                impiantoAudioCheck.setDisable(true);
+            }
+
+            if(motorizzazioneComboBox.getValue().contains("Elettrica")){
+                abbonamentoCheck.setDisable(false);
+            }else {
+                abbonamentoCheck.setDisable(true);
+            }
         }
     }
 
