@@ -4,12 +4,18 @@ import Classi.DecisionTree;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.stage.Stage;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -33,11 +39,15 @@ public class CarConfiguratorController {
     @FXML
     private ImageView carImageView;
 
-    private DecisionTree tree;
-    //private Nodo root
+
+    private Nodo root = buildCarDecisionTree();
+    private final DecisionTree tree = new DecisionTree(root);
+
+    private Stage stage;
 
     @FXML
     public void initialize() {
+        stage = new Stage();
         /**
          *  root = buildCarDecisionTree();
          *         tree = new DecisionTree();
@@ -47,7 +57,6 @@ public class CarConfiguratorController {
         List<String> marche = Arrays.asList("BMW", "AUDI", "ALFA");
         marcaComboBox.setItems(FXCollections.observableArrayList(marche));
     }
-
     @FXML
     private void onMarcaSelected(ActionEvent event) {
         String selectedMarca = marcaComboBox.getValue();
@@ -63,10 +72,6 @@ public class CarConfiguratorController {
             }
         }
     }
-
-
-
-
     @FXML
     private void onModelloSelected(ActionEvent event) {
         String selectedMarca = marcaComboBox.getValue();
@@ -84,9 +89,6 @@ public class CarConfiguratorController {
         }
     }
 
-
-
-
     @FXML
     private void onColoreSelected(ActionEvent event) {
         String selectedColore = coloreComboBox.getValue();
@@ -102,9 +104,6 @@ public class CarConfiguratorController {
             }
         }
     }
-
-
-
 
     @FXML
     private void onConfiguraButtonClicked() {
@@ -131,8 +130,6 @@ public class CarConfiguratorController {
             loadImage(path);
         }
     }
-
-
 
     private List<String> getModelliForMarca(String marca) {
         List<String> modelli = new ArrayList<>();
@@ -164,6 +161,26 @@ public class CarConfiguratorController {
         }
     }
 
+    @FXML
+    private void handleHomeButton(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/configuratoreautoonline/Home-view.fxml"));
+            Parent root = loader.load();
+            Scene scene = new Scene(root);
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException e) {
+            showAlert("Errore nel tornare alla Home", "Si è verificato un errore nel tornare alla Home");
+        }
+    }
+
+    private void showAlert(String title, String content) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(content);
+        alert.show();
+    }
 
     private List<String> getColoriForModello(String marca, String modello) {
         List<String> colori = new ArrayList<>();
