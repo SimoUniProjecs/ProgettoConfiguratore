@@ -201,12 +201,18 @@ public class HomeController {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlFile));
             Parent root = loader.load();
-            stage.setScene(new Scene(root));
-            stage.show();
+            Scene scene = new Scene(root);
+
+            // Ottieni lo Stage dalla scena corrente
+            Stage currentStage = (Stage) stage.getScene().getWindow();
+            currentStage.setScene(scene);
+            currentStage.show();
         } catch (Exception e) {
-            showAlert("Error loading scene", "Cannot load scene from file: " + fxmlFile);
+            showAlert("Error loading scene", "Cannot load scene from file: " + fxmlFile + "\n" + e.getMessage());
+            e.printStackTrace(); // Stampa lo stack trace per il debug
         }
     }
+
 
     private void showDialog(String fxmlFile) {
         try {

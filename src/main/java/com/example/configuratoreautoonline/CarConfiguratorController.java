@@ -65,6 +65,10 @@ public class CarConfiguratorController {
             List<String> modelli = getModelliForMarca(selectedMarca);
             modelloComboBox.setItems(FXCollections.observableArrayList(modelli));
             modelloComboBox.setDisable(false);
+            modelloComboBox.getSelectionModel().clearSelection();
+
+            coloreComboBox.setDisable(true);
+            coloreComboBox.getItems().clear();
 
             ruoteComboBox.setDisable(true);
             ruoteComboBox.getItems().clear();
@@ -100,13 +104,10 @@ public class CarConfiguratorController {
             ruoteComboBox.setItems(FXCollections.observableArrayList(ruote));
             ruoteComboBox.setDisable(false);
 
-            // Seleziona automaticamente il primo tipo di ruote disponibile
-            if (!ruote.isEmpty()) {
-                ruoteComboBox.setValue(ruote.get(0));
-                updateImage(); // Aggiorna l'immagine in base alle selezioni complete
-            }
+            updateImage();
         }
     }
+
 
     @FXML
     private void onConfiguraButtonClicked() {
