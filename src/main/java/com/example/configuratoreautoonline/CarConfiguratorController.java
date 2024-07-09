@@ -82,9 +82,18 @@ public class CarConfiguratorController {
         cerchiCheck.setOnAction(event -> updateImage());
         pinzeCheck.setOnAction(event -> updateImage());
         cerchiScuriCheck.setOnAction(event -> updateImage());
-        internoCheck.setOnAction(event -> updateImage());
+        internoCheck.setOnAction(event -> onInternoCheckChanged(event));
         impiantoAudioCheck.setOnAction(event -> updateImage());
         abbonamentoCheck.setOnAction(event -> updateImage());
+    }
+    @FXML
+    private void onInternoCheckChanged(ActionEvent event) {
+        if (interniBtn.getText().equals("Visualizza Esterni")) {
+            // Se stiamo visualizzando gli interni, aggiorniamo l'immagine degli interni
+            loadImage(generaPathInterni(selectedMarca, modelloComboBox.getValue()));
+        } else {
+            updateImage();
+        }
     }
     @FXML
     private void onModelloSelected(ActionEvent event) {
