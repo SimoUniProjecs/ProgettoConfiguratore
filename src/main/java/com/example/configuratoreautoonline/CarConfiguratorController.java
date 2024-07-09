@@ -34,12 +34,11 @@ public class CarConfiguratorController {
     @FXML
     private ComboBox<String> coloreComboBox;
     @FXML
-    private ComboBox<String> ruoteComboBox;
-    @FXML
     private Label resultLabel;
     @FXML
     private CheckBox vetriCheck;
     @FXML
+    private CheckBox cerchiCheck;
     private CheckBox pinzeCheck;
     @FXML
     private CheckBox internoCheck;
@@ -90,8 +89,6 @@ public class CarConfiguratorController {
             modelloComboBox.getSelectionModel().clearSelection();
             coloreComboBox.setDisable(true);
             coloreComboBox.getItems().clear();
-            ruoteComboBox.setDisable(true);
-            ruoteComboBox.getItems().clear();
             motorizzazioneComboBox.setDisable(true);
             motorizzazioneComboBox.getItems().clear();
             carImageView.setImage(null);
@@ -109,10 +106,7 @@ public class CarConfiguratorController {
             coloreComboBox.setDisable(false);
             coloreComboBox.getSelectionModel().clearSelection();
 
-            ruoteComboBox.setDisable(true);
-            ruoteComboBox.getItems().clear();
-
-            // updateMotorizzazioneComboBox(selectedModello);
+            updateMotorizzazioneComboBox(selectedModello);
             updateImage();
         }
     }
@@ -160,41 +154,28 @@ public class CarConfiguratorController {
 
     // popola la choicebox con le motorizzazioni disponibili per il modello selezionato
     private List<String> getMotorizzazioniForModello(String marca, String modello) {
-        List<String> optionals = new ArrayList<>();
+        List<String> motorizzazioni = new ArrayList<>();
         JsonNode marcaNode = datiModelliAuto.get(marca.toLowerCase());
         if (marcaNode != null) {
             Iterator<JsonNode> modelliIterator = marcaNode.elements();
             while (modelliIterator.hasNext()) {
                 JsonNode modelloNode = modelliIterator.next().get("modelli").get(0);
-                JsonNode optionalNode = modelloNode.get(modello);
-                if (optionalNode != null && optionalNode.has("motorizzazioni")) {
-                    optionalNode.get("motorizzazioni").forEach(optional -> optionals.add(optional.asText()));
+                JsonNode modelloSpecificoNode = modelloNode.get(modello);
+                if (modelloSpecificoNode != null && modelloSpecificoNode.has("motorizzazioni")) {
+                    modelloSpecificoNode.get("motorizzazioni").forEach(motorizzazione -> {
+                        if (motorizzazione.has("potenza") && motorizzazione.has("alimentazione")) {
+                            String alimentazione = motorizzazione.get("alimentazione").asText();
+                            String potenza = motorizzazione.get("potenza").asText();
+                            motorizzazioni.add(alimentazione + " - " + potenza);
+                        }
+                    });
                 }
             }
         }
-        return optionals;
-    }
-    @FXML
-    private void onColoreSelected(ActionEvent event) {
-        String selectedColore = coloreComboBox.getValue();
-        if (selectedColore != null) {
-            List<String> ruote = Arrays.asList("_cerchi_grandi", "_cerchi_base");
-            ruoteComboBox.setItems(FXCollections.observableArrayList(ruote));
-            ruoteComboBox.setDisable(false);
-
-            updateImage();
-        }
+        return motorizzazioni;
     }
 
-    @FXML
-    private void onRuoteSelected(ActionEvent event) {
-        // Attivo motorizzazioni
-        motorizzazioneComboBox.setDisable(false);
-
-        // Aggiorno cambiamenti sulle gomme
-        updateImage();
-    }
-
+    //scelta motorizzazione
     public void onMotoSelected(ActionEvent event) {
         String selectedModello = modelloComboBox.getValue();
         if (selectedModello != null) {
@@ -208,10 +189,9 @@ public class CarConfiguratorController {
     private void onConfiguraButtonClicked() {
         String selectedModello = modelloComboBox.getValue();
         String selectedColore = coloreComboBox.getValue();
-        String selectedRuote = ruoteComboBox.getValue();
 
-        if (selectedMarca != null && selectedModello != null && selectedColore != null && selectedRuote != null) {
-            List<String> nodePath = Arrays.asList("img", selectedMarca, selectedModello, selectedColore, selectedRuote);
+        if (selectedMarca != null && selectedModello != null && selectedColore != null ) {
+            List<String> nodePath = Arrays.asList("img", selectedMarca, selectedModello, selectedColore);
             String path = tree.predict(nodePath);
 
             resultLabel.setText("Percorso configurazione: " + path);
@@ -224,8 +204,8 @@ public class CarConfiguratorController {
 
     private void updateImage() {
         if (modelloComboBox.getValue() != null &&
-                coloreComboBox.getValue() != null && ruoteComboBox.getValue() != null) {
-            List<String> nodePath = Arrays.asList("img", selectedMarca, modelloComboBox.getValue(), coloreComboBox.getValue(), ruoteComboBox.getValue());
+                coloreComboBox.getValue() != null) {
+            List<String> nodePath = Arrays.asList("img", selectedMarca, modelloComboBox.getValue(), coloreComboBox.getValue());
             String path = tree.predict(nodePath);
             resultLabel.setText("Percorso configurazione: " + path);
             loadImage(path);
@@ -261,7 +241,7 @@ public class CarConfiguratorController {
     }
 
     private void loadImage(String imagePath) {
-        String path = createPath(selectedMarca, modelloComboBox.getValue(), coloreComboBox.getValue(), ruoteComboBox.getValue());
+        String path = createPath(selectedMarca, modelloComboBox.getValue(), coloreComboBox.getValue());
         try {
             System.out.println(path);
             File file = new File(path);

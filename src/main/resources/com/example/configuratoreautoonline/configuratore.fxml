@@ -18,14 +18,14 @@
    <Label fx:id="resultLabel" layoutX="10.0" layoutY="400.0" AnchorPane.leftAnchor="10.0" />
    <ImageView fx:id="carImageView" fitHeight="404.0" fitWidth="588.0" layoutX="163.0" layoutY="38.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="50.0" />
    <ComboBox fx:id="modelloComboBox" layoutX="18.0" layoutY="50.0" onAction="#onModelloSelected" prefHeight="26.0" prefWidth="184.0" promptText="Seleziona Modello" />
-   <ComboBox fx:id="coloreComboBox" layoutX="22.0" layoutY="102.0" onAction="#onColoreSelected" prefHeight="26.0" prefWidth="184.0" promptText="Seleziona Colore" />
-   <ComboBox fx:id="ruoteComboBox" layoutX="25.0" layoutY="143.0" prefHeight="26.0" prefWidth="184.0" promptText="Seleziona Ruote" />
+   <ComboBox fx:id="coloreComboBox" layoutX="22.0" layoutY="102.0" prefHeight="26.0" prefWidth="184.0" promptText="Seleziona Colore" />
    <Button layoutX="29.0" layoutY="441.0" onAction="#onConfiguraButtonClicked" prefHeight="26.0" prefWidth="209.0" text="Configura" />
    <CheckBox fx:id="vetriCheck" layoutX="29.0" layoutY="246.0" mnemonicParsing="false" text="Vetri oscurati" />
    <CheckBox fx:id="pinzeCheck" layoutX="29.0" layoutY="290.0" mnemonicParsing="false" text="Pinze Freni colorate" />
    <CheckBox fx:id="internoCheck" layoutX="29.0" layoutY="333.0" mnemonicParsing="false" text="Interno in Pelle" />
    <CheckBox fx:id="impiantoAudioCheck" layoutX="29.0" layoutY="371.0" mnemonicParsing="false" text="Impianto Audio maggiorato" />
    <CheckBox fx:id="abbonamentoCheck" layoutX="29.0" layoutY="408.0" mnemonicParsing="false" text="Abbonamento annuale per ricarica" />
-   <ComboBox fx:id="motorizzazioneComboBox" layoutX="25.0" layoutY="190.0" onAction="#onMotoSelected" promptText="Seleziona Motorizzazione" />
+   <ComboBox fx:id="motorizzazioneComboBox" layoutX="22.0" layoutY="154.0" onAction="#onMotoSelected" promptText="Seleziona Motorizzazione" />
+   <CheckBox fx:id="cerchiCheck" layoutX="29.0" layoutY="207.0" mnemonicParsing="false" text="Cerchi maggiorati" />
 
 </AnchorPane>
