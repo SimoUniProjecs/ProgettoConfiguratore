@@ -131,6 +131,7 @@ public class CarConfiguratorController {
                 showAlert("Errore", "Impossibile caricare l'immagine degli interni.");
             }
         } else {
+            interniBtn.setText("Visualizza Interni");
             updateImage();
         }
     }
@@ -157,6 +158,7 @@ public class CarConfiguratorController {
             modelloComboBox.getSelectionModel().clearSelection();
             coloreComboBox.setDisable(true);
             coloreComboBox.getItems().clear();
+            interniBtn.setDisable(true);
             motorizzazioneComboBox.setDisable(true);
             motorizzazioneComboBox.getItems().clear();
             carImageView.setImage(null);
@@ -325,6 +327,9 @@ public class CarConfiguratorController {
 
             // Aggiorna il prezzo base con quel motore
             prezzoLbl.setText(getPrezzo(selectedMarca, modelloComboBox.getValue(), motorizzazioneComboBox.getValue()) + " €");
+
+            // do la possibilità di vedere gli interni
+            interniBtn.setDisable(false);
         }
         updateImage();
     }
@@ -430,7 +435,6 @@ public class CarConfiguratorController {
     // DAto il percorso dell'immagine, la carica
     private void loadImage(String path) {
         try {
-            System.out.println(path);
             File file = new File(path);
             Image image = new Image(file.toURI().toString());
             carImageView.setImage(image);
