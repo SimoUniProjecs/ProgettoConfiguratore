@@ -1,6 +1,7 @@
 package com.example.configuratoreautoonline;
-import Classi.*;
+
 import Classi.DecisionTree;
+import Classi.Nodo;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -39,21 +40,14 @@ public class CarConfiguratorController {
     @FXML
     private ImageView carImageView;
 
-
     private Nodo root = buildCarDecisionTree();
-    private final DecisionTree tree = new DecisionTree(root);
+    private DecisionTree tree;
 
     private Stage stage;
 
     @FXML
     public void initialize() {
         stage = new Stage();
-        /**
-         *  root = buildCarDecisionTree();
-         *         tree = new DecisionTree();
-         *         tree.train(root);
-         */
-
         List<String> marche = Arrays.asList("BMW", "AUDI", "ALFA");
         marcaComboBox.setItems(FXCollections.observableArrayList(marche));
     }
@@ -120,6 +114,7 @@ public class CarConfiguratorController {
             List<String> nodePath = Arrays.asList("img", selectedMarca, selectedModello, selectedColore, selectedRuote);
             String path = tree.predict(nodePath);
             resultLabel.setText("Percorso configurazione: " + path);
+            loadImage(path);
         } else {
             resultLabel.setText("Errore: Seleziona tutte le opzioni");
         }
@@ -152,47 +147,6 @@ public class CarConfiguratorController {
                 break;
         }
         return modelli;
-    }
-
-    private void loadImage(String imagePath) {
-        try {
-            File file = new File(imagePath);
-            Image image = new Image(file.toURI().toString());
-            carImageView.setImage(image);
-        } catch (Exception e) {
-            carImageView.setImage(null);
-            resultLabel.setText("Errore: Immagine non trovata");
-        }
-    }
-
-    @FXML
-    private void handleHomeButton(ActionEvent event) {
-        Node source = (Node) event.getSource();
-        Stage currentStage = (Stage) source.getScene().getWindow();
-
-        changeScene("/com/example/configuratoreautoonline/Home-view.fxml", currentStage);
-    }
-
-    private void changeScene(String fxmlFile, Stage currentStage) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlFile));
-            Parent root = loader.load();
-            Scene scene = new Scene(root);
-
-            currentStage.setScene(scene);
-            currentStage.show();
-        } catch (Exception e) {
-            showAlert("Error loading scene", "Cannot load scene from file: " + fxmlFile + "\n" + e.getMessage());
-            e.printStackTrace();
-        }
-    }
-
-    private void showAlert(String title, String content) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(content);
-        alert.show();
     }
 
     private List<String> getColoriForModello(String marca, String modello) {
@@ -233,57 +187,48 @@ public class CarConfiguratorController {
         return colori;
     }
 
-    private Nodo buildCarDecisionTree() {
-        Nodo root = new Nodo("img", null);
-
-        Nodo bmw = new Nodo("BMW", root);
-        Nodo audi = new Nodo("AUDI", root);
-        Nodo alfa = new Nodo("ALFA", root);
-
-        root.addBranch(bmw);
-        root.addBranch(audi);
-        root.addBranch(alfa);
-
-        Nodo Giulia = new Nodo("GIULIA", alfa);
-        Nodo Stelvio = new Nodo("STELVIO", alfa);
-
-        alfa.addBranch(Stelvio, Giulia);
-
-        Nodo VerdeGiulia = new Nodo("Verde", Giulia);
-        Nodo GrigioGiulia = new Nodo("Grigio", Giulia);
-        Nodo RossoGiulia = new Nodo("Rosso", Giulia);
-
-        Giulia.addBranch(VerdeGiulia, GrigioGiulia, RossoGiulia);
-
-        Nodo RS3 = new Nodo("RS3", audi);
-        Nodo RS4 = new Nodo("RS4", audi);
-
-        audi.addBranch(RS3, RS4);
-
-        Nodo RossoStelvio = new Nodo("Rosso", Stelvio);
-        Nodo BluStelvio = new Nodo("Blu", Stelvio);
-        Nodo VerdeStelvio = new Nodo("Verde", Stelvio);
-
-        Stelvio.addBranch(RossoStelvio, BluStelvio, VerdeStelvio);
-
-        RS3.addBranch(new Nodo("Nero", RS3), new Nodo("Grigio", RS3), new Nodo("Giallo", RS3));
-        RS4.addBranch(new Nodo("Bianco", RS4), new Nodo("Blu", RS4), new Nodo("Grigio", RS4));
-
-        Nodo M2 = new Nodo("M2", bmw);
-        Nodo XM = new Nodo("XM", bmw);
-
-        bmw.addBranch(M2, XM);
-
-        M2.addBranch(new Nodo("Azzurro", M2), new Nodo("Grigio", M2), new Nodo("Rosso", M2));
-        XM.addBranch(new Nodo("Base", XM));
-
-        // Aggiungi nodi "RuoteGrandi" e "RuoteBase" per ogni colore
-        for (Nodo colore : new Nodo[]{VerdeGiulia, GrigioGiulia, RossoGiulia, RossoStelvio, BluStelvio, VerdeStelvio}) {
-            colore.addBranch(new Nodo("RuoteGrandi", colore), new Nodo("RuoteBase", colore));
+    private void loadImage(String imagePath) {
+        try {
+            File file = new File("src/main/resources/img/ALFA/GIULIA/colore_grigio_cerchi_grandi_pastiglie_rosse.png");
+            Image image = new Image(file.toURI().toString());
+            carImageView.setImage(image);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-
-        return root;
     }
 
-}
+    private Nodo buildCarDecisionTree() {
+        // Implementazione per costruire l'albero decisionale
+        return new Nodo("root", null); // Sostituisci con la logica effettiva
+    }
 
+    @FXML
+    private void handleHomeButton(ActionEvent event) {
+        Node source = (Node) event.getSource();
+        Stage currentStage = (Stage) source.getScene().getWindow();
+
+        changeScene("/com/example/configuratoreautoonline/Home-view.fxml", currentStage);
+    }
+
+    private void changeScene(String fxmlFile, Stage currentStage) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlFile));
+            Parent root = loader.load();
+            Scene scene = new Scene(root);
+
+            currentStage.setScene(scene);
+            currentStage.show();
+        } catch (Exception e) {
+            showAlert("Error loading scene", "Cannot load scene from file: " + fxmlFile + "\n" + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    private void showAlert(String title, String content) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(content);
+        alert.show();
+    }
+}

@@ -1,19 +1,49 @@
 package Classi;
 
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import java.io.File;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
-
 
 
 public class DecisionTree {
     Nodo root;
 
     Boolean [] optionals = new Boolean[5];
-    String[] optiString = {"_A", "_B", "_C", "_D", "_E"}; // leggerlo da datiModelliAuto.json
 
-    public DecisionTree(Nodo root) {
+    String[] optiString;
+    for(int i=0; i<5; i++){
+        optionals[i] = false;
+    }
+    public DecisionTree(Nodo root, String marca, String modello) {
         this.root = root;
+        loadOptionalsFromJson("public/res/data/datiModelliAuto.json",marca, modello);
+    }
+
+    private void loadOptionalsFromJson(String jsonFilePath, String marca, String modello) {
+        ObjectMapper objectMapper = new ObjectMapper();
+        try {
+            JsonNode rootNode = objectMapper.readTree(new File(jsonFilePath));
+            JsonNode datiAutoUsate = rootNode.get("datiAutoUsate").get(0);
+            JsonNode marcaNode = datiAutoUsate.get(marca.toLowerCase());
+            if (marcaNode != null) {
+                JsonNode modelliNode = marcaNode.get(0).get("modelli").get(0).get(modello);
+                if (modelliNode != null) {
+                    JsonNode optionalsNode = modelliNode.get("optionals");
+                    optiString = new String[optionalsNode.size()];
+                    for (int i = 0; i < optionalsNode.size(); i++) {
+                        optiString[i] = optionalsNode.get(i).asText();
+                    }
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            optiString = new String[]{"_A", "_B", "_C", "_D", "_E"}; // Valori di default in caso di errore
+        }
     }
 
 
@@ -93,7 +123,7 @@ public class DecisionTree {
 
 
     // Esempio di utilizzo
-    /*public static void main(String[] args) {
+    public static void main(String[] args) {
         // Costruzione manuale dell'albero per la selezione degli optional di una macchina
         Nodo root = new Nodo("img", null);
 
@@ -142,8 +172,8 @@ public class DecisionTree {
         for (Nodo colore : new Nodo[]{VerdeGiulia, GrigioGiulia, RossoGiulia, RossoStelvio, BluStelvio, VerdeStelvio}) {
             colore.addBranch(new Nodo("RuoteGrandi", colore), new Nodo("RuoteBase", colore));
         }
-        DecisionTree tree = new DecisionTree();
-        tree.train(root);
+        DecisionTree tree = new DecisionTree(root,  "ALFA", "GIULIA");
+
         tree.printTree();
 
 
@@ -157,6 +187,8 @@ public class DecisionTree {
             System.out.println("Path: " + path);
         }
 
-    }*/
+
+
+    }
 }
 

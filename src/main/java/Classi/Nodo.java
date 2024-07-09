@@ -5,8 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Nodo {
-    String part;
-    List<Nodo> branches;
+    public String part;
+    public List<Nodo> branches;
     Nodo padre;
 
     // Costruttore per i nodi decisionali
@@ -23,5 +23,9 @@ public class Nodo {
     public void addBranch(Nodo... node) {
         for(Nodo n: node)
             this.branches.add(n);
+    }
+
+    public Nodo findChild(String marca) {
+        return null;
     }
 }
