@@ -51,10 +51,17 @@ public class VendiController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/configuratoreautoonline/Home-view.fxml"));
             Parent root = loader.load();
 
-            // Ottieni lo Stage dalla scena corrente
+            // Crea una nuova scena con il root caricato
+            Scene newScene = new Scene(root);
+
+            // Ottieni lo Stage dalla scena corrente e chiudilo
             Stage currentStage = (Stage) imageView.getScene().getWindow();
-            currentStage.setScene(new Scene(root));
-            currentStage.show();
+            currentStage.close();
+
+            // Crea un nuovo Stage per la nuova scena
+            Stage newStage = new Stage();
+            newStage.setScene(newScene);
+            newStage.show();
         } catch (IOException e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Errore nel tornare alla Home");

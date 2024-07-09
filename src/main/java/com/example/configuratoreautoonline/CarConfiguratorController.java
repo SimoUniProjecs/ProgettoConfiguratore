@@ -166,9 +166,18 @@ public class CarConfiguratorController {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/configuratoreautoonline/Home-view.fxml"));
             Parent root = loader.load();
-            Scene scene = new Scene(root);
-            stage.setScene(scene);
-            stage.show();
+
+            // Crea una nuova scena con il root caricato
+            Scene newScene = new Scene(root);
+
+            // Ottieni lo Stage dalla scena corrente e chiudilo
+            Stage currentStage = (Stage) coloreComboBox.getScene().getWindow();
+            currentStage.close();
+
+            // Crea un nuovo Stage per la nuova scena
+            Stage newStage = new Stage();
+            newStage.setScene(newScene);
+            newStage.show();
         } catch (IOException e) {
             showAlert("Errore nel tornare alla Home", "Si è verificato un errore nel tornare alla Home");
         }
