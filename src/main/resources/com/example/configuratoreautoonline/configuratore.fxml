@@ -28,5 +28,6 @@
    <ComboBox fx:id="motorizzazioneComboBox" layoutX="22.0" layoutY="154.0" onAction="#onMotoSelected" promptText="Seleziona Motorizzazione" />
    <CheckBox fx:id="cerchiCheck" layoutX="29.0" layoutY="207.0" mnemonicParsing="false" text="Cerchi maggiorati" />
    <CheckBox fx:id="cerchiScuriCheck" layoutX="29.0" layoutY="252.0" mnemonicParsing="false" text="Cerchi scuri" />
+   <Label fx:id="prezzoLbl" layoutX="769.0" layoutY="511.0" prefHeight="17.0" prefWidth="120.0" />
 
 </AnchorPane>

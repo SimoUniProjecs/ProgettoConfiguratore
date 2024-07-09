@@ -31,8 +31,6 @@ public class CarConfiguratorController {
     @FXML
     private ComboBox<String> coloreComboBox;
     @FXML
-    private Label resultLabel;
-    @FXML
     private CheckBox vetriCheck;
     @FXML
     private CheckBox cerchiCheck;
@@ -48,6 +46,8 @@ public class CarConfiguratorController {
     private CheckBox abbonamentoCheck;
     @FXML
     private ImageView carImageView;
+    @FXML
+    private Label prezzoLbl;
     private Stage stage;
     private String selectedMarca;
     private JsonNode datiModelliAuto;
@@ -98,8 +98,6 @@ public class CarConfiguratorController {
             internoCheck.setDisable(true);
             impiantoAudioCheck.setDisable(true);
             abbonamentoCheck.setDisable(true);
-
-            resultLabel.setText("");
         }
     }
 
@@ -250,6 +248,8 @@ public class CarConfiguratorController {
             }else {
                 abbonamentoCheck.setDisable(true);
             }
+            // Aggiorna il prezzo base con quel motore
+            prezzoLbl.setText(getPrezzo(selectedMarca, modelloComboBox.getValue(), motorizzazioneComboBox.getValue()) + " €");
         }
     }
     @FXML
@@ -259,16 +259,50 @@ public class CarConfiguratorController {
 
         if (selectedMarca != null && selectedModello != null && selectedColore != null ) {
             String path = getPercorsoIMGPerModello(selectedMarca, selectedModello) + getSecondaParteIMG(getOptionalsForModello(selectedMarca, selectedModello), selectedColore);
-
-            resultLabel.setText("Percorso configurazione: " + path);
             loadImage(path);
         } else {
-            resultLabel.setText("Errore: Seleziona tutte le opzioni");
+            showAlert("Errore", "Seleziona marca, modello e colore per configurare l'auto.");
         }
     }
+
+    // Ritorna il prezzo dell'auto base senza optional
+    private String getPrezzo(String selectedMarca, String modello, String motorizzazione) {
+        // Dividiamo l'input di motorizzazione in alimentazione e potenza
+        String[] parts = motorizzazione.split(" - ");
+        if (parts.length != 2) {
+            return null; // Restituisce null se l'input non è nel formato corretto
+        }
+        String alimentazione = parts[0];
+        String potenza = parts[1];
+
+        JsonNode marcaNode = datiModelliAuto.get(selectedMarca.toLowerCase());
+        if (marcaNode != null) {
+            Iterator<JsonNode> modelliIterator = marcaNode.elements();
+            while (modelliIterator.hasNext()) {
+                JsonNode modelliNode = modelliIterator.next().get("modelli");
+                for (JsonNode modelloNode : modelliNode) {
+                    JsonNode specificModelNode = modelloNode.get(modello);
+                    if (specificModelNode != null) {
+                        JsonNode motorizzazioniNode = specificModelNode.get("motorizzazioni");
+                        for (JsonNode motorizzazioneNode : motorizzazioniNode) {
+                            String potenzaModello = motorizzazioneNode.get("potenza").asText();
+                            String alimentazioneModello = motorizzazioneNode.get("alimentazione").asText();
+                            // Confrontiamo sia l'alimentazione che la potenza
+                            if (potenzaModello.equals(potenza) && alimentazioneModello.equalsIgnoreCase(alimentazione)) {
+                                return motorizzazioneNode.get("prezzo").asText();
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return ""; // Se non trova corrispondenze
+    }
+    // Costruisce il percorso all'interno della directory del modello
     private String getSecondaParteIMG(List<String> optionalsForModello, String selectedColore) {
         StringBuilder risultato = new StringBuilder();
 
+        // Aggiungo il colore
         risultato.append(selectedColore);
 
         // Per ogni possibile optional controllo se è stato selezionato
@@ -294,7 +328,7 @@ public class CarConfiguratorController {
 
         return risultato.append(".png").toString().toLowerCase();
     }
-
+    // Aggiorna l'immagine caricata in base al modello e al colore selezionati e optionals
     private void updateImage() {
         if (modelloComboBox.getValue() != null &&
                 coloreComboBox.getValue() != null) {
@@ -303,7 +337,7 @@ public class CarConfiguratorController {
             loadImage(path);
         }
     }
-
+    // Restituisce i modelli per la marca selezionata in una LISTA di stringhe
     private List<String> getModelliForMarca(String marca) {
         List<String> modelli = new ArrayList<>();
         JsonNode marcaNode = datiModelliAuto.get(marca.toLowerCase());
@@ -316,6 +350,7 @@ public class CarConfiguratorController {
         }
         return modelli;
     }
+    // DAto il percorso dell'immagine, la carica
     private void loadImage(String path) {
         try {
             System.out.println(path);

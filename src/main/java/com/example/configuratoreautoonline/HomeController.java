@@ -62,7 +62,6 @@ public class HomeController {
     public void setStage(Stage stage) {
         this.stage = stage;
     }
-
     @FXML
     private void handleSwitchToViewLoginClick(ActionEvent event) {
         showDialog("/com/example/configuratoreautoonline/login-view.fxml");
@@ -71,17 +70,16 @@ public class HomeController {
     private void handlePopUpDipendent(ActionEvent event){
         showDialog("/com/example/configuratoreautoonline/gestisci-dipendenti.fxml");
     }
-
     @FXML
     private void handleVendiClick(ActionEvent event) {
         changeScene("/com/example/configuratoreautoonline/vendi.fxml");
     }
-
     @FXML
     private void initializeImageSlider() {
         // Array di URL delle immagini per lo slider
-        String[] imageUrls = {"src/main/resources/img/AUDI/RS3/nerovetrioscurati.png",
-        "src/main/resources/img/AUDI/RS3/nerovetrioscurati.png"};
+        String[] imageUrls = {"src/main/resources/img/AUDI/RS3/verde.png",
+        "src/main/resources/img/AUDI/RS3/giallo.png",
+        "src/main/resources/img/AUDI/RS3/nerocerchinerivetrioscurati.png"};
 
         // Indice iniziale dell'array delle immagini
         Random random = new Random();
