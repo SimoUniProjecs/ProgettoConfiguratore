@@ -138,7 +138,7 @@ public class HomeController {
 
     @FXML
     private void handleOpenConfiguratoreALFA(ActionEvent event ){
-        changeSceneToConfiguratore("/com/example/configuratoreautoonline/configuratore.fxml", "ALFA");
+        changeSceneToConfiguratore("/com/example/configuratoreautoonline/configuratore.fxml", "ALFA ROMEO");
     }
 
     private void changeSceneToConfiguratore(String fxmlFile, String marca) {
