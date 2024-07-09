@@ -41,7 +41,8 @@ public class CarConfiguratorController {
     private ImageView carImageView;
 
     private Nodo root = buildCarDecisionTree();
-    private DecisionTree tree;
+
+    private DecisionTree tree = new DecisionTree(root, "", "");
 
     private Stage stage;
 
@@ -94,7 +95,7 @@ public class CarConfiguratorController {
     private void onColoreSelected(ActionEvent event) {
         String selectedColore = coloreComboBox.getValue();
         if (selectedColore != null) {
-            List<String> ruote = Arrays.asList("RuoteGrandi", "RuoteBase");
+            List<String> ruote = Arrays.asList("_cerchi_grandi", "_cerchi_base");
             ruoteComboBox.setItems(FXCollections.observableArrayList(ruote));
             ruoteComboBox.setDisable(false);
 
@@ -113,6 +114,7 @@ public class CarConfiguratorController {
         if (selectedMarca != null && selectedModello != null && selectedColore != null && selectedRuote != null) {
             List<String> nodePath = Arrays.asList("img", selectedMarca, selectedModello, selectedColore, selectedRuote);
             String path = tree.predict(nodePath);
+
             resultLabel.setText("Percorso configurazione: " + path);
             loadImage(path);
         } else {
@@ -187,9 +189,27 @@ public class CarConfiguratorController {
         return colori;
     }
 
+    private String createPath(String... lista)   {
+        String path = "src/main/resources/img/";
+        int i = 0;
+        for ( String s : lista)    {
+            if (i < 2)   {
+                path += s + "/";
+            }
+            else {
+                path += s;
+            }
+            i++;
+        }
+        path+=".png";
+        return path;
+    }
+
     private void loadImage(String imagePath) {
+        String path = createPath(marcaComboBox.getValue(), modelloComboBox.getValue(), coloreComboBox.getValue(), ruoteComboBox.getValue());
         try {
-            File file = new File("src/main/resources/img/ALFA/GIULIA/colore_grigio_cerchi_grandi_pastiglie_rosse.png");
+            System.out.println(path);
+            File file = new File(path);
             Image image = new Image(file.toURI().toString());
             carImageView.setImage(image);
         } catch (Exception e) {

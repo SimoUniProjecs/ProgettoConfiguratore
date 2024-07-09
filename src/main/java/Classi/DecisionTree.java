@@ -16,11 +16,14 @@ public class DecisionTree {
     Boolean [] optionals = new Boolean[5];
 
     String[] optiString;
-    for(int i=0; i<5; i++){
-        optionals[i] = false;
-    }
+
+
+
     public DecisionTree(Nodo root, String marca, String modello) {
         this.root = root;
+        for(int i = 0; i < 5; i++){
+            optionals[i] = false;
+        }
         loadOptionalsFromJson("public/res/data/datiModelliAuto.json",marca, modello);
     }
 

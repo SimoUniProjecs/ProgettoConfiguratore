@@ -17,6 +17,7 @@
             <menus>
                 <Menu mnemonicParsing="false" text="Azioni">
                     <items>
+                        MenuItem mnemonicParsing="false" onAction="#handleSwitchHome" text="Torna alla Home" />
                         <MenuItem mnemonicParsing="false" onAction="#handleValutaUsati" text="Valuta Usati" />
                         <MenuItem mnemonicParsing="false" onAction="#handleInserisciVeicolo" text="Inserisci Veicolo" />
                     </items>
