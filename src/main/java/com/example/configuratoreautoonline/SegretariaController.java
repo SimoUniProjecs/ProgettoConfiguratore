@@ -1,6 +1,6 @@
 package com.example.configuratoreautoonline;
 
-import Classi.DecisionTree;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 
@@ -60,4 +60,10 @@ public class SegretariaController {
 
         return true; // TODO: Implementare
     }
+
+    @FXML
+    private void handleValutaUsati(ActionEvent event) {}
+
+    @FXML
+    private void handleInserisciVeicolo(ActionEvent event) {}
 }
