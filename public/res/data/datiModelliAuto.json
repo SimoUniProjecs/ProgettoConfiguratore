@@ -31,7 +31,8 @@
                     "alimentazione": "Benzina",
                     "prezzo": "75.000 EUR"
                   }
-                ]
+                ],
+                "percorsoImg": "src/main/resources/img/BMW/M2/"
               },
               "XM": {
                 "optionals": [
@@ -57,7 +58,8 @@
                     "alimentazione": "Elettrica",
                     "prezzo": "130.000 EUR"
                   }
-                ]
+                ],
+                "percorsoImg": "src/main/resources/img/BMW/XM/"
               }
             }
           ]
@@ -94,7 +96,8 @@
                     "alimentazione": "Benzina",
                     "prezzo": "68.000 EUR"
                   }
-                ]
+                ],
+                "percorsoImg": "src/main/resources/img/AUDI/RS3/"
               },
               "RS4": {
                 "optionals": [
@@ -122,7 +125,8 @@
                     "alimentazione": "Benzina",
                     "prezzo": "95.000 EUR"
                   }
-                ]
+                ],
+                "percorsoImg": "src/main/resources/img/AUDI/RS4/"
               }
             }
           ]
@@ -157,7 +161,8 @@
                     "alimentazione": "Benzina",
                     "prezzo": "50.000 EUR"
                   }
-                ]
+                ],
+                "percorsoImg": "src/main/resources/img/ALFA/GIULIA/"
               },
               "STELVIO": {
                 "optionals": [
@@ -185,7 +190,8 @@
                     "alimentazione": "Benzina",
                     "prezzo": "70.000 EUR"
                   }
-                ]
+                ],
+                "percorsoImg": "src/main/resources/img/ALFA/STELVIO/"
               }
             }
           ]

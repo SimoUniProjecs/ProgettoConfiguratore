@@ -165,6 +165,23 @@ public class CarConfiguratorController {
         return colori;
     }
 
+    // Ritorna il percorso alla cartella del modello:
+    private String getPercorsoIMGPerModello(String marca, String modello) {
+        String percorso = "";
+        JsonNode marcaNode = datiModelliAuto.get(marca.toLowerCase());
+        if (marcaNode != null) {
+            Iterator<JsonNode> modelliIterator = marcaNode.elements();
+            while (modelliIterator.hasNext()) {
+                JsonNode modelloNode = modelliIterator.next().get("modelli").get(0);
+                JsonNode optionalNode = modelloNode.get(modello);
+                if (optionalNode != null && optionalNode.has("percorsoImg")) {
+                    percorso = optionalNode.get("percorsoImg").asText();
+                }
+            }
+        }
+        return percorso;
+    }
+
     // popola la choicebox con le motorizzazioni disponibili per il modello selezionato
     private List<String> getMotorizzazioniForModello(String marca, String modello) {
         List<String> motorizzazioni = new ArrayList<>();
@@ -249,7 +266,7 @@ public class CarConfiguratorController {
 
         if (selectedMarca != null && selectedModello != null && selectedColore != null ) {
             List<String> nodePath = Arrays.asList("img", selectedMarca, selectedModello, selectedColore);
-            String path = tree.predict(nodePath);
+            String path = getPercorsoIMGPerModello(selectedMarca, selectedModello);
 
             resultLabel.setText("Percorso configurazione: " + path);
             loadImage(path);
@@ -257,7 +274,10 @@ public class CarConfiguratorController {
             resultLabel.setText("Errore: Seleziona tutte le opzioni");
         }
     }
+/*
+ grigiocerchimaggioratifrenirossi.png
 
+ */
 
     private void updateImage() {
         if (modelloComboBox.getValue() != null &&
@@ -265,7 +285,7 @@ public class CarConfiguratorController {
             List<String> nodePath = Arrays.asList("img", selectedMarca, modelloComboBox.getValue(), coloreComboBox.getValue());
             String path = tree.predict(nodePath);
             resultLabel.setText("Percorso configurazione: " + path);
-            loadImage(path);
+            loadImage("src/main/resources/img/ALFA/GIULIA/colore_grigio_cerchi_grandi_pastiglie_rosse.png");
         }
     }
 
