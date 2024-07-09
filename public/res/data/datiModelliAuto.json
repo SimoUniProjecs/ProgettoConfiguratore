@@ -7,8 +7,9 @@
             {
               "M2": {
                 "optionals": [
-                  "assa",
-                  "azzdasadsuro"
+                  "cerchi maggiorati",
+                  "vetri oscurati",
+                  "interni pelle"
                 ],
                 "colori": [
                   "Azzurro",
@@ -34,12 +35,12 @@
               },
               "XM": {
                 "optionals": [
-                  "_cerchi_base",
-                  "_pasiglie_rosse"
+                  "cerchi maggiorati",
+                  "freni rossi",
+                  "impianto audio HarmanCardon"
                 ],
                 "colori": [
-                  "Colore1",
-                  "Colore2"
+                  "grigio"
                 ],
                 "motorizzazioni": [
                   {
@@ -68,12 +69,15 @@
             {
               "RS3": {
                 "optionals": [
-                  "_cerchi_neri",
-                  "_vetri_oscurati"
+                  "interni pelle",
+                  "cerchi neri",
+                  "vetri oscurati"
                 ],
                 "colori": [
-                  "Colore1",
-                  "Colore2"
+                  "giallo",
+                  "grigio",
+                  "nero",
+                  "verde"
                 ],
                 "motorizzazioni": [
                   {
@@ -94,12 +98,14 @@
               },
               "RS4": {
                 "optionals": [
-                  "_cerchi_neri",
-                  "_vetri_oscurati"
+                  "interni pelle",
+                  "cerchi neri",
+                  "vetri oscurati"
                 ],
                 "colori": [
-                  "Colore1",
-                  "Colore2"
+                  "bianco",
+                  "blu",
+                  "grigio"
                 ],
                 "motorizzazioni": [
                   {
@@ -128,12 +134,13 @@
             {
               "GIULIA": {
                 "optionals": [
-                  "_cerchi_grandi",
-                  "_pastiglie_rosse"
+                  "cerchi maggiorati",
+                  "freni rossi"
                 ],
                 "colori": [
-                  "Colore1",
-                  "Colore2"
+                  "grigio",
+                  "rosso",
+                  "verde"
                 ],
                 "motorizzazioni": [
                   {
@@ -154,12 +161,14 @@
               },
               "STELVIO": {
                 "optionals": [
-                  "_cerchi_grandi",
-                  "_pastiglie_rosse"
+                  "cerchi maggiorati",
+                  "freni rossi",
+                  "interni pelle"
                 ],
                 "colori": [
-                  "Colore1",
-                  "Colore2"
+                  "blu",
+                  "rosso",
+                  "verde"
                 ],
                 "motorizzazioni": [
                   {
