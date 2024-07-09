@@ -1,7 +1,5 @@
 package com.example.configuratoreautoonline;
 
-import Classi.DecisionTree;
-import Classi.Nodo;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import javafx.collections.FXCollections;
@@ -22,7 +20,6 @@ import javafx.stage.Stage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
@@ -51,9 +48,6 @@ public class CarConfiguratorController {
     private CheckBox abbonamentoCheck;
     @FXML
     private ImageView carImageView;
-
-    private Nodo root = buildCarDecisionTree();
-    private DecisionTree tree = new DecisionTree(root, "", "");
     private Stage stage;
     private String selectedMarca;
     private JsonNode datiModelliAuto;
@@ -258,15 +252,13 @@ public class CarConfiguratorController {
             }
         }
     }
-
     @FXML
     private void onConfiguraButtonClicked() {
         String selectedModello = modelloComboBox.getValue();
         String selectedColore = coloreComboBox.getValue();
 
         if (selectedMarca != null && selectedModello != null && selectedColore != null ) {
-            List<String> nodePath = Arrays.asList("img", selectedMarca, selectedModello, selectedColore);
-            String path = getPercorsoIMGPerModello(selectedMarca, selectedModello);
+            String path = getPercorsoIMGPerModello(selectedMarca, selectedModello) + getSecondaParteIMG(getOptionalsForModello(selectedMarca, selectedModello), selectedColore);
 
             resultLabel.setText("Percorso configurazione: " + path);
             loadImage(path);
@@ -274,18 +266,36 @@ public class CarConfiguratorController {
             resultLabel.setText("Errore: Seleziona tutte le opzioni");
         }
     }
-/*
- grigiocerchimaggioratifrenirossi.png
+    private String getSecondaParteIMG(List<String> optionalsForModello, String selectedColore) {
+        StringBuilder risultato = new StringBuilder();
 
- */
+        risultato.append(selectedColore);
+
+        if(cerchiScuriCheck.isSelected()){
+            risultato.append("cerchineri");
+        }
+
+        if(cerchiCheck.isSelected()){
+            risultato.append("cerchimaggiorati");
+        }
+
+        if(vetriCheck.isSelected()){
+            risultato.append("vetrioscurati");
+        }
+
+        if(pinzeCheck.isSelected()){
+            risultato.append("frenirossi");
+        }
+
+        return risultato.append(".png").toString().toLowerCase();
+    }
 
     private void updateImage() {
         if (modelloComboBox.getValue() != null &&
                 coloreComboBox.getValue() != null) {
-            List<String> nodePath = Arrays.asList("img", selectedMarca, modelloComboBox.getValue(), coloreComboBox.getValue());
-            String path = tree.predict(nodePath);
-            resultLabel.setText("Percorso configurazione: " + path);
-            loadImage("src/main/resources/img/ALFA/GIULIA/colore_grigio_cerchi_grandi_pastiglie_rosse.png");
+            String path = getPercorsoIMGPerModello(selectedMarca, modelloComboBox.getValue()) +
+                    getSecondaParteIMG(getOptionalsForModello(selectedMarca, modelloComboBox.getValue()), coloreComboBox.getValue());
+            loadImage(path);
         }
     }
 
@@ -301,24 +311,7 @@ public class CarConfiguratorController {
         }
         return modelli;
     }
-
-    private String createPath(String... lista) {
-        String path = "src/main/resources/img/";
-        int i = 0;
-        for (String s : lista) {
-            if (i < 2) {
-                path += s + "/";
-            } else {
-                path += s;
-            }
-            i++;
-        }
-        path += ".png";
-        return path;
-    }
-
-    private void loadImage(String imagePath) {
-        String path = createPath(selectedMarca, modelloComboBox.getValue(), coloreComboBox.getValue());
+    private void loadImage(String path) {
         try {
             System.out.println(path);
             File file = new File(path);
@@ -328,12 +321,6 @@ public class CarConfiguratorController {
             e.printStackTrace();
         }
     }
-
-    private Nodo buildCarDecisionTree() {
-        // Implementazione per costruire l'albero decisionale
-        return new Nodo("root", null); // Sostituisci con la logica effettiva
-    }
-
     // per tornare alla home
     @FXML
     private void handleHomeButton(ActionEvent event) {
@@ -342,7 +329,6 @@ public class CarConfiguratorController {
 
         changeScene("/com/example/configuratoreautoonline/Home-view.fxml", currentStage);
     }
-
     private void changeScene(String fxmlFile, Stage currentStage) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlFile));
@@ -356,8 +342,6 @@ public class CarConfiguratorController {
             e.printStackTrace();
         }
     }
-
-
     private void showAlert(String title, String content) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle(title);
