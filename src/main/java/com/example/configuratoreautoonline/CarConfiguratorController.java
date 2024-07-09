@@ -271,19 +271,24 @@ public class CarConfiguratorController {
 
         risultato.append(selectedColore);
 
-        if(cerchiScuriCheck.isSelected()){
+        // Per ogni possibile optional controllo se è stato selezionato
+        // e se è presente tra gli optional possibili del modello
+        // Altrimenti potrebbe essere un optional non disponibile per quel modello perchè disattivato
+        // ma disattivato solo per quel modello
+
+        if(cerchiScuriCheck.isSelected() && optionalsForModello.contains("cerchi neri")){
             risultato.append("cerchineri");
         }
 
-        if(cerchiCheck.isSelected()){
+        if(cerchiCheck.isSelected() && optionalsForModello.contains("cerchi maggiorati")){
             risultato.append("cerchimaggiorati");
         }
 
-        if(vetriCheck.isSelected()){
+        if(vetriCheck.isSelected() && optionalsForModello.contains("vetri oscurati")){
             risultato.append("vetrioscurati");
         }
 
-        if(pinzeCheck.isSelected()){
+        if(pinzeCheck.isSelected() && optionalsForModello.contains("freni rossi")){
             risultato.append("frenirossi");
         }
 
