@@ -24,7 +24,13 @@ public class DecisionTree {
         for(int i = 0; i < 5; i++){
             optionals[i] = false;
         }
-        loadOptionalsFromJson("public/res/data/datiModelliAuto.json",marca, modello);
+        try {
+            loadOptionalsFromJson("public/res/data/datiModelliAuto.json", marca, modello);
+        }
+        catch (Exception e){
+            System.out.println("Errore nel caricamento degli optional");
+            e.printStackTrace();
+        }
     }
 
     private void loadOptionalsFromJson(String jsonFilePath, String marca, String modello) {

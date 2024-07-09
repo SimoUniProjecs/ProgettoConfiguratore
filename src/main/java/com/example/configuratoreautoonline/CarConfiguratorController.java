@@ -72,7 +72,7 @@ public class CarConfiguratorController {
     private void loadJsonData() {
         ObjectMapper objectMapper = new ObjectMapper();
         try {
-            File file = new File("public/res/data/datiModelliAuto.json"); // Sostituisci con il percorso corretto
+            File file = new File("public/res/data/datiModelliAuto.json");
             JsonNode root = objectMapper.readTree(file);
             datiModelliAuto = root.get("datiModelliAuto").get(0);
         } catch (IOException e) {
