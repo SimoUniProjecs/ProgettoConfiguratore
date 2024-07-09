@@ -62,8 +62,44 @@ public class CarConfiguratorController {
     @FXML
     public void initialize() {
         stage = new Stage();
-    }
 
+        // Listener per aggiornare l'immagine quando cambia il modello
+        modelloComboBox.setOnAction(event -> {
+            onModelloSelected(event);
+            updateImage();
+        });
+
+        // Listener per aggiornare l'immagine quando cambia il colore
+        coloreComboBox.setOnAction(event -> updateImage());
+
+        // Listener per aggiornare l'immagine quando cambia la motorizzazione
+        motorizzazioneComboBox.setOnAction(event -> {
+            onMotoSelected(event);
+            updateImage();
+        });
+
+        // Listener per aggiornare l'immagine quando si selezionano/deselezionano i CheckBox
+        vetriCheck.setOnAction(event -> updateImage());
+        cerchiCheck.setOnAction(event -> updateImage());
+        pinzeCheck.setOnAction(event -> updateImage());
+        cerchiScuriCheck.setOnAction(event -> updateImage());
+        internoCheck.setOnAction(event -> updateImage());
+        impiantoAudioCheck.setOnAction(event -> updateImage());
+        abbonamentoCheck.setOnAction(event -> updateImage());
+    }
+    @FXML
+    private void onModelloSelected(ActionEvent event) {
+        String selectedModello = modelloComboBox.getValue();
+        if (selectedModello != null) {
+            List<String> colori = getColoriPerModello(selectedMarca, selectedModello);
+            coloreComboBox.setItems(FXCollections.observableArrayList(colori));
+            coloreComboBox.setDisable(false);
+            coloreComboBox.getSelectionModel().clearSelection();
+
+            updateMotorizzazioneComboBox(selectedModello);
+        }
+        updateImage();
+    }
     // Carica datiModelliAuto.json in datiModelliAuto
     private void loadJsonData() {
         ObjectMapper objectMapper = new ObjectMapper();
@@ -90,37 +126,40 @@ public class CarConfiguratorController {
             motorizzazioneComboBox.getItems().clear();
             carImageView.setImage(null);
 
-            // Deve prima scegliere il resto
-            vetriCheck.setDisable(true);
-            cerchiCheck.setDisable(true);
-            cerchiScuriCheck.setDisable(true);
-            pinzeCheck.setDisable(true);
-            internoCheck.setDisable(true);
-            impiantoAudioCheck.setDisable(true);
-            abbonamentoCheck.setDisable(true);
+            // Rimuovi il listener vecchio se presente
+            modelloComboBox.setOnAction(null);
+
+            // Aggiungi nuovo listener per il cambio dinamico dell'immagine
+            modelloComboBox.setOnAction(event -> onModelloSelected(event));
+
+            // Disabilita gli optional
+            disableOptionalCheckboxes(true);
         }
+    }
+    @FXML
+    private void disableOptionalCheckboxes(boolean disable) {
+        vetriCheck.setDisable(disable);
+        cerchiCheck.setDisable(disable);
+        cerchiScuriCheck.setDisable(disable);
+        pinzeCheck.setDisable(disable);
+        internoCheck.setDisable(disable);
+        impiantoAudioCheck.setDisable(disable);
+        abbonamentoCheck.setDisable(disable);
     }
 
     // Una volta che è stato scelto il modello, si possono selezionare gli optional partendo dal colore
-    @FXML
-    private void onModelloSelected(ActionEvent event) {
-        String selectedModello = modelloComboBox.getValue();
-        if (selectedModello != null) {
-            List<String> colori = getColoriPerModello(selectedMarca, selectedModello);
-            coloreComboBox.setItems(FXCollections.observableArrayList(colori));
-            coloreComboBox.setDisable(false);
-            coloreComboBox.getSelectionModel().clearSelection();
-
-            updateMotorizzazioneComboBox(selectedModello);
-            updateImage();
-        }
-    }
 
     // Richiama getMotorizzazioniForModello per ottenere le motorizzazioni del modello selezionato
     private void updateMotorizzazioneComboBox(String modello) {
         List<String> motorizzazioni = getMotorizzazioniForModello(selectedMarca, modello);
         motorizzazioneComboBox.setItems(FXCollections.observableArrayList(motorizzazioni));
         motorizzazioneComboBox.setDisable(false);
+
+        // Rimuovi il listener vecchio se presente
+        motorizzazioneComboBox.setOnAction(null);
+
+        // Aggiungi nuovo listener per il cambio dinamico dell'immagine
+        motorizzazioneComboBox.setOnAction(event -> onMotoSelected(event));
     }
 
     // Restituisci gli optional per il modello selezionato
@@ -209,48 +248,50 @@ public class CarConfiguratorController {
 
             if (optionals.contains("vetri oscurati")) {
                 vetriCheck.setDisable(false);
-              }else {
+            } else {
                 vetriCheck.setDisable(true);
             }
 
             if (optionals.contains("cerchi maggiorati")) {
                 cerchiCheck.setDisable(false);
-            }else {
+            } else {
                 cerchiCheck.setDisable(true);
             }
 
             if (optionals.contains("cerchi neri")) {
                 cerchiScuriCheck.setDisable(false);
-            }else {
+            } else {
                 cerchiScuriCheck.setDisable(true);
             }
 
             if (optionals.contains("freni rossi")) {
                 pinzeCheck.setDisable(false);
-            }else {
+            } else {
                 pinzeCheck.setDisable(true);
             }
 
             if (optionals.contains("interni pelle")) {
                 internoCheck.setDisable(false);
-            }else {
+            } else {
                 internoCheck.setDisable(true);
             }
 
             if (optionals.contains("impianto audio HarmanCardon")) {
                 impiantoAudioCheck.setDisable(false);
-            }else {
+            } else {
                 impiantoAudioCheck.setDisable(true);
             }
 
-            if(motorizzazioneComboBox.getValue().contains("Elettrica")){
+            if (motorizzazioneComboBox.getValue().contains("Elettrica")) {
                 abbonamentoCheck.setDisable(false);
-            }else {
+            } else {
                 abbonamentoCheck.setDisable(true);
             }
+
             // Aggiorna il prezzo base con quel motore
             prezzoLbl.setText(getPrezzo(selectedMarca, modelloComboBox.getValue(), motorizzazioneComboBox.getValue()) + " €");
         }
+        updateImage();
     }
     @FXML
     private void onConfiguraButtonClicked() {
@@ -329,9 +370,10 @@ public class CarConfiguratorController {
         return risultato.append(".png").toString().toLowerCase();
     }
     // Aggiorna l'immagine caricata in base al modello e al colore selezionati e optionals
-    private void updateImage() {
+    public void updateImage() {
         if (modelloComboBox.getValue() != null &&
-                coloreComboBox.getValue() != null) {
+                coloreComboBox.getValue() != null &&
+                motorizzazioneComboBox.getValue() != null) {
             String path = getPercorsoIMGPerModello(selectedMarca, modelloComboBox.getValue()) +
                     getSecondaParteIMG(getOptionalsForModello(selectedMarca, modelloComboBox.getValue()), coloreComboBox.getValue());
             loadImage(path);
