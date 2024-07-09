@@ -1,14 +1,1 @@
-{"datiAutoUsate": [
-{
-    "bmw": [{
-
-    }],
-    "audi": [{
-
-    }],
-    "alfa Romeo": [{
-
-    }]
-
-  }
-]}
+{"datiAutoUsate":[{"bmw":[{}],"audi":[{}],"alfa Romeo":[{}]},{"marca":"dasdas","modello":"asddas","alimentazione":"Diesel","cambio":"Automatico","anno":"2020-07-10","km":"123","proprietari":3,"condizioni":3,"prezzo":-1}]}

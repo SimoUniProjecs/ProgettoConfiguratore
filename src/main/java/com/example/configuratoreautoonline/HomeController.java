@@ -233,6 +233,7 @@ public class HomeController {
 
     @FXML
     public void initialize() {
+        stage = new Stage();
         updateMenuVisibility();
         loadImages();
 

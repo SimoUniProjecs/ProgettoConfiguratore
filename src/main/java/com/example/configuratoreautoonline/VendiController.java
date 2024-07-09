@@ -41,10 +41,10 @@ public class VendiController {
     private ChoiceBox<String> carburanteChoiceBox;
     private Stage stage;
 
-    public void setStage(Stage stage) {
-        this.stage = stage;
+    @FXML
+    public void initialize() {
+        stage = new Stage();
     }
-
     @FXML
     private void handleHomeButton(ActionEvent event) {
         try {
@@ -119,14 +119,6 @@ public class VendiController {
                 }
                 ArrayNode autoUsate = (ArrayNode) root.get("datiAutoUsate");
 
-                System.out.println("Marca: " + marcaTxt.getText());
-                System.out.println("Modello: " + modelloTxt.getText());
-                System.out.println("Alimentazione: " + carburanteChoiceBox.getValue());
-                System.out.println("Cambio: " + trasmissioniChoiceBox.getValue());
-                System.out.println("Anno: " + immatricolazione.getValue().getYear());
-                System.out.println("Km: " + kmTxt.getText());
-                System.out.println("Condizioni: " + statoChoiceBox.getValue());
-
                 // Crea un nuovo oggetto JSON per l'auto
                 ObjectNode auto = mapper.createObjectNode();
                 auto.put("marca", marcaTxt.getText());
@@ -139,22 +131,14 @@ public class VendiController {
                 // Gestione dell'input per il campo proprietari
                 Integer proprietari = safelyParseInteger(proprietariTxt.getText());
                 if (proprietari == null) {
-                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                    alert.setTitle("Errore Input");
-                    alert.setHeaderText(null);
-                    alert.setContentText("Il numero di proprietari deve essere un valore numerico valido.");
-                    alert.show();
+                    showAlert("Errore", "Il numero di proprietari deve essere un valore numerico valido.");
                     return;
                 }
                 auto.put("proprietari", proprietari);
 
                 // Gestione dell'input per il campo condizioni (statoChoiceBox)
                 if (statoChoiceBox.getValue() == null) {
-                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                    alert.setTitle("Errore Input");
-                    alert.setHeaderText(null);
-                    alert.setContentText("Selezionare uno stato dall'elenco.");
-                    alert.show();
+                    showAlert("Errore", "Selezionare uno stato dall'elenco.");
                     return;
                 }
                 auto.put("condizioni", statoChoiceBox.getValue());
@@ -166,19 +150,25 @@ public class VendiController {
             }
 
             // Mostra una conferma
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Richiesta preventivo");
-            alert.setHeaderText(null);
-            alert.setContentText("L'auto è inserita nel database delle richieste, verrà contattato al più presto per un preventivo!");
-            alert.show();
+            showAlert("Richiesta preventivo", "L'auto è inserita nel database delle richieste, verrà contattato al più presto per un preventivo!");
         } else {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Errore");
-            alert.setHeaderText(null);
-            alert.setContentText("Compilare tutti i campi in maniera corretta per richiedere un preventivo!");
-            alert.show();
+            showAlert("Errore", "Compilare tutti i campi in maniera corretta per richiedere un preventivo!");
         }
     }
+
+    private void showAlert(String title, String content) {
+        Alert alert;
+        if(title.equals("Richiesta preventivo")){
+            alert = new Alert(Alert.AlertType.INFORMATION);
+        }else{
+            alert = new Alert(Alert.AlertType.ERROR);
+        }
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(content);
+        alert.show();
+    }
+
     private boolean isValidInput() {
         // Verifica che i campi numerici siano correttamente compilati
         boolean numericFieldsValid =
