@@ -9,10 +9,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
@@ -48,6 +45,8 @@ public class CarConfiguratorController {
     private ImageView carImageView;
     @FXML
     private Label prezzoLbl;
+    @FXML
+    private Button interniBtn;
     private Stage stage;
     private String selectedMarca;
     private JsonNode datiModelliAuto;
@@ -100,6 +99,42 @@ public class CarConfiguratorController {
         }
         updateImage();
     }
+
+    private String generaPathInterni(String marca, String modello){
+        String percorso = "";
+        JsonNode marcaNode = datiModelliAuto.get(marca.toLowerCase());
+        if (marcaNode != null) {
+            Iterator<JsonNode> modelliIterator = marcaNode.elements();
+            while (modelliIterator.hasNext()) {
+                JsonNode modelloNode = modelliIterator.next().get("modelli").get(0);
+                JsonNode optionalNode = modelloNode.get(modello);
+                if (optionalNode != null && optionalNode.has("percorsoImg")) {
+                    percorso = optionalNode.get("percorsoImg").asText();
+                }
+            }
+        }
+
+        if(internoCheck.isSelected() && getOptionalsForModello(selectedMarca, modelloComboBox.getValue()).contains("interni pelle")){
+            percorso += "internopelle.png";
+        } else {
+            percorso += "internobase.png";
+        }
+        return percorso.toLowerCase();
+    }
+    @FXML
+    private void onInterniClicked(ActionEvent event){
+        if(interniBtn.getText().equals("Visualizza Interni")){
+            try {
+                loadImage(generaPathInterni(selectedMarca, modelloComboBox.getValue()));
+                interniBtn.setText("Visualizza Esterni");
+            }catch (Exception e) {
+                showAlert("Errore", "Impossibile caricare l'immagine degli interni.");
+            }
+        } else {
+            updateImage();
+        }
+    }
+
     // Carica datiModelliAuto.json in datiModelliAuto
     private void loadJsonData() {
         ObjectMapper objectMapper = new ObjectMapper();
