@@ -12,7 +12,7 @@
    </HBox>
 
    <VBox spacing="10" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="177.0" AnchorPane.topAnchor="50.0">
-      <ComboBox fx:id="marcaComboBox" onAction="#onMarcaSelected" promptText="Seleziona Marca" VBox.vgrow="ALWAYS" />
+      
       <ComboBox fx:id="modelloComboBox" onAction="#onModelloSelected" promptText="Seleziona Modello" VBox.vgrow="ALWAYS" />
       <ComboBox fx:id="coloreComboBox" onAction="#onColoreSelected" promptText="Seleziona Colore" VBox.vgrow="ALWAYS" />
       <ComboBox fx:id="ruoteComboBox" promptText="Seleziona Ruote" VBox.vgrow="ALWAYS" />

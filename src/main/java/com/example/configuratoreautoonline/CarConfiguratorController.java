@@ -23,9 +23,6 @@ import java.util.List;
 
 public class CarConfiguratorController {
     @FXML
-    private ComboBox<String> marcaComboBox;
-
-    @FXML
     private ComboBox<String> modelloComboBox;
 
     @FXML
@@ -46,16 +43,20 @@ public class CarConfiguratorController {
 
     private Stage stage;
 
-    @FXML
-    public void initialize() {
-        stage = new Stage();
-        List<String> marche = Arrays.asList("BMW", "AUDI", "ALFA");
-        marcaComboBox.setItems(FXCollections.observableArrayList(marche));
+    private String selectedMarca;
+
+    public void initData(String marca) {
+        this.selectedMarca = marca;
+        System.out.println(marca);
+        initializeModelComboBox();
     }
 
     @FXML
-    private void onMarcaSelected(ActionEvent event) {
-        String selectedMarca = marcaComboBox.getValue();
+    public void initialize() {
+        stage = new Stage();
+    }
+
+    private void initializeModelComboBox() {
         if (selectedMarca != null) {
             List<String> modelli = getModelliForMarca(selectedMarca);
             modelloComboBox.setItems(FXCollections.observableArrayList(modelli));
@@ -73,10 +74,8 @@ public class CarConfiguratorController {
         }
     }
 
-
     @FXML
     private void onModelloSelected(ActionEvent event) {
-        String selectedMarca = marcaComboBox.getValue();
         String selectedModello = modelloComboBox.getValue();
         if (selectedModello != null) {
             List<String> colori = getColoriForModello(selectedMarca, selectedModello);
@@ -103,10 +102,8 @@ public class CarConfiguratorController {
         }
     }
 
-
     @FXML
     private void onConfiguraButtonClicked() {
-        String selectedMarca = marcaComboBox.getValue();
         String selectedModello = modelloComboBox.getValue();
         String selectedColore = coloreComboBox.getValue();
         String selectedRuote = ruoteComboBox.getValue();
@@ -123,9 +120,9 @@ public class CarConfiguratorController {
     }
 
     private void updateImage() {
-        if (marcaComboBox.getValue() != null && modelloComboBox.getValue() != null &&
+        if (modelloComboBox.getValue() != null &&
                 coloreComboBox.getValue() != null && ruoteComboBox.getValue() != null) {
-            List<String> nodePath = Arrays.asList("img", marcaComboBox.getValue(), modelloComboBox.getValue(), coloreComboBox.getValue(), ruoteComboBox.getValue());
+            List<String> nodePath = Arrays.asList("img", selectedMarca, modelloComboBox.getValue(), coloreComboBox.getValue(), ruoteComboBox.getValue());
             String path = tree.predict(nodePath);
             resultLabel.setText("Percorso configurazione: " + path);
             loadImage(path);
@@ -189,24 +186,23 @@ public class CarConfiguratorController {
         return colori;
     }
 
-    private String createPath(String... lista)   {
+    private String createPath(String... lista) {
         String path = "src/main/resources/img/";
         int i = 0;
-        for ( String s : lista)    {
-            if (i < 2)   {
+        for (String s : lista) {
+            if (i < 2) {
                 path += s + "/";
-            }
-            else {
+            } else {
                 path += s;
             }
             i++;
         }
-        path+=".png";
+        path += ".png";
         return path;
     }
 
     private void loadImage(String imagePath) {
-        String path = createPath(marcaComboBox.getValue(), modelloComboBox.getValue(), coloreComboBox.getValue(), ruoteComboBox.getValue());
+        String path = createPath(selectedMarca, modelloComboBox.getValue(), coloreComboBox.getValue(), ruoteComboBox.getValue());
         try {
             System.out.println(path);
             File file = new File(path);

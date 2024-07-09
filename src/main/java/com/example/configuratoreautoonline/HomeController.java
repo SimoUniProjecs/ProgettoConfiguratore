@@ -193,9 +193,38 @@ public class HomeController {
     }
 
     @FXML
-    private void handleOpenConfiguratore(ActionEvent event ){
-        changeScene("/com/example/configuratoreautoonline/configuratore.fxml");
+    private void handleOpenConfiguratoreBMW(ActionEvent event ){
+        changeSceneToConfiguratore("/com/example/configuratoreautoonline/configuratore.fxml", "BMW");
     }
+
+    @FXML
+    private void handleOpenConfiguratoreAUDI(ActionEvent event ){
+        changeSceneToConfiguratore("/com/example/configuratoreautoonline/configuratore.fxml", "AUDI");
+    }
+
+    @FXML
+    private void handleOpenConfiguratoreALFA(ActionEvent event ){
+        changeSceneToConfiguratore("/com/example/configuratoreautoonline/configuratore.fxml", "ALFA");
+    }
+
+    private void changeSceneToConfiguratore(String fxmlFile, String marca) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlFile));
+            Parent root = loader.load();
+
+            // Ottieni il controller associato alla nuova scena
+            CarConfiguratorController controller = loader.getController();
+            controller.initData(marca);
+
+            Scene scene = new Scene(root);
+            stage.setScene(scene); // Usa il membro stage della classe
+            stage.show();
+        } catch (IOException e) {
+            showAlert("Error loading scene", "Cannot load scene from file: " + fxmlFile + "\n" + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
 
     private void changeScene(String fxmlFile) {
         try {
