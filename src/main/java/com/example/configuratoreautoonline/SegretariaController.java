@@ -57,7 +57,7 @@ public class SegretariaController {
 
     // Aggiunge un'auto al catalogo
     boolean aggiungiAlCatalogo(){
-        DecisionTree tree = new DecisionTree();
+
         return true; // TODO: Implementare
     }
 }

@@ -1,5 +1,5 @@
 package com.example.configuratoreautoonline;
-
+import Classi.*;
 import Classi.DecisionTree;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
@@ -219,59 +219,58 @@ public class CarConfiguratorController {
         }
         return colori;
     }
-/**
- *
- private Nodo buildCarDecisionTree() {
- Nodo root = new Nodo("img", null);
 
- Nodo bmw = new Nodo("BMW", root);
- Nodo audi = new Nodo("AUDI", root);
- Nodo alfa = new Nodo("ALFA", root);
+    private Nodo buildCarDecisionTree() {
+        Nodo root = new Nodo("img", null);
 
- root.addBranch(bmw);
- root.addBranch(audi);
- root.addBranch(alfa);
+        Nodo bmw = new Nodo("BMW", root);
+        Nodo audi = new Nodo("AUDI", root);
+        Nodo alfa = new Nodo("ALFA", root);
 
- Nodo Giulia = new Nodo("GIULIA", alfa);
- Nodo Stelvio = new Nodo("STELVIO", alfa);
+        root.addBranch(bmw);
+        root.addBranch(audi);
+        root.addBranch(alfa);
 
- alfa.addBranch(Stelvio, Giulia);
+        Nodo Giulia = new Nodo("GIULIA", alfa);
+        Nodo Stelvio = new Nodo("STELVIO", alfa);
 
- Nodo VerdeGiulia = new Nodo("Verde", Giulia);
- Nodo GrigioGiulia = new Nodo("Grigio", Giulia);
- Nodo RossoGiulia = new Nodo("Rosso", Giulia);
+        alfa.addBranch(Stelvio, Giulia);
 
- Giulia.addBranch(VerdeGiulia, GrigioGiulia, RossoGiulia);
+        Nodo VerdeGiulia = new Nodo("Verde", Giulia);
+        Nodo GrigioGiulia = new Nodo("Grigio", Giulia);
+        Nodo RossoGiulia = new Nodo("Rosso", Giulia);
 
- Nodo RS3 = new Nodo("RS3", audi);
- Nodo RS4 = new Nodo("RS4", audi);
+        Giulia.addBranch(VerdeGiulia, GrigioGiulia, RossoGiulia);
 
- audi.addBranch(RS3, RS4);
+        Nodo RS3 = new Nodo("RS3", audi);
+        Nodo RS4 = new Nodo("RS4", audi);
 
- Nodo RossoStelvio = new Nodo("Rosso", Stelvio);
- Nodo BluStelvio = new Nodo("Blu", Stelvio);
- Nodo VerdeStelvio = new Nodo("Verde", Stelvio);
+        audi.addBranch(RS3, RS4);
 
- Stelvio.addBranch(RossoStelvio, BluStelvio, VerdeStelvio);
+        Nodo RossoStelvio = new Nodo("Rosso", Stelvio);
+        Nodo BluStelvio = new Nodo("Blu", Stelvio);
+        Nodo VerdeStelvio = new Nodo("Verde", Stelvio);
 
- RS3.addBranch(new Nodo("Nero", RS3), new Nodo("Grigio", RS3), new Nodo("Giallo", RS3));
- RS4.addBranch(new Nodo("Bianco", RS4), new Nodo("Blu", RS4), new Nodo("Grigio", RS4));
+        Stelvio.addBranch(RossoStelvio, BluStelvio, VerdeStelvio);
 
- Nodo M2 = new Nodo("M2", bmw);
- Nodo XM = new Nodo("XM", bmw);
+        RS3.addBranch(new Nodo("Nero", RS3), new Nodo("Grigio", RS3), new Nodo("Giallo", RS3));
+        RS4.addBranch(new Nodo("Bianco", RS4), new Nodo("Blu", RS4), new Nodo("Grigio", RS4));
 
- bmw.addBranch(M2, XM);
+        Nodo M2 = new Nodo("M2", bmw);
+        Nodo XM = new Nodo("XM", bmw);
 
- M2.addBranch(new Nodo("Azzurro", M2), new Nodo("Grigio", M2), new Nodo("Rosso", M2));
- XM.addBranch(new Nodo("Base", XM));
+        bmw.addBranch(M2, XM);
 
- // Aggiungi nodi "RuoteGrandi" e "RuoteBase" per ogni colore
- for (Nodo colore : new Nodo[]{VerdeGiulia, GrigioGiulia, RossoGiulia, RossoStelvio, BluStelvio, VerdeStelvio}) {
- colore.addBranch(new Nodo("RuoteGrandi", colore), new Nodo("RuoteBase", colore));
- }
+        M2.addBranch(new Nodo("Azzurro", M2), new Nodo("Grigio", M2), new Nodo("Rosso", M2));
+        XM.addBranch(new Nodo("Base", XM));
 
- return root;
- }
- */
+        // Aggiungi nodi "RuoteGrandi" e "RuoteBase" per ogni colore
+        for (Nodo colore : new Nodo[]{VerdeGiulia, GrigioGiulia, RossoGiulia, RossoStelvio, BluStelvio, VerdeStelvio}) {
+            colore.addBranch(new Nodo("RuoteGrandi", colore), new Nodo("RuoteBase", colore));
+        }
+
+        return root;
+    }
+
 }
 

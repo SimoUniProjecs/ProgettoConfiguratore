@@ -11,12 +11,11 @@ public class DecisionTree {
 
     Boolean [] optionals = new Boolean[5];
     String[] optiString = {"_A", "_B", "_C", "_D", "_E"}; // leggerlo da datiModelliAuto.json
-    // Metodo per addestrare l'albero
 
-
-    public void train(Nodo root) {
+    public DecisionTree(Nodo root) {
         this.root = root;
     }
+
 
 
 
@@ -94,7 +93,7 @@ public class DecisionTree {
 
 
     // Esempio di utilizzo
-    public static void main(String[] args) {
+    /*public static void main(String[] args) {
         // Costruzione manuale dell'albero per la selezione degli optional di una macchina
         Nodo root = new Nodo("img", null);
 
@@ -158,6 +157,6 @@ public class DecisionTree {
             System.out.println("Path: " + path);
         }
 
-    }
+    }*/
 }
 
