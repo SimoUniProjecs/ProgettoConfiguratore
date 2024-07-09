@@ -4,15 +4,24 @@
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 
-
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="444.0" prefWidth="765.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane prefHeight="444.0" prefWidth="765.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.configuratoreautoonline.CarConfiguratorController">
    <children>
-      <ComboBox fx:id="marcaComboBox" layoutX="48.0" layoutY="47.0" onAction="#onMarcaSelected" promptText="Seleziona Marca" />
-      <ComboBox fx:id="modelloComboBox" layoutX="43.0" layoutY="107.0" onAction="#onModelloSelected" promptText="Seleziona Modello" />
-      <ComboBox fx:id="coloreComboBox" layoutX="43.0" layoutY="166.0" onAction="#onColoreSelected" prefHeight="26.0" prefWidth="145.0" promptText="Seleziona Colore" />
-      <ComboBox fx:id="ruoteComboBox" layoutX="49.0" layoutY="234.0" promptText="Seleziona Ruote" />
-      <Button layoutX="80.0" layoutY="307.0" onAction="#onConfiguraButtonClicked" text="Configura" />
-      <ImageView fitHeight="420.0" fitWidth="560.0" layoutX="191.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true" />
+      <!-- Barra di navigazione -->
+      <HBox alignment="CENTER" style="-fx-background-color: #f0f0f0;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <Button onAction="#handleHomeButton" text="Home" />
+      </HBox>
+
+      <VBox spacing="10" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="50.0">
+         <ComboBox fx:id="marcaComboBox" onAction="#onMarcaSelected" promptText="Seleziona Marca" VBox.vgrow="ALWAYS" />
+         <ComboBox fx:id="modelloComboBox" onAction="#onModelloSelected" promptText="Seleziona Modello" VBox.vgrow="ALWAYS" />
+         <ComboBox fx:id="coloreComboBox" onAction="#onColoreSelected" promptText="Seleziona Colore" VBox.vgrow="ALWAYS" />
+         <ComboBox fx:id="ruoteComboBox" promptText="Seleziona Ruote" VBox.vgrow="ALWAYS" />
+         <Button onAction="#onConfiguraButtonClicked" text="Configura" VBox.vgrow="ALWAYS" />
+      </VBox>
+
+      <ImageView fx:id="carImageView" fitHeight="200" fitWidth="300" preserveRatio="true" />
    </children>
 </AnchorPane>

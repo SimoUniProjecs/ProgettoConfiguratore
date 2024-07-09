@@ -176,7 +176,7 @@ public class HomeController {
                 bigImageView.setImage(nextImage);
 
             } catch (NullPointerException e) {
-                    System.out.println("Errore nel caricamento dell'immagine con indice: " + inDex);
+                System.out.println("Errore nel caricamento dell'immagine con indice: " + inDex);
             }
         }));
 
