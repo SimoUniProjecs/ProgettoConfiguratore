@@ -2,6 +2,8 @@ package com.example.configuratoreautoonline;
 
 import Classi.DecisionTree;
 import Classi.Nodo;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -17,8 +19,10 @@ import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 
 public class CarConfiguratorController {
@@ -45,15 +49,29 @@ public class CarConfiguratorController {
 
     private String selectedMarca;
 
+    private JsonNode datiAutoUsate;
+
     public void initData(String marca) {
         this.selectedMarca = marca;
-        System.out.println(marca);
+        loadJsonData();
         initializeModelComboBox();
     }
 
     @FXML
     public void initialize() {
         stage = new Stage();
+    }
+
+    private void loadJsonData() {
+        ObjectMapper objectMapper = new ObjectMapper();
+        try {
+            File file = new File("public/res/data/datiModelliAuto.json"); // Sostituisci con il percorso corretto
+            JsonNode root = objectMapper.readTree(file);
+            datiAutoUsate = root.get("datiAutoUsate").get(0);
+        } catch (IOException e) {
+            e.printStackTrace();
+            showAlert("Errore di caricamento", "Impossibile caricare i dati del file JSON.");
+        }
     }
 
     private void initializeModelComboBox() {
@@ -78,8 +96,8 @@ public class CarConfiguratorController {
     private void onModelloSelected(ActionEvent event) {
         String selectedModello = modelloComboBox.getValue();
         if (selectedModello != null) {
-            List<String> colori = getColoriForModello(selectedMarca, selectedModello);
-            coloreComboBox.setItems(FXCollections.observableArrayList(colori));
+            List<String> optionalList = getOptionalsForModello(selectedMarca, selectedModello);
+            coloreComboBox.setItems(FXCollections.observableArrayList(optionalList));
             coloreComboBox.setDisable(false);
             coloreComboBox.getSelectionModel().clearSelection();
 
@@ -88,6 +106,22 @@ public class CarConfiguratorController {
 
             updateImage();
         }
+    }
+
+    private List<String> getOptionalsForModello(String marca, String modello) {
+        List<String> optionals = new ArrayList<>();
+        JsonNode marcaNode = datiAutoUsate.get(marca.toLowerCase());
+        if (marcaNode != null) {
+            Iterator<JsonNode> modelliIterator = marcaNode.elements();
+            while (modelliIterator.hasNext()) {
+                JsonNode modelloNode = modelliIterator.next().get("modelli").get(0);
+                JsonNode optionalNode = modelloNode.get(modello);
+                if (optionalNode != null && optionalNode.has("optionals")) {
+                    optionalNode.get("optionals").forEach(optional -> optionals.add(optional.asText()));
+                }
+            }
+        }
+        return optionals;
     }
 
     @FXML
@@ -131,59 +165,15 @@ public class CarConfiguratorController {
 
     private List<String> getModelliForMarca(String marca) {
         List<String> modelli = new ArrayList<>();
-        switch (marca) {
-            case "BMW":
-                modelli.add("M2");
-                modelli.add("XM");
-                break;
-            case "AUDI":
-                modelli.add("RS3");
-                modelli.add("RS4");
-                break;
-            case "ALFA":
-                modelli.add("GIULIA");
-                modelli.add("STELVIO");
-                break;
+        JsonNode marcaNode = datiAutoUsate.get(marca.toLowerCase());
+        if (marcaNode != null) {
+            Iterator<JsonNode> modelliIterator = marcaNode.elements();
+            while (modelliIterator.hasNext()) {
+                JsonNode modelloNode = modelliIterator.next().get("modelli").get(0);
+                modelloNode.fieldNames().forEachRemaining(modelli::add);
+            }
         }
         return modelli;
-    }
-
-    private List<String> getColoriForModello(String marca, String modello) {
-        List<String> colori = new ArrayList<>();
-        switch (marca) {
-            case "BMW":
-                if (modello.equals("M2")) {
-                    colori.add("colore_azzurro");
-                    colori.add("colore_grigio");
-                    colori.add("colore_rosso");
-                } else if (modello.equals("XM")) {
-                    colori.add("Base");
-                }
-                break;
-            case "AUDI":
-                if (modello.equals("RS3")) {
-                    colori.add("colore_nero");
-                    colori.add("colore_grigio");
-                    colori.add("colore_giallo");
-                } else if (modello.equals("RS4")) {
-                    colori.add("colore_bianco");
-                    colori.add("colore_blu");
-                    colori.add("colore_grigio");
-                }
-                break;
-            case "ALFA":
-                if (modello.equals("GIULIA")) {
-                    colori.add("colore_verde");
-                    colori.add("colore_grigio");
-                    colori.add("colore_rosso");
-                } else if (modello.equals("STELVIO")) {
-                    colori.add("colore_rosso");
-                    colori.add("colore_blu");
-                    colori.add("colore_verde");
-                }
-                break;
-        }
-        return colori;
     }
 
     private String createPath(String... lista) {

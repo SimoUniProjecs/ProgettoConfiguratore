@@ -14,7 +14,7 @@
               "XM": {
                 "optionals": [
                   "_cerchi_base",
-                  "_cerchi_rossi"
+                  "_cerchi_base_pasiglie_rosse"
                 ]
               }
             }
