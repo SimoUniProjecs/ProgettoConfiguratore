@@ -1,5 +1,5 @@
 {
-  "datiAutoUsate": [
+  "datiModelliAuto": [
     {
       "bmw": [
         {
@@ -7,14 +7,55 @@
             {
               "M2": {
                 "optionals": [
-                  "_vetri_oscurati",
-                  "_cerchi_grandi"
+                  "assa",
+                  "azzdasadsuro"
+                ],
+                "colori": [
+                  "Azzurro",
+                  "Grigio",
+                  "Rosso"
+                ],
+                "motorizzazioni": [
+                  {
+                    "cilindrata": "3.0 L",
+                    "potenza": "410 CV",
+                    "coppia": "550 Nm",
+                    "alimentazione": "Benzina",
+                    "prezzo": "70.000 EUR"
+                  },
+                  {
+                    "cilindrata": "3.0 L",
+                    "potenza": "450 CV",
+                    "coppia": "550 Nm",
+                    "alimentazione": "Benzina",
+                    "prezzo": "75.000 EUR"
+                  }
                 ]
               },
               "XM": {
                 "optionals": [
                   "_cerchi_base",
-                  "_cerchi_base_pasiglie_rosse"
+                  "_pasiglie_rosse"
+                ],
+                "colori": [
+                  "Colore1",
+                  "Colore2"
+                ],
+                "motorizzazioni": [
+                  {
+                    "cilindrata": "4.4 L",
+                    "potenza": "653 CV",
+                    "coppia": "800 Nm",
+                    "alimentazione": "Ibrida Plug-in",
+                    "prezzo": "150.000 EUR"
+                  },
+                  {
+                    "cilindrata": "3.2 L",
+                    "potenza": "150 CV",
+                    "coppia": "600 Nm",
+                    "alimentazione": "Elettrica",
+                    "prezzo": "130.000 EUR"
+                  }
                 ]
               }
             }
@@ -29,13 +70,52 @@
                 "optionals": [
                   "_cerchi_neri",
                   "_vetri_oscurati"
+                ],
+                "colori": [
+                  "Colore1",
+                  "Colore2"
+                ],
+                "motorizzazioni": [
+                  {
+                    "cilindrata": "2.5 L",
+                    "potenza": "400 CV",
+                    "coppia": "500 Nm",
+                    "alimentazione": "Benzina",
+                    "prezzo": "65.000 EUR"
+                  },
+                  {
+                    "cilindrata": "2.5 L",
+                    "potenza": "420 CV",
+                    "coppia": "500 Nm",
+                    "alimentazione": "Benzina",
+                    "prezzo": "68.000 EUR"
+                  }
                 ]
               },
               "RS4": {
                 "optionals": [
-
                   "_cerchi_neri",
                   "_vetri_oscurati"
+                ],
+                "colori": [
+                  "Colore1",
+                  "Colore2"
+                ],
+                "motorizzazioni": [
+                  {
+                    "cilindrata": "2.9 L",
+                    "potenza": "450 CV",
+                    "coppia": "600 Nm",
+                    "alimentazione": "Benzina",
+                    "prezzo": "90.000 EUR"
+                  },
+                  {
+                    "cilindrata": "2.9 L",
+                    "potenza": "500 CV",
+                    "coppia": "600 Nm",
+                    "alimentazione": "Benzina",
+                    "prezzo": "95.000 EUR"
+                  }
                 ]
               }
             }
@@ -50,12 +130,52 @@
                 "optionals": [
                   "_cerchi_grandi",
                   "_pastiglie_rosse"
+                ],
+                "colori": [
+                  "Colore1",
+                  "Colore2"
+                ],
+                "motorizzazioni": [
+                  {
+                    "cilindrata": "2.9 L",
+                    "potenza": "510 CV",
+                    "coppia": "600 Nm",
+                    "alimentazione": "Benzina",
+                    "prezzo": "85.000 EUR"
+                  },
+                  {
+                    "cilindrata": "2.0 L",
+                    "potenza": "280 CV",
+                    "coppia": "400 Nm",
+                    "alimentazione": "Benzina",
+                    "prezzo": "50.000 EUR"
+                  }
                 ]
               },
               "STELVIO": {
                 "optionals": [
                   "_cerchi_grandi",
                   "_pastiglie_rosse"
+                ],
+                "colori": [
+                  "Colore1",
+                  "Colore2"
+                ],
+                "motorizzazioni": [
+                  {
+                    "cilindrata": "2.9 L",
+                    "potenza": "510 CV",
+                    "coppia": "600 Nm",
+                    "alimentazione": "Benzina",
+                    "prezzo": "95.000 EUR"
+                  },
+                  {
+                    "cilindrata": "2.0 L",
+                    "potenza": "280 CV",
+                    "coppia": "400 Nm",
+                    "alimentazione": "Benzina",
+                    "prezzo": "70.000 EUR"
+                  }
                 ]
               }
             }

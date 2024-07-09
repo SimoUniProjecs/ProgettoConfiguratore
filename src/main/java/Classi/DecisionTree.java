@@ -31,8 +31,8 @@ public class DecisionTree {
         ObjectMapper objectMapper = new ObjectMapper();
         try {
             JsonNode rootNode = objectMapper.readTree(new File(jsonFilePath));
-            JsonNode datiAutoUsate = rootNode.get("datiAutoUsate").get(0);
-            JsonNode marcaNode = datiAutoUsate.get(marca.toLowerCase());
+            JsonNode datiModelliAuto = rootNode.get("datiModelliAuto").get(0);
+            JsonNode marcaNode = datiModelliAuto.get(marca.toLowerCase());
             if (marcaNode != null) {
                 JsonNode modelliNode = marcaNode.get(0).get("modelli").get(0).get(modello);
                 if (modelliNode != null) {

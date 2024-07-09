@@ -50,6 +50,8 @@ public class HomeController {
     @FXML
     private Menu loginVisibilityMenu;
     @FXML
+    private Menu SecretaryVisibilityMenu;
+    @FXML
     private MenuItem gestisciDipendenti;
     private Stage stage;
     @FXML
@@ -337,8 +339,6 @@ public class HomeController {
         }
     }
 
-
-
     // Stampare gli errori
     private void showAlert(String title, String content) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -407,5 +407,11 @@ public class HomeController {
         } catch (IOException e) {
             e.printStackTrace();  // Migliora la gestione degli errori in base alle necessità dell'applicazione
         }
+    }
+
+    public void handleSwitchToValutaUsatiClick(ActionEvent event) {
+    }
+
+    public void handleSwitchToSegretariaClick(ActionEvent event) {
     }
 }

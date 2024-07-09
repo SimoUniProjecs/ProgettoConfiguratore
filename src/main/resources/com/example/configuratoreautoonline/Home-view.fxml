@@ -15,6 +15,12 @@
                         <MenuItem fx:id="switchToViewLogin" mnemonicParsing="false" onAction="#handleSwitchToViewLoginClick" text="Login" />
                     </items>
                 </Menu>
+                <Menu fx:id="secretaryVisibilityMenu" mnemonicParsing="false" text="Accedi">
+                    <items>
+                        <MenuItem fx:id="switchToValutaUsati" mnemonicParsing="false" onAction="#handleSwitchToValutaUsatiClick" text="Valuta Usati" />
+                        <MenuItem fx:id="switchToSegretaria" mnemonicParsing="false" onAction="#handleSwitchToSegretariaClick" text="Inserisci Autovettura" />
+                    </items>
+                </Menu>
                 <Menu mnemonicParsing="false" text="Compra" />
                 <Menu  mnemonicParsing="false" text="Configura">
                     <items>
