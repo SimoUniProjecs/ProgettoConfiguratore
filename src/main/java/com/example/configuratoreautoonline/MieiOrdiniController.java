@@ -41,12 +41,8 @@ public class MieiOrdiniController {
     private TableColumn<Configurazione, String> dataArrivoColumn;
     @FXML
     private TableColumn<Configurazione, Void> actionColumn;
-
     @FXML
-
     private TableColumn<Configurazione, String> concessionarioColumn;
-
-
     @FXML
     private Button homeButton;
 
@@ -124,7 +120,6 @@ public class MieiOrdiniController {
         }
     }
 
-
     private void addButtonToTable() {
         TableColumn<Configurazione, Void> colBtnAnnulla = new TableColumn<>("Azione");
         TableColumn<Configurazione, Void> colBtnModifica = new TableColumn<>("Modifica");
@@ -197,7 +192,7 @@ public class MieiOrdiniController {
                     {
                         btn.setOnAction((ActionEvent event) -> {
                             Configurazione data = getTableView().getItems().get(getIndex());
-                            markAsPaid(data);
+                            showConfirmPayDialog(data);
                         });
                     }
 
@@ -228,9 +223,24 @@ public class MieiOrdiniController {
         tableView.getColumns().addAll(colBtnAnnulla, colBtnModifica, colBtnSalda);
     }
 
+    private void showConfirmPayDialog(Configurazione data) {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Conferma Pagamento");
+        alert.setHeaderText(null);
+        alert.setContentText("Sei sicuro di voler saldare questo ordine?");
+
+        ButtonType buttonTypeYes = new ButtonType("Sì");
+        ButtonType buttonTypeNo = new ButtonType("No", ButtonBar.ButtonData.CANCEL_CLOSE);
+
+        alert.getButtonTypes().setAll(buttonTypeYes, buttonTypeNo);
+
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.isPresent() && result.get() == buttonTypeYes) {
+            markAsPaid(data);
+        }
+    }
+
     private void markAsPaid(Configurazione data) {
-        // Implementa la logica per segnare la configurazione come saldata
-        // Potresti aggiornare una proprietà dell'oggetto Configurazione e poi salvare le configurazioni
         data.setPagato(true); // Esempio: assuming there's a setPaid method
         saveConfigurations();
         tableView.refresh();
@@ -274,8 +284,6 @@ public class MieiOrdiniController {
         }
     }
 
-
-
     private void deleteConfiguration(Configurazione configurazione) {
         ordini.remove(configurazione);
         saveConfigurations();
@@ -290,7 +298,6 @@ public class MieiOrdiniController {
             e.printStackTrace();
         }
     }
-
 
     @FXML
     private void handleHomeButtonAction(ActionEvent event) {
