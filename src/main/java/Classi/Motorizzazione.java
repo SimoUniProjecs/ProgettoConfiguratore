@@ -7,7 +7,7 @@ public class Motorizzazione {
     private String alimentazione;
     private String prezzo;
 
-    // Costruttori, getter e setter
+    public Motorizzazione() {}
 
     public Motorizzazione(String cilindrata, String potenza, String coppia, String alimentazione, String prezzo) {
         this.cilindrata = cilindrata;
@@ -21,24 +21,44 @@ public class Motorizzazione {
         return cilindrata;
     }
 
+    public void setCilindrata(String cilindrata) {
+        this.cilindrata = cilindrata;
+    }
+
     public String getPotenza() {
         return potenza;
+    }
+
+    public void setPotenza(String potenza) {
+        this.potenza = potenza;
     }
 
     public String getCoppia() {
         return coppia;
     }
 
+    public void setCoppia(String coppia) {
+        this.coppia = coppia;
+    }
+
     public String getAlimentazione() {
         return alimentazione;
+    }
+
+    public void setAlimentazione(String alimentazione) {
+        this.alimentazione = alimentazione;
     }
 
     public String getPrezzo() {
         return prezzo;
     }
 
+    public void setPrezzo(String prezzo) {
+        this.prezzo = prezzo;
+    }
+
     @Override
     public String toString() {
-        return cilindrata + " " + potenza + " " + coppia + " " + alimentazione + " " + prezzo;
+        return alimentazione;
     }
 }

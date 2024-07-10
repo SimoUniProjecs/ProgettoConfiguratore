@@ -38,6 +38,7 @@
                         <MenuItem fx:id="logout" mnemonicParsing="false" onAction="#handleLogoutClick" text="Logout" />
                         <MenuItem fx:id="eliminaUtente" mnemonicParsing="false" onAction="#handleEliminaUtenteClick" text="Elimina Utente" />
                         <MenuItem fx:id="gestisciDipendenti" mnemonicParsing="false" onAction="#handlePopUpDipendent" text="Gestisci Dipendente" />
+                        <MenuItem fx:id="mieiOrdini" mnemonicParsing="false" onAction="#handleSwitchToMieiOrdiniClick" text="Miei Ordini" />
                     </items>
                 </Menu>
             </menus>
