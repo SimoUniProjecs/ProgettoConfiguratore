@@ -25,6 +25,8 @@ import java.util.Objects;
 public class HomeController {
     public MenuItem logout;
     @FXML
+    private MenuItem mieiOrdini;
+    @FXML
     private MenuItem switchToViewLogin;
     @FXML
     private ImageView audiImageView;
@@ -46,7 +48,7 @@ public class HomeController {
     @FXML
     private Menu loginVisibilityMenu;
     @FXML
-    private Menu SecretaryVisibilityMenu;
+    private Menu secretaryVisibilityMenu;
     @FXML
     private MenuItem gestisciDipendenti;
     private Stage stage;
@@ -66,53 +68,16 @@ public class HomeController {
     private void handlePopUpDipendent(ActionEvent event){
         showDialog("/com/example/configuratoreautoonline/gestisci-dipendenti.fxml");
     }
+
+    @FXML
+    private void handleSwitchToMieiOrdiniClick(ActionEvent event) {
+        changeScene("/com/example/configuratoreautoonline/miei-ordini.fxml");
+    }
+
     @FXML
     private void handleVendiClick(ActionEvent event) {
         changeScene("/com/example/configuratoreautoonline/vendi.fxml");
-    }
-    @FXML
-    private void initializeImageSlider() {
-        // Array di URL delle immagini per lo slider
-        String[] imageUrls = {"src/main/resources/img/AUDI/RS3/verde.png",
-        "src/main/resources/img/AUDI/RS3/giallo.png",
-        "src/main/resources/img/AUDI/RS3/nerocerchinerivetrioscurati.png"};
-
-        // Indice iniziale dell'array delle immagini
-        Random random = new Random();
-        int index = random.nextInt(0, imageUrls.length);
-
-        // Carico la prima immagine iniziale
-        try {
-            // Carica l'immagine successiva
-            Image nextImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream(imageUrls[(imageUrls.length-1) / 2])));
-            bigImageView.setImage(nextImage);
-
-        } catch (NullPointerException e) {
-            // Incrementa l'indice per la prossima immagine
-            index = random.nextInt(0, imageUrls.length);
-            System.out.println("Errore nel caricamento dell'immagine con indice: " + index);
-        }
-
-        // Timeline per cambiare l'immagine ogni 5 secondi
-        timeline = new Timeline(new KeyFrame(Duration.seconds(3), event -> {
-            int inDex = -1;
-            try {
-                inDex = random.nextInt(0, imageUrls.length);
-
-                // Carica l'immagine successiva
-                Image nextImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream(imageUrls[inDex])));
-                bigImageView.setImage(nextImage);
-
-            } catch (NullPointerException e) {
-                System.out.println("Errore nel caricamento dell'immagine con indice: " + inDex);
-            }
-        }));
-
-        timeline.setCycleCount(Animation.INDEFINITE); // Esecuzione indefinita della Timeline
-        timeline.play(); // Avvia la Timeline
-    }
-
-    @FXML
+    }@FXML
     private void handleSwitchToViewSignInClick(ActionEvent event) {
         showSignInDialog();
     }
@@ -146,14 +111,18 @@ public class HomeController {
             CarConfiguratorController controller = loader.getController();
             controller.initData(marca);
 
+            // Ottieni lo Stage dalla scena corrente
+            Stage currentStage = (Stage) pannelloAncora.getScene().getWindow();
+
             Scene scene = new Scene(root);
-            stage.setScene(scene); // Usa il membro stage della classe
-            stage.show();
+            currentStage.setScene(scene); // Usa il currentStage
+            currentStage.show();
         } catch (IOException e) {
             showAlert("Error loading scene", "Cannot load scene from file: " + fxmlFile + "\n" + e.getMessage());
             e.printStackTrace();
         }
     }
+
 
 
     private void changeScene(String fxmlFile) {
@@ -163,7 +132,7 @@ public class HomeController {
             Scene scene = new Scene(root);
 
             // Ottieni lo Stage dalla scena corrente
-            Stage currentStage = (Stage) stage.getScene().getWindow();
+            Stage currentStage = (Stage) pannelloAncora.getScene().getWindow();
             currentStage.setScene(scene);
             currentStage.show();
         } catch (Exception e) {
@@ -171,6 +140,7 @@ public class HomeController {
             e.printStackTrace(); // Stampa lo stack trace per il debug
         }
     }
+
 
 
     private void showDialog(String fxmlFile) {
@@ -196,7 +166,6 @@ public class HomeController {
 
     @FXML
     public void initialize() {
-        stage = new Stage();
         updateMenuVisibility();
         loadImages();
 
@@ -215,6 +184,7 @@ public class HomeController {
         pannelloAncora.widthProperty().addListener((obs, oldVal, newVal) -> resizeBigImage());
         pannelloAncora.heightProperty().addListener((obs, oldVal, newVal) -> resizeBigImage());
     }
+
 
     private void resizeBigImage() {
         double width = pannelloAncora.getWidth() - 20; // 10 pixels padding on each side
@@ -262,6 +232,9 @@ public class HomeController {
         }
         if(gestisciDipendenti!=null)    {
             gestisciDipendenti.setVisible(session.getPermessi()==3);
+        }
+        if(secretaryVisibilityMenu!=null)   {
+            secretaryVisibilityMenu.setVisible(session.getPermessi()>=2);
         }
     }
 

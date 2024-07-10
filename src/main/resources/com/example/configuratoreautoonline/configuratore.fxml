@@ -19,7 +19,7 @@
    <ImageView fx:id="carImageView" fitHeight="404.0" fitWidth="588.0" layoutX="163.0" layoutY="38.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="50.0" />
    <ComboBox fx:id="modelloComboBox" layoutX="18.0" layoutY="50.0" onAction="#onModelloSelected" prefHeight="26.0" prefWidth="184.0" promptText="Seleziona Modello" />
    <ComboBox fx:id="coloreComboBox" layoutX="22.0" layoutY="102.0" prefHeight="26.0" prefWidth="184.0" promptText="Seleziona Colore" />
-   <Button layoutX="29.0" layoutY="485.0" onAction="#onConfiguraButtonClicked" prefHeight="26.0" prefWidth="103.0" text="Configura" />
+   <Button layoutX="29.0" layoutY="485.0" onAction="#onConfiguraButtonClicked" prefHeight="26.0" prefWidth="103.0" text="Ordina" />
    <CheckBox fx:id="vetriCheck" layoutX="29.0" layoutY="290.0" mnemonicParsing="false" text="Vetri oscurati" />
    <CheckBox fx:id="pinzeCheck" layoutX="29.0" layoutY="334.0" mnemonicParsing="false" text="Pinze Freni colorate" />
    <CheckBox fx:id="internoCheck" layoutX="29.0" layoutY="377.0" mnemonicParsing="false" text="Interno in Pelle" />
