@@ -8,33 +8,9 @@
       "anno": "2011-07-08",
       "immagine": "public/res/images/micra.jpg",
       "km": "150000",
-      "prezzo": "55",
+      "prezzo": "-1",
       "proprietari": 1,
       "condizioni": 1
-    },
-    {
-      "marca": "vespa",
-      "modello": "del david",
-      "alimentazione": "Ibrida",
-      "cambio": "Automatico",
-      "anno": "2022-07-07",
-      "immagine": "public/res/images/Screenshot%202024-06-18%20at%2008.34.28.png",
-      "km": "1",
-      "prezzo": -1,
-      "proprietari": 10,
-      "condizioni": 6
-    },
-    {
-      "marca": "nissan",
-      "modello": "gtr",
-      "alimentazione": "Diesel",
-      "cambio": "Automatico",
-      "anno": "2019-07-11",
-      "immagine": "public/res/images/Nissan-Micra-K12-3-hatchback-problemi-difetti-recensione-affidabilita-informazioni-motore-cambio-dci-sospensioni-elettronica-abitacolo-interni-consumi-diesel-benzina-gpl-rossa-spazio-e1630319485155.jpg",
-      "km": "500",
-      "prezzo": -1,
-      "proprietari": 2,
-      "condizioni": 10
     }
   ]
 }
