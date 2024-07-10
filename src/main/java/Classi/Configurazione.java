@@ -20,6 +20,7 @@ public class Configurazione {
     public Configurazione() {}
 
     public Configurazione(int idConfigurazione, String marcaAutomobile, String modelloAutomobile, String colore, Motorizzazione motorizzazione, List<String> optionals, int prezzo, String emailCliente, Concessionari concessionario) {
+        int numeroOptional = optionals.size();
         this.idConfigurazione = idConfigurazione;
         this.marcaAutomobile = marcaAutomobile;
         this.modelloAutomobile = modelloAutomobile;
@@ -28,7 +29,7 @@ public class Configurazione {
         this.optionals = optionals;
         this.prezzo = prezzo;
         this.emailCliente = emailCliente;
-        this.dataArrivo = LocalDate.now().plusDays(28).toString();
+        this.dataArrivo = LocalDate.now().plusDays(28+10*numeroOptional).toString();
         this.luogoConcessionario = concessionario;
     }
 

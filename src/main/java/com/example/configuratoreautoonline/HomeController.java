@@ -34,7 +34,8 @@ public class HomeController {
     private ImageView bmwImageView;
     @FXML
     private ImageView alfaImageView;
-
+    @FXML
+    private MenuItem mieiPreventivi;
     @FXML
     private AnchorPane pannelloAncora;
     @FXML
@@ -72,6 +73,11 @@ public class HomeController {
     @FXML
     private void handleSwitchToMieiOrdiniClick(ActionEvent event) {
         changeScene("/com/example/configuratoreautoonline/miei-ordini.fxml");
+    }
+
+    @FXML
+    private void handleSwitchToPreventiviClick(ActionEvent event) {
+        changeScene("/com/example/configuratoreautoonline/preventivi.fxml");
     }
 
     @FXML

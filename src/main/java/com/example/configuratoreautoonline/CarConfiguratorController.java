@@ -19,11 +19,14 @@ import javafx.stage.Stage;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
 public class CarConfiguratorController {
+    @FXML
+    public Label scontoMensile;
     @FXML
     private ComboBox<String> motorizzazioneComboBox;
     @FXML
@@ -222,6 +225,15 @@ public class CarConfiguratorController {
         motorizzazioneComboBox.setOnAction(event -> onMotoSelected(event));
     }
 
+    public void updateVisibility()  {
+        int mese = LocalDate.now().getMonthValue();
+        if(mese == 12 || mese == 7 || mese == 10) {
+            scontoMensile.setVisible(true);
+        } else {
+            scontoMensile.setVisible(false);
+        }
+    }
+
     // Restituisci gli optional per il modello selezionato
     private List<String> getOptionalsForModello(String marca, String modello) {
         List<String> optionals = new ArrayList<>();
@@ -327,8 +339,10 @@ public class CarConfiguratorController {
             impiantoAudioCheck.setDisable(!optionals.toString().contains("impianto audio HarmanCardon"));
             abbonamentoCheck.setDisable(!(selectedMotorizzazioneStr.toString().contains("Elettrica") || selectedMotorizzazioneStr.toString().contains("Ibrida Plug-in")));
 
+            updateImage();
+
+            stampaPrezzo(prezzo);
             // Aggiorna il prezzo base con quel motore
-            prezzoLbl.setText(this.prezzo + " €");
 
             // Abilita il pulsante per vedere gli interni
             interniBtn.setDisable(false);
@@ -368,7 +382,7 @@ public class CarConfiguratorController {
         UserSession session = UserSession.getInstance();
 
         if (!session.isLoggato()) {
-            showAlert("Errore", "Devi essere loggato per configurare l'auto.");
+            showErrorAlert("Errore", "Devi essere loggato per configurare l'auto.");
             return;
         }
 
@@ -397,54 +411,101 @@ public class CarConfiguratorController {
                     })
                     .sum();
 
-            int totalePrezzo = this.prezzo + optionalPrice;
+            int totalePrezzo;
 
-            int newId = 1; // ID iniziale
-            File file = new File("public/res/data/configurazioni.json");
-            ObjectMapper objectMapper = new ObjectMapper();
+            int mese = LocalDate.now().getMonthValue();
 
-            try {
-                JsonNode root;
-                ArrayNode configurazioni;
-
-                if (file.exists() && file.length() != 0) {
-                    root = objectMapper.readTree(file);
-                    if (root.isArray()) {
-                        configurazioni = (ArrayNode) root;
-                    } else {
-                        configurazioni = objectMapper.createArrayNode();
-                        configurazioni.add(root);
-                    }
-
-                    for (JsonNode node : configurazioni) {
-                        JsonNode idNode = node.get("idConfigurazione");
-                        if (idNode != null) {
-                            int id = idNode.asInt();
-                            if (id >= newId) {
-                                newId = id + 1;
-                            }
-                        }
-                    }
-                } else {
-                    configurazioni = objectMapper.createArrayNode();
-                }
-
-                Configurazione configurazione = new Configurazione(newId, selectedMarca, selectedModello, selectedColore, selectedMotorizzazione, selectedOptionals, totalePrezzo, session.getEmail(), session.getConcessionario());
-                configurazioni.add(objectMapper.valueToTree(configurazione));
-
-                objectMapper.writeValue(file, configurazioni);
-                showAlert("Successo", "Configurazione salvata con successo.");
-            } catch (IOException e) {
-                e.printStackTrace();
-                showAlert("Errore", "Errore durante il salvataggio della configurazione.");
+            if (mese == 12 || mese == 7 || mese == 10) {
+                totalePrezzo =(this.prezzo )*97/100;
+            }
+            else {
+                totalePrezzo = this.prezzo;
             }
 
-            String path = getPercorsoIMGPerModello(selectedMarca, selectedModello) + getSecondaParteIMG(selectedOptionals, selectedColore);
-            loadImage(path);
+
+            // Mostra il pop-up di conferma
+            Alert confirmationAlert = new Alert(Alert.AlertType.CONFIRMATION);
+            confirmationAlert.setTitle("Conferma Ordine");
+            confirmationAlert.setHeaderText("Conferma configurazione dell'auto");
+            if(mese == 12 || mese == 7 || mese == 10)   {
+                confirmationAlert.setHeaderText("E' stato applicato uno sconto su questa vettura");
+            }
+            confirmationAlert.setContentText("Sei sicuro di voler configurare l'auto con le opzioni selezionate?\nPrezzo totale: " + totalePrezzo + " €");
+
+            // Aggiungi i pulsanti al pop-up di conferma
+            ButtonType confirmButton = new ButtonType("Conferma");
+            ButtonType cancelButton = new ButtonType("Annulla", ButtonBar.ButtonData.CANCEL_CLOSE);
+            confirmationAlert.getButtonTypes().setAll(confirmButton, cancelButton);
+
+            int finalTotalePrezzo = totalePrezzo;
+            confirmationAlert.showAndWait().ifPresent(response -> {
+                if (response == confirmButton) {
+                    int newId = 1; // ID iniziale
+                    File file = new File("public/res/data/preventivi.json");
+                    ObjectMapper objectMapper = new ObjectMapper();
+
+                    try {
+                        JsonNode root;
+                        ArrayNode configurazioni;
+
+                        if (file.exists() && file.length() != 0) {
+                            root = objectMapper.readTree(file);
+                            if (root.isArray()) {
+                                configurazioni = (ArrayNode) root;
+                            } else {
+                                configurazioni = objectMapper.createArrayNode();
+                                configurazioni.add(root);
+                            }
+
+                            for (JsonNode node : configurazioni) {
+                                JsonNode idNode = node.get("idConfigurazione");
+                                if (idNode != null) {
+                                    int id = idNode.asInt();
+                                    if (id >= newId) {
+                                        newId = id + 1;
+                                    }
+                                }
+                            }
+                        } else {
+                            configurazioni = objectMapper.createArrayNode();
+                        }
+
+                        Configurazione configurazione = new Configurazione(newId, selectedMarca, selectedModello, selectedColore, selectedMotorizzazione, selectedOptionals, finalTotalePrezzo, session.getEmail(), session.getConcessionario());
+                        configurazioni.add(objectMapper.valueToTree(configurazione));
+
+                        objectMapper.writeValue(file, configurazioni);
+                        showSuccessAlert("Successo", "Configurazione salvata con successo.");
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        showErrorAlert("Errore", "Errore durante il salvataggio della configurazione.");
+                    }
+
+                    String path = getPercorsoIMGPerModello(selectedMarca, selectedModello) + getSecondaParteIMG(selectedOptionals, selectedColore);
+                    loadImage(path);
+                }
+            });
         } else {
-            showAlert("Errore", "Seleziona marca, modello, colore e motorizzazione per configurare l'auto.");
+            showErrorAlert("Errore", "Seleziona marca, modello, colore e motorizzazione per configurare l'auto.");
         }
     }
+
+    private void showErrorAlert(String title, String content) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(content);
+        alert.show();
+    }
+
+    private void showSuccessAlert(String title, String content) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(content);
+        alert.show();
+    }
+
+
 
     // Costruisce il percorso all'interno della directory del modello
     private String getSecondaParteIMG(List<String> optionalsForModello, String selectedColore) {
@@ -525,11 +586,12 @@ public class CarConfiguratorController {
                     getSecondaParteIMG(getOptionalsForModello(selectedMarca, modelloComboBox.getValue()), coloreComboBox.getValue());
             loadImage(path);
         }
-        updatePrezzo();
+        stampaPrezzo(prezzoBase + prezzoOptional());
     }
-    private void updatePrezzo() {
-        int prezzoTotale = prezzoBase + prezzoOptional();
-        prezzoLbl.setText(prezzoTotale + " €");
+
+    private void stampaPrezzo (int prezzoFinale)    {
+            this.prezzo = prezzoFinale;
+            prezzoLbl.setText(prezzoFinale + " €");
     }
     // Restituisce i modelli per la marca selezionata in una LISTA di stringhe
     private List<String> getModelliForMarca(String marca) {
