@@ -2,22 +2,29 @@ package com.example.configuratoreautoonline;
 
 import Classi.Configurazione;
 import Classi.Motorizzazione;
+import Enums.Concessionari;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalDate;
+import java.util.Optional;
 
 public class MieiOrdiniController {
     @FXML
@@ -35,7 +42,15 @@ public class MieiOrdiniController {
     @FXML
     private TableColumn<Configurazione, Integer> prezzoColumn;
     @FXML
+    private TableColumn<Configurazione, String> dataArrivoColumn;
+    @FXML
     private TableColumn<Configurazione, Void> actionColumn;
+
+    @FXML
+
+    private TableColumn<Configurazione, String> concessionarioColumn;
+
+
     @FXML
     private Button homeButton;
 
@@ -49,6 +64,8 @@ public class MieiOrdiniController {
         coloreColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getColore().split(" ")[0]));
         motorizzazioneColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getMotorizzazione().getAlimentazione()));
         prezzoColumn.setCellValueFactory(new PropertyValueFactory<>("prezzo"));
+        dataArrivoColumn.setCellValueFactory(new PropertyValueFactory<>("dataArrivo"));
+        concessionarioColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getLuogoConcessionario().getNome()));
 
         loadOrdini();
         addButtonToTable();
@@ -81,20 +98,52 @@ public class MieiOrdiniController {
         tableView.setItems(ordini);
     }
 
-    private void addButtonToTable() {
-        TableColumn<Configurazione, Void> colBtn = new TableColumn("Action");
+    private void showEditDialog(Configurazione data) {
+        Dialog<ButtonType> dialog = new Dialog<>();
+        dialog.setTitle("Modifica Ordine");
+        dialog.setHeaderText(null);
 
-        javafx.util.Callback<TableColumn<Configurazione, Void>, TableCell<Configurazione, Void>> cellFactory = new javafx.util.Callback<>() {
+        // Create the form fields
+        ComboBox<Concessionari> concessionarioComboBox = new ComboBox<>();
+        concessionarioComboBox.setItems(FXCollections.observableArrayList(Concessionari.values()));
+        concessionarioComboBox.setValue(data.getLuogoConcessionario());
+
+        GridPane gridPane = new GridPane();
+        gridPane.setHgap(10);
+        gridPane.setVgap(10);
+        gridPane.setPadding(new Insets(20, 150, 10, 10));
+
+        gridPane.add(new Label("Luogo del Concessionario:"), 0, 0);
+        gridPane.add(concessionarioComboBox, 1, 0);
+
+        dialog.getDialogPane().setContent(gridPane);
+
+        // Add the buttons
+        dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
+
+        Optional<ButtonType> result = dialog.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            data.setLuogoConcessionario(concessionarioComboBox.getValue());
+            saveConfigurations();
+        }
+    }
+
+
+    private void addButtonToTable() {
+        TableColumn<Configurazione, Void> colBtnAnnulla = new TableColumn("Azione");
+        TableColumn<Configurazione, Void> colBtnModifica = new TableColumn("Modifica");
+
+        javafx.util.Callback<TableColumn<Configurazione, Void>, TableCell<Configurazione, Void>> cellFactoryAnnulla = new javafx.util.Callback<>() {
             @Override
             public TableCell<Configurazione, Void> call(final TableColumn<Configurazione, Void> param) {
                 final TableCell<Configurazione, Void> cell = new TableCell<>() {
 
-                    private final Button btn = new Button("Delete");
+                    private final Button btn = new Button("Annulla ordine");
 
                     {
                         btn.setOnAction((ActionEvent event) -> {
                             Configurazione data = getTableView().getItems().get(getIndex());
-                            deleteConfiguration(data);
+                            showConfirmDeleteDialog(data);
                         });
                     }
 
@@ -112,9 +161,79 @@ public class MieiOrdiniController {
             }
         };
 
-        colBtn.setCellFactory(cellFactory);
-        tableView.getColumns().add(colBtn);
+        javafx.util.Callback<TableColumn<Configurazione, Void>, TableCell<Configurazione, Void>> cellFactoryModifica = new javafx.util.Callback<>() {
+            @Override
+            public TableCell<Configurazione, Void> call(final TableColumn<Configurazione, Void> param) {
+                final TableCell<Configurazione, Void> cell = new TableCell<>() {
+
+                    private final Button btn = new Button("Modifica");
+
+                    {
+                        btn.setOnAction((ActionEvent event) -> {
+                            Configurazione data = getTableView().getItems().get(getIndex());
+                            showEditOrderDialog(data);
+                        });
+                    }
+
+                    @Override
+                    public void updateItem(Void item, boolean empty) {
+                        super.updateItem(item, empty);
+                        if (empty) {
+                            setGraphic(null);
+                        } else {
+                            setGraphic(btn);
+                        }
+                    }
+                };
+                return cell;
+            }
+        };
+
+        colBtnAnnulla.setCellFactory(cellFactoryAnnulla);
+        colBtnModifica.setCellFactory(cellFactoryModifica);
+
+        tableView.getColumns().addAll(colBtnAnnulla, colBtnModifica);
     }
+
+    private void showConfirmDeleteDialog(Configurazione data) {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Conferma Cancellazione");
+        alert.setHeaderText(null);
+        alert.setContentText("Sei sicuro di voler annullare l'ordine?");
+
+        ButtonType buttonTypeYes = new ButtonType("Sì");
+        ButtonType buttonTypeNo = new ButtonType("No", ButtonBar.ButtonData.CANCEL_CLOSE);
+
+        alert.getButtonTypes().setAll(buttonTypeYes, buttonTypeNo);
+
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.get() == buttonTypeYes) {
+            deleteConfiguration(data);
+        }
+    }
+
+    private void showEditOrderDialog(Configurazione data) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/configuratoreautoonline/modifica-configurazione.fxml"));
+            Parent root = loader.load();
+
+            ModificaOrdineController controller = loader.getController();
+            controller.setConfigurazione(data);
+
+            Stage stage = new Stage();
+            stage.setTitle("Modifica Ordine");
+            stage.setScene(new Scene(root));
+            stage.showAndWait();
+
+            // Aggiorna la tabella dopo la chiusura del popup
+            tableView.refresh();
+            saveConfigurations();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
 
     private void deleteConfiguration(Configurazione configurazione) {
         ordini.remove(configurazione);
@@ -123,12 +242,14 @@ public class MieiOrdiniController {
 
     private void saveConfigurations() {
         ObjectMapper objectMapper = new ObjectMapper();
+
         try {
             objectMapper.writeValue(new File("public/res/data/configurazioni.json"), ordini);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
+
 
     @FXML
     private void handleHomeButtonAction(ActionEvent event) {

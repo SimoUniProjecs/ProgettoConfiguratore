@@ -16,7 +16,8 @@
             <TableColumn fx:id="coloreColumn" text="Colore"/>
             <TableColumn fx:id="motorizzazioneColumn" text="Motorizzazione"/>
             <TableColumn fx:id="prezzoColumn" text="Prezzo"/>
-            <TableColumn fx:id="actionColumn" text="Action"/>
+            <TableColumn fx:id="concessionarioColumn" prefWidth="150.0" text="Concessionario"/>
+            <TableColumn fx:id="dataArrivoColumn" text="Data Arrivo"/>
         </columns>
     </TableView>
     <Button fx:id="homeButton" text="Home" layoutX="14.0" layoutY="370.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" onAction="#handleHomeButtonAction"/>

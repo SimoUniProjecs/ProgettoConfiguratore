@@ -333,7 +333,6 @@ public class CarConfiguratorController {
             // Abilita il pulsante per vedere gli interni
             interniBtn.setDisable(false);
         }
-        updateImage();
     }
     private List<Motorizzazione> getMotorizzazioniDetailsForModello(String marca, String modello) {
         List<Motorizzazione> motorizzazioni = new ArrayList<>();
@@ -359,6 +358,9 @@ public class CarConfiguratorController {
         }
         return motorizzazioni;
     }
+
+
+
     @FXML
     private void onConfiguraButtonClicked() {
         String selectedModello = modelloComboBox.getValue();
@@ -427,7 +429,7 @@ public class CarConfiguratorController {
                     configurazioni = objectMapper.createArrayNode();
                 }
 
-                Configurazione configurazione = new Configurazione(newId, selectedMarca, selectedModello, selectedColore, selectedMotorizzazione, selectedOptionals, totalePrezzo, session.getEmail());
+                Configurazione configurazione = new Configurazione(newId, selectedMarca, selectedModello, selectedColore, selectedMotorizzazione, selectedOptionals, totalePrezzo, session.getEmail(), session.getConcessionario());
                 configurazioni.add(objectMapper.valueToTree(configurazione));
 
                 objectMapper.writeValue(file, configurazioni);

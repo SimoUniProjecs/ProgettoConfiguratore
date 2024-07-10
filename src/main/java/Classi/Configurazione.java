@@ -1,5 +1,8 @@
 package Classi;
 
+import Enums.Concessionari;
+
+import java.time.LocalDate;
 import java.util.List;
 
 public class Configurazione {
@@ -11,10 +14,12 @@ public class Configurazione {
     private List<String> optionals;
     private int prezzo;
     private String emailCliente;
+    private Concessionari luogoConcessionario;
+    private String dataArrivo;
 
     public Configurazione() {}
 
-    public Configurazione(int idConfigurazione, String marcaAutomobile, String modelloAutomobile, String colore, Motorizzazione motorizzazione, List<String> optionals, int prezzo, String emailCliente) {
+    public Configurazione(int idConfigurazione, String marcaAutomobile, String modelloAutomobile, String colore, Motorizzazione motorizzazione, List<String> optionals, int prezzo, String emailCliente, Concessionari concessionario) {
         this.idConfigurazione = idConfigurazione;
         this.marcaAutomobile = marcaAutomobile;
         this.modelloAutomobile = modelloAutomobile;
@@ -23,6 +28,8 @@ public class Configurazione {
         this.optionals = optionals;
         this.prezzo = prezzo;
         this.emailCliente = emailCliente;
+        this.dataArrivo = LocalDate.now().plusDays(28).toString();
+        this.luogoConcessionario = concessionario;
     }
 
     public int getIdConfigurazione() {
@@ -87,5 +94,21 @@ public class Configurazione {
 
     public void setEmailCliente(String emailCliente) {
         this.emailCliente = emailCliente;
+    }
+
+    public String getDataArrivo() {
+        return dataArrivo;
+    }
+
+    public void setDataArrivo(String dataArrivo) {
+        this.dataArrivo = dataArrivo;
+    }
+
+    public Concessionari getLuogoConcessionario() {
+        return luogoConcessionario;
+    }
+
+    public void setLuogoConcessionario(Concessionari luogoConcessionario) {
+        this.luogoConcessionario = luogoConcessionario;
     }
 }
