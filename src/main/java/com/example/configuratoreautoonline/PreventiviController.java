@@ -18,6 +18,10 @@ import javafx.stage.Stage;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
+import java.util.Iterator;
 import java.util.Optional;
 
 public class PreventiviController {
@@ -36,9 +40,11 @@ public class PreventiviController {
     @FXML
     private TableColumn<Configurazione, Integer> prezzoColumn;
     @FXML
-    private TableColumn<Configurazione, String> dataArrivoColumn;
+    private TableColumn<Configurazione, String> dataPreventivoColumn;
     @FXML
     private TableColumn<Configurazione, String> concessionarioColumn;
+    @FXML
+    private TableColumn<Configurazione, String> giorniRimanentiColumn;
     @FXML
     private TableColumn<Configurazione, Void> actionColumn;
 
@@ -55,8 +61,13 @@ public class PreventiviController {
         coloreColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getColore().split(" ")[0]));
         motorizzazioneColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getMotorizzazione().getAlimentazione()));
         prezzoColumn.setCellValueFactory(new PropertyValueFactory<>("prezzo"));
-        dataArrivoColumn.setCellValueFactory(new PropertyValueFactory<>("dataArrivo"));
+        dataPreventivoColumn.setCellValueFactory(new PropertyValueFactory<>("dataPreventivo"));
         concessionarioColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getLuogoConcessionario().getNome()));
+        giorniRimanentiColumn.setCellValueFactory(data -> {
+            LocalDate dataPreventivo = LocalDate.parse(data.getValue().getDataPreventivo(), DateTimeFormatter.ISO_DATE);
+            long giorniRimanenti = ChronoUnit.DAYS.between(LocalDate.now(), dataPreventivo.plusDays(20));
+            return new SimpleStringProperty(giorniRimanenti > 0 ? String.valueOf(giorniRimanenti) : "Scaduto");
+        });
 
         loadPreventivi();
         addButtonToTable();
@@ -73,13 +84,24 @@ public class PreventiviController {
             try {
                 JsonNode root = objectMapper.readTree(file);
                 if (root.isArray()) {
-                    for (JsonNode node : root) {
+                    Iterator<JsonNode> iterator = root.iterator();
+                    while (iterator.hasNext()) {
+                        JsonNode node = iterator.next();
                         JsonNode emailNode = node.get("emailCliente");
                         if (emailNode != null && emailNode.asText().equals(userEmail)) {
-                            Configurazione configurazione = objectMapper.treeToValue(node, Configurazione.class);
-                            preventivi.add(configurazione);
+                            JsonNode dataPreventivoNode = node.get("dataPreventivo");
+                            if (dataPreventivoNode != null) {
+                                LocalDate dataPreventivo = LocalDate.parse(dataPreventivoNode.asText(), DateTimeFormatter.ISO_DATE);
+                                if (ChronoUnit.DAYS.between(dataPreventivo, LocalDate.now()) <= 20) {
+                                    Configurazione configurazione = objectMapper.treeToValue(node, Configurazione.class);
+                                    preventivi.add(configurazione);
+                                } else {
+                                    iterator.remove();
+                                }
+                            }
                         }
                     }
+                    objectMapper.writeValue(file, root);
                 }
             } catch (IOException e) {
                 e.printStackTrace();
@@ -90,14 +112,14 @@ public class PreventiviController {
     }
 
     private void addButtonToTable() {
-        TableColumn<Configurazione, Void> colBtn = new TableColumn("Azione");
+        TableColumn<Configurazione, Void> colBtn = new TableColumn<>("Azione");
 
         javafx.util.Callback<TableColumn<Configurazione, Void>, TableCell<Configurazione, Void>> cellFactory = new javafx.util.Callback<>() {
             @Override
             public TableCell<Configurazione, Void> call(final TableColumn<Configurazione, Void> param) {
                 final TableCell<Configurazione, Void> cell = new TableCell<>() {
 
-                    private final Button btn = new Button("Paga Acconto");
+                    private final Button btn = new Button("Conferma");
 
                     {
                         btn.setOnAction((ActionEvent event) -> {

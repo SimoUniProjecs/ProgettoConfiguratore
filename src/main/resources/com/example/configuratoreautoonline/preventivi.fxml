@@ -17,8 +17,8 @@
             <TableColumn fx:id="motorizzazioneColumn" text="Motorizzazione"/>
             <TableColumn fx:id="prezzoColumn" text="Prezzo"/>
             <TableColumn fx:id="concessionarioColumn" prefWidth="150.0" text="Concessionario"/>
-            <TableColumn fx:id="dataArrivoColumn" text="Data Arrivo"/>
-            <TableColumn fx:id="actionColumn" text="Azione"/>
+            <TableColumn fx:id="dataPreventivoColumn" text="Data Preventivo"/>
+            <TableColumn fx:id="giorniRimanentiColumn" text="Giorni Rimanenti"/>
         </columns>
     </TableView>
     <Button fx:id="homeButton" text="Home" layoutX="14.0" layoutY="370.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" onAction="#handleHomeButtonAction"/>

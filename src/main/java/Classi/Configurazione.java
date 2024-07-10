@@ -17,6 +17,7 @@ public class Configurazione {
     private Concessionari luogoConcessionario;
     private String dataArrivo;
     private boolean pagato = false;
+    private String dataPreventivo;
 
     public Configurazione() {}
 
@@ -32,6 +33,7 @@ public class Configurazione {
         this.emailCliente = emailCliente;
         this.dataArrivo = LocalDate.now().plusDays(28+10*numeroOptional).toString();
         this.luogoConcessionario = concessionario;
+        this.dataPreventivo = LocalDate.now().toString();
     }
 
     public int getIdConfigurazione() {
@@ -120,5 +122,12 @@ public class Configurazione {
 
     public boolean getPagato() {
         return this.pagato;
+    }
+    public String getDataPreventivo() {
+        return dataPreventivo;
+    }
+
+    public void setDataPreventivo(String dataPreventivo) {
+        this.dataPreventivo = dataPreventivo;
     }
 }
