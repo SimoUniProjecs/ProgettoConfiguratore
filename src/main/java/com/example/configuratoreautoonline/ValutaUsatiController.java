@@ -10,7 +10,9 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
@@ -19,14 +21,14 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.Objects;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 public class ValutaUsatiController extends Application {
 
     @FXML
     private AnchorPane pannelloAncora;
-    @FXML
-    private MenuBar menuBar;
     @FXML
     private ImageView imageView;
     @FXML
@@ -40,10 +42,13 @@ public class ValutaUsatiController extends Application {
     @FXML
     private Label immatricolazione;
     @FXML
-    private TextField prezzoStimatoField; // Assicurati che questo campo sia collegato alla tua GUI
+    private TextField prezzoStimatoField;
 
     private Stage stage;
-    private JsonNode autoNode;
+    private JsonNode rootNode;
+    private List<JsonNode> filteredAutoList;
+    private Iterator<JsonNode> autoIterator;
+    private JsonNode currentAuto;
     private String jsonFilePath = "public/res/data/datiAutoUsate.json";
 
     public static void main(String[] args) {
@@ -65,119 +70,24 @@ public class ValutaUsatiController extends Application {
         stage = new Stage();
         // Carica i dati dal JSON e imposta i campi nel controller
         loadJSONData(jsonFilePath);
+        loadNextValidAuto();
     }
 
     @FXML
-    public void handleSwitchHome(ActionEvent event) {
-        changeScene("/com/example/configuratoreautoonline/Home-view.fxml");
+    public void onProssimoVeicoloClicked(ActionEvent event) {
+        loadNextValidAuto();
     }
 
-    @FXML
-    public void onInserisciVeicoloClicked(ActionEvent event) {
-        changeScene("/com/example/configuratoreautoonline/Vendi-view.fxml");
-    }
-
-    private void changeScene(String fxmlFile) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlFile));
-            Parent root = loader.load();
-            Scene scene = new Scene(root);
-            // Ottieni lo Stage dalla scena corrente
-            Stage currentStage = (Stage) pannelloAncora.getScene().getWindow();
-            currentStage.setScene(scene);
-            currentStage.show();
-        } catch (IOException e) {
-            showAlert("Error loading scene", "Cannot load scene from file: " + fxmlFile + "\n" + e.getMessage());
-            e.printStackTrace(); // Stampa lo stack trace per il debug
-        }
-    }
-
-    private void showAlert(String title, String content) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(content);
-        alert.show();
-    }
-
-    private void loadJSONData(String jsonFilePath) {
-        try {
-            // Legge il contenuto del file JSON
-            String jsonContent = new String(Files.readAllBytes(Paths.get(jsonFilePath)));
-
-            // Converte il contenuto JSON in un oggetto JsonNode
-            ObjectMapper objectMapper = new ObjectMapper();
-            JsonNode rootNode = objectMapper.readTree(jsonContent);
-
-            // Estrai l'array "datiAutoUsate"
-            JsonNode datiAutoUsate = rootNode.get("datiAutoUsate");
-
-            // Prendi il primo oggetto auto (presumendo che ce ne sia solo uno)
-            if (datiAutoUsate != null && datiAutoUsate.isArray() && datiAutoUsate.size() > 0) {
-                autoNode = datiAutoUsate.get(0);
-
-                // Estrapola i dati dall'oggetto JSON
-                String marca = autoNode.get("marca").asText();
-                String modello = autoNode.get("modello").asText();
-                String km = autoNode.get("km").asText();
-                String proprietari = String.valueOf(autoNode.get("proprietari").asInt());
-                String immatricolazione = autoNode.get("anno").asText();
-                String imageUrl = autoNode.get("immagine").asText();
-
-                // Imposta i dati nei campi della GUI
-                marcaTxt.setText(marca);
-                modelloTxt.setText(modello);
-                kmTxt.setText(km);
-                proprietariTxt.setText(proprietari);
-                this.immatricolazione.setText(immatricolazione);
-
-                // Carica e visualizza l'immagine
-                loadImage(imageUrl);
-            } else {
-                showAlert("JSON Error", "Nessun dato auto trovato nel file JSON.");
-            }
-        } catch (IOException e) {
-            showAlert("JSON Error", "Errore durante il caricamento dei dati dal file JSON: " + e.getMessage());
-            e.printStackTrace(); // Stampa lo stack trace per il debug
-        }
-    }
-
-    private void loadImage(String path) {
-        try {
-            Image image = new Image(Objects.requireNonNull(getClass().getResourceAsStream(path)));
-            imageView.setImage(image);
-        } catch (NullPointerException e) {
-            showAlert("Loading Error", "Failed to load image: " + path);
-        }
-    }
-
+    // Quando l'utente clicca sul pulsante "Stima" e viene salvato il prezzo stimato
     @FXML
     public void onStimaBtnClicked(ActionEvent event) {
-        if (autoNode != null) {
+        if (currentAuto != null) {
             try {
-                // Modifica il prezzo dell'auto
-                ((ObjectNode) autoNode).put("prezzo", prezzoStimatoField.getText()); // Imposta il nuovo prezzo dal campo input
-
-                // Leggi il contenuto del file JSON
-                String jsonContent = new String(Files.readAllBytes(Paths.get(jsonFilePath)));
-
-                // Converte il contenuto JSON in un oggetto JsonNode
-                ObjectMapper objectMapper = new ObjectMapper();
-                JsonNode rootNode = objectMapper.readTree(jsonContent);
-
-                // Trova l'array "datiAutoUsate"
-                ArrayNode datiAutoUsate = (ArrayNode) rootNode.get("datiAutoUsate");
-
-                // Sostituisci l'autoNode nell'array con la nuova versione aggiornata
-                for (int i = 0; i < datiAutoUsate.size(); i++) {
-                    JsonNode currentNode = datiAutoUsate.get(i);
-                    if (currentNode.get("modello").asText().equals(autoNode.get("modello").asText())) {
-                        datiAutoUsate.set(i, autoNode);
-                        break;
-                    }
-                }
+                // Modifica il prezzo dell'auto corrente
+                ((ObjectNode) currentAuto).put("prezzo", prezzoStimatoField.getText());
 
                 // Scrivi il JSON modificato nel file
+                ObjectMapper objectMapper = new ObjectMapper();
                 objectMapper.writerWithDefaultPrettyPrinter().writeValue(Paths.get(jsonFilePath).toFile(), rootNode);
 
                 // Mostra un messaggio di successo
@@ -191,29 +101,100 @@ public class ValutaUsatiController extends Application {
         }
     }
 
-    // Metodo per gestire l'azione dei MenuItem nel MenuBar
-    @FXML
-    public void handleMenuItemAction(ActionEvent event) {
-        MenuItem menuItem = (MenuItem) event.getSource();
-        String menuItemText = menuItem.getText();
+    // legge li file json e filtra le auto con prezzo minore di 0 ( quindi da valutare )
+    private void loadJSONData(String jsonFilePath) {
+        try {
+            // Legge il contenuto del file JSON
+            String jsonContent = new String(Files.readAllBytes(Paths.get(jsonFilePath)));
 
-        switch (menuItemText) {
-            case "Torna alla Home":
-                handleSwitchHome(event);
-                break;
-            case "Valuta Usati":
-                // Non necessario, siamo già sulla scena Valuta Usati
-                break;
-            case "Inserisci Veicolo":
-                onInserisciVeicoloClicked(event);
-                break;
-            default:
-                showAlert("Menu Item Clicked", "Azione non gestita per il MenuItem: " + menuItemText);
+            // Converte il contenuto JSON in un oggetto JsonNode
+            ObjectMapper objectMapper = new ObjectMapper();
+            rootNode = objectMapper.readTree(jsonContent);
+
+            // Estrai l'array "datiAutoUsate"
+            ArrayNode autoArray = (ArrayNode) rootNode.get("datiAutoUsate");
+
+            // Filtra le auto con prezzo diverso da -1
+            filteredAutoList = new ArrayList<>();
+            for (JsonNode auto : autoArray) {
+                if (auto.get("prezzo").asInt() < 0) {
+                    filteredAutoList.add(auto);
+                }
+            }
+
+            autoIterator = filteredAutoList.iterator();
+        } catch (IOException e) {
+            showAlert("JSON Error", "Errore durante la lettura del file JSON: " + e.getMessage());
+            e.printStackTrace(); // Stampa lo stack trace per il debug
         }
     }
 
-    public void onProssimoVeicoloClicked(ActionEvent event) {
-        // Deve cercare il prossimo veicolo che ha come prezzo -1 e caricare i suoi dati
-        // Nel caso non ci siano auto con prezzo -1 allora non c'è nessuna auto da valutare
+    // Carica il prossimo veicolo valido
+    private void loadNextValidAuto() {
+        if (autoIterator.hasNext()) {
+            currentAuto = autoIterator.next();
+            updateUI(currentAuto);
+        } else {
+            showAlert("Fine della lista", "Non ci sono più veicoli nella lista.");
+            resetUI();
+        }
+    }
+
+    // popola i campi con i dati dell'auto corrente
+    private void updateUI(JsonNode autoNode) {
+        marcaTxt.setText(autoNode.get("marca").asText());
+        modelloTxt.setText(autoNode.get("modello").asText());
+        kmTxt.setText(autoNode.get("km").asText());
+        proprietariTxt.setText(String.valueOf(autoNode.get("proprietari").asInt()));
+        immatricolazione.setText(autoNode.get("anno").asText());
+        prezzoStimatoField.setText(autoNode.get("prezzo").asText());
+
+        // Imposta l'immagine del veicolo
+        String imagePath = autoNode.get("immagine").asText();
+        Image image = new Image(Paths.get(imagePath).toUri().toString());
+        imageView.setImage(image);
+    }
+
+    // svuota tutti i campi
+    private void resetUI() {
+        marcaTxt.setText("");
+        modelloTxt.setText("");
+        kmTxt.setText("");
+        proprietariTxt.setText("");
+        immatricolazione.setText("");
+        prezzoStimatoField.setText("");
+        imageView.setImage(null);
+    }
+
+    private void showAlert(String title, String content) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(content);
+        alert.show();
+    }
+
+    public void handleSwitchHome(ActionEvent event) {
+        changeScene("/com/example/configuratoreautoonline/Home-view.fxml");
+    }
+
+    public void onInserisciVeicoloClicked(ActionEvent event) {
+        changeScene("/com/example/configuratoreautoonline/segretaria.fxml");
+    }
+
+    private void changeScene(String fxmlFile) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlFile));
+            Parent root = loader.load();
+            Scene scene = new Scene(root);
+
+            // Ottieni lo Stage dalla scena corrente
+            Stage currentStage = (Stage) pannelloAncora.getScene().getWindow();
+            currentStage.setScene(scene);
+            currentStage.show();
+        } catch (Exception e) {
+            showAlert("Error loading scene", "Cannot load scene from file: " + fxmlFile + "\n" + e.getMessage());
+            e.printStackTrace(); // Stampa lo stack trace per il debug
+        }
     }
 }
