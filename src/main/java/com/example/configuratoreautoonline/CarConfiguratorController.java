@@ -31,7 +31,6 @@ import java.util.Iterator;
 import java.util.List;
 
 
-
 public class CarConfiguratorController {
     @FXML
     public Label scontoMensile;
@@ -66,6 +65,7 @@ public class CarConfiguratorController {
     private String selectedMarca;
     private JsonNode datiModelliAuto;
     private int prezzoBase = 0;
+    private String path = "";
 
     private int prezzo = 0;
     private List<String> optionals = new ArrayList<>();
@@ -527,7 +527,7 @@ public class CarConfiguratorController {
                         showErrorAlert("Errore", "Errore durante il salvataggio della configurazione.");
                     }
 
-                    String path = getPercorsoIMGPerModello(selectedMarca, selectedModello) + getSecondaParteIMG(selectedOptionals, selectedColore);
+                    this.path = getPercorsoIMGPerModello(selectedMarca, selectedModello) + getSecondaParteIMG(selectedOptionals, selectedColore);
                     loadImage(path);
                 }
             });
@@ -629,7 +629,7 @@ public class CarConfiguratorController {
         if (modelloComboBox.getValue() != null &&
                 coloreComboBox.getValue() != null &&
                 motorizzazioneComboBox.getValue() != null) {
-            String path = getPercorsoIMGPerModello(selectedMarca, modelloComboBox.getValue()) +
+            this.path = getPercorsoIMGPerModello(selectedMarca, modelloComboBox.getValue()) +
                     getSecondaParteIMG(getOptionalsForModello(selectedMarca, modelloComboBox.getValue()), coloreComboBox.getValue());
             loadImage(path);
         }
