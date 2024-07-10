@@ -1,8 +1,10 @@
 package com.example.configuratoreautoonline;
 
 import Classi.Configurazione;
+import Classi.Motorizzazione;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -20,7 +22,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Objects;
 
 public class CarConfiguratorController {
     @FXML
@@ -52,6 +53,11 @@ public class CarConfiguratorController {
     private Stage stage;
     private String selectedMarca;
     private JsonNode datiModelliAuto;
+    private int prezzoBase = 0;
+
+    private int prezzo = 0;
+    private List<String> optionals = new ArrayList<>();
+    private Motorizzazione selectedMotorizzazione;
 
     // Inizializza i dati per la marca dell'auto selezionata
     public void initData(String marca) {
@@ -84,19 +90,23 @@ public class CarConfiguratorController {
         cerchiCheck.setOnAction(event -> updateImage());
         pinzeCheck.setOnAction(event -> updateImage());
         cerchiScuriCheck.setOnAction(event -> updateImage());
-        internoCheck.setOnAction(event -> onInternoCheckChanged(event));
+        internoCheck.setOnAction(this::onInternoCheckChanged);
         impiantoAudioCheck.setOnAction(event -> updateImage());
         abbonamentoCheck.setOnAction(event -> updateImage());
     }
+
     @FXML
     private void onInternoCheckChanged(ActionEvent event) {
         if (interniBtn.getText().equals("Visualizza Esterni")) {
             // Se stiamo visualizzando gli interni, aggiorniamo l'immagine degli interni
             loadImage(generaPathInterni(selectedMarca, modelloComboBox.getValue()));
         } else {
+            // Altrimenti, aggiorniamo l'immagine degli esterni
+            interniBtn.setText("Visualizza Interni");
             updateImage();
         }
     }
+
     @FXML
     private void onModelloSelected(ActionEvent event) {
         String selectedModello = modelloComboBox.getValue();
@@ -125,13 +135,14 @@ public class CarConfiguratorController {
             }
         }
 
-        if(internoCheck.isSelected() && getOptionalsForModello(selectedMarca, modelloComboBox.getValue()).contains("interni pelle")){
+        if(internoCheck.isSelected() && getOptionalsForModello(selectedMarca, modelloComboBox.getValue()).toString().contains("interni pelle")){
             percorso += "internopelle.png";
         } else {
             percorso += "internobase.png";
         }
         return percorso.toLowerCase();
     }
+
     @FXML
     private void onInterniClicked(ActionEvent event){
         if(interniBtn.getText().equals("Visualizza Interni")){
@@ -184,6 +195,7 @@ public class CarConfiguratorController {
             disableOptionalCheckboxes(true);
         }
     }
+
     @FXML
     private void disableOptionalCheckboxes(boolean disable) {
         vetriCheck.setDisable(disable);
@@ -215,17 +227,24 @@ public class CarConfiguratorController {
         List<String> optionals = new ArrayList<>();
         JsonNode marcaNode = datiModelliAuto.get(marca.toLowerCase());
         if (marcaNode != null) {
-            Iterator<JsonNode> modelliIterator = marcaNode.elements();
-            while (modelliIterator.hasNext()) {
-                JsonNode modelloNode = modelliIterator.next().get("modelli").get(0);
-                JsonNode optionalNode = modelloNode.get(modello);
-                if (optionalNode != null && optionalNode.has("optionals")) {
-                    optionalNode.get("optionals").forEach(optional -> optionals.add(optional.asText()));
+            for (JsonNode modelloNode : marcaNode) {
+                JsonNode modelliNode = modelloNode.get("modelli");
+                if (modelliNode != null) {
+                    for (JsonNode modNode : modelliNode) {
+                        JsonNode modelloSpecificoNode = modNode.get(modello);
+                        if (modelloSpecificoNode != null && modelloSpecificoNode.has("optionals")) {
+                            for (JsonNode optionalNode : modelloSpecificoNode.get("optionals")) {
+                                optionals.add(optionalNode.asText());
+                            }
+                            return optionals; // Trovati gli optional per il modello, interrompe il loop
+                        }
+                    }
                 }
             }
         }
         return optionals;
     }
+
 
     // popola la choicebox con i colori disponibili per il modello selezionato
     private List<String> getColoriPerModello(String marca, String modello) {
@@ -272,11 +291,8 @@ public class CarConfiguratorController {
                 JsonNode modelloSpecificoNode = modelloNode.get(modello);
                 if (modelloSpecificoNode != null && modelloSpecificoNode.has("motorizzazioni")) {
                     modelloSpecificoNode.get("motorizzazioni").forEach(motorizzazione -> {
-                        if (motorizzazione.has("potenza") && motorizzazione.has("alimentazione")) {
-                            String alimentazione = motorizzazione.get("alimentazione").asText();
-                            String potenza = motorizzazione.get("potenza").asText();
-                            motorizzazioni.add(alimentazione + " - " + potenza);
-                        }
+                        String motorizzazioneStr = motorizzazione.get("alimentazione").asText() + " - " + motorizzazione.get("potenza").asText();
+                        motorizzazioni.add(motorizzazioneStr);
                     });
                 }
             }
@@ -286,199 +302,220 @@ public class CarConfiguratorController {
 
     //scelta motorizzazione
     public void onMotoSelected(ActionEvent event) {
-        // Aggiorna il prezzo base con quel motore
-        this.prezzo = Integer.parseInt(Objects.requireNonNull(getPrezzo(selectedMarca, modelloComboBox.getValue(), motorizzazioneComboBox.getValue()).split(" ")[0].replace(".", "")));
-
         String selectedModello = modelloComboBox.getValue();
         if (selectedModello != null) {
-            List<String> motori = getMotorizzazioniForModello(selectedMarca, selectedModello);
-            motorizzazioneComboBox.setItems(FXCollections.observableArrayList(motori));
-            motorizzazioneComboBox.setDisable(false);
+            List<Motorizzazione> motori = getMotorizzazioniDetailsForModello(selectedMarca, selectedModello);
+            String selectedMotorizzazioneStr = motorizzazioneComboBox.getValue();
+
+            for (Motorizzazione motorizzazione : motori) {
+                String motorizzazioneStr = motorizzazione.getAlimentazione() + " - " + motorizzazione.getPotenza();
+                if (motorizzazioneStr.equals(selectedMotorizzazioneStr)) {
+                    this.selectedMotorizzazione = motorizzazione;
+                    this.prezzoBase = Integer.parseInt(motorizzazione.getPrezzo().replace(".", "").replace(" EUR", ""));
+                    this.prezzo = prezzoBase;
+                    break;
+                }
+            }
 
             List<String> optionals = getOptionalsForModello(selectedMarca, selectedModello);
 
-            if (optionals.contains("vetri oscurati")) {
-                vetriCheck.setDisable(false);
-            } else {
-                vetriCheck.setDisable(true);
-            }
+            vetriCheck.setDisable(!optionals.toString().contains("vetri oscurati"));
+            cerchiCheck.setDisable(!optionals.toString().contains("cerchi maggiorati"));
+            cerchiScuriCheck.setDisable(!optionals.toString().contains("cerchi neri"));
+            pinzeCheck.setDisable(!optionals.toString().contains("freni rossi €800"));
+            internoCheck.setDisable(!optionals.toString().contains("interni pelle"));
+            impiantoAudioCheck.setDisable(!optionals.toString().contains("impianto audio HarmanCardon"));
+            abbonamentoCheck.setDisable(!(selectedMotorizzazioneStr.toString().contains("Elettrica") || selectedMotorizzazioneStr.toString().contains("Ibrida Plug-in")));
 
-            if (optionals.contains("cerchi maggiorati")) {
-                cerchiCheck.setDisable(false);
-            } else {
-                cerchiCheck.setDisable(true);
-            }
+            // Aggiorna il prezzo base con quel motore
+            prezzoLbl.setText(this.prezzo + " €");
 
-            if (optionals.contains("cerchi neri")) {
-                cerchiScuriCheck.setDisable(false);
-            } else {
-                cerchiScuriCheck.setDisable(true);
-            }
-
-            if (optionals.contains("freni rossi")) {
-                pinzeCheck.setDisable(false);
-            } else {
-                pinzeCheck.setDisable(true);
-            }
-
-            if (optionals.contains("interni pelle")) {
-                internoCheck.setDisable(false);
-            } else {
-                internoCheck.setDisable(true);
-            }
-
-            if (optionals.contains("impianto audio HarmanCardon")) {
-                impiantoAudioCheck.setDisable(false);
-            } else {
-                impiantoAudioCheck.setDisable(true);
-            }
-
-            if (motorizzazioneComboBox.getValue().contains("Elettrica") || motorizzazioneComboBox.getValue().contains("Ibrida Plug-in")) {
-                abbonamentoCheck.setDisable(false);
-            } else {
-                abbonamentoCheck.setDisable(true);
-            }
-
-            // do la possibilità di vedere gli interni
+            // Abilita il pulsante per vedere gli interni
             interniBtn.setDisable(false);
         }
         updateImage();
     }
-    @FXML
-    private void onConfiguraButtonClicked() {
-        String marca = selectedMarca;
-        String selectedModello = modelloComboBox.getValue();
-        String selectedColore = coloreComboBox.getValue();
-        String motore = motorizzazioneComboBox.getValue();
-
-        optionals.add(selectedColore);
-        optionals.add(motore);
-
-        UserSession session = new UserSession();
-
-
-        Configurazione configurazione = new Configurazione(1,marca,selectedModello, selectedColore, prezzo, session.getEmail() );
-        ObjectMapper objectMapper = new ObjectMapper();
-
-        try {
-            objectMapper.writeValue(new File("public/res/data/configurazioni.json"), configurazione);
-            showAlert("Successo", "Configurazione salvata con successo.");
-        } catch (IOException e) {
-            e.printStackTrace();
-            showAlert("Errore", "Errore durante il salvataggio della configurazione.");
-        }
-
-        if (selectedMarca != null && selectedModello != null && selectedColore != null ) {
-            String path = getPercorsoIMGPerModello(selectedMarca, selectedModello) + getSecondaParteIMG(getOptionalsForModello(selectedMarca, selectedModello), selectedColore);
-            loadImage(path);
-        } else {
-            showAlert("Errore", "Seleziona marca, modello e colore per configurare l'auto.");
-        }
-    }
-
-    // Ritorna il prezzo dell'auto base senza optional
-    private String getPrezzo(String selectedMarca, String modello, String motorizzazione) {
-        // Dividiamo l'input di motorizzazione in alimentazione e potenza
-        String[] parts = motorizzazione.split(" - ");
-        if (parts.length != 2) {
-            return null; // Restituisce null se l'input non è nel formato corretto
-        }
-        String alimentazione = parts[0];
-        String potenza = parts[1];
-
-        JsonNode marcaNode = datiModelliAuto.get(selectedMarca.toLowerCase());
+    private List<Motorizzazione> getMotorizzazioniDetailsForModello(String marca, String modello) {
+        List<Motorizzazione> motorizzazioni = new ArrayList<>();
+        JsonNode marcaNode = datiModelliAuto.get(marca.toLowerCase());
         if (marcaNode != null) {
             Iterator<JsonNode> modelliIterator = marcaNode.elements();
             while (modelliIterator.hasNext()) {
-                JsonNode modelliNode = modelliIterator.next().get("modelli");
-                for (JsonNode modelloNode : modelliNode) {
-                    JsonNode specificModelNode = modelloNode.get(modello);
-                    if (specificModelNode != null) {
-                        JsonNode motorizzazioniNode = specificModelNode.get("motorizzazioni");
-                        for (JsonNode motorizzazioneNode : motorizzazioniNode) {
-                            String potenzaModello = motorizzazioneNode.get("potenza").asText();
-                            String alimentazioneModello = motorizzazioneNode.get("alimentazione").asText();
-                            // Confrontiamo sia l'alimentazione che la potenza
-                            if (potenzaModello.equals(potenza) && alimentazioneModello.equalsIgnoreCase(alimentazione)) {
-                                return motorizzazioneNode.get("prezzo").asText();
-                            }
-                        }
-                    }
+                JsonNode modelloNode = modelliIterator.next().get("modelli").get(0);
+                JsonNode modelloSpecificoNode = modelloNode.get(modello);
+                if (modelloSpecificoNode != null && modelloSpecificoNode.has("motorizzazioni")) {
+                    modelloSpecificoNode.get("motorizzazioni").forEach(motorizzazione -> {
+                        Motorizzazione motorizzazioneObj = new Motorizzazione(
+                                motorizzazione.get("cilindrata").asText(),
+                                motorizzazione.get("potenza").asText(),
+                                motorizzazione.get("coppia").asText(),
+                                motorizzazione.get("alimentazione").asText(),
+                                motorizzazione.get("prezzo").asText()
+                        );
+                        motorizzazioni.add(motorizzazioneObj);
+                    });
                 }
             }
         }
-        return ""; // Se non trova corrispondenze
+        return motorizzazioni;
     }
+    @FXML
+    private void onConfiguraButtonClicked() {
+        String selectedModello = modelloComboBox.getValue();
+        String selectedColore = coloreComboBox.getValue();
+        UserSession session = UserSession.getInstance();
+
+        if (!session.isLoggato()) {
+            showAlert("Errore", "Devi essere loggato per configurare l'auto.");
+            return;
+        }
+
+        if (selectedMarca != null && selectedModello != null && selectedColore != null && selectedMotorizzazione != null) {
+            List<String> selectedOptionals = new ArrayList<>();
+            if (vetriCheck.isSelected()) selectedOptionals.add("vetri oscurati €800");
+            if (cerchiCheck.isSelected()) selectedOptionals.add("cerchi maggiorati €500");
+            if (cerchiScuriCheck.isSelected()) selectedOptionals.add("cerchi neri €1000");
+            if (pinzeCheck.isSelected()) selectedOptionals.add("freni rossi €800");
+            if (internoCheck.isSelected()) selectedOptionals.add("interni pelle €2590");
+            if (impiantoAudioCheck.isSelected()) selectedOptionals.add("impianto audio HarmanCardon €1500");
+            if (abbonamentoCheck.isSelected()) selectedOptionals.add("abbonamento");
+
+            int optionalPrice = selectedOptionals.stream()
+                    .mapToInt(o -> {
+                        String[] parts = o.split("€");
+                        if (parts.length == 2) {
+                            try {
+                                return Integer.parseInt(parts[1].trim());
+                            } catch (NumberFormatException e) {
+                                return 0;
+                            }
+                        } else {
+                            return 0;
+                        }
+                    })
+                    .sum();
+
+            int totalePrezzo = this.prezzo + optionalPrice;
+
+            int newId = 1; // ID iniziale
+            File file = new File("public/res/data/configurazioni.json");
+            ObjectMapper objectMapper = new ObjectMapper();
+
+            try {
+                JsonNode root;
+                ArrayNode configurazioni;
+
+                if (file.exists() && file.length() != 0) {
+                    root = objectMapper.readTree(file);
+                    if (root.isArray()) {
+                        configurazioni = (ArrayNode) root;
+                    } else {
+                        configurazioni = objectMapper.createArrayNode();
+                        configurazioni.add(root);
+                    }
+
+                    for (JsonNode node : configurazioni) {
+                        JsonNode idNode = node.get("idConfigurazione");
+                        if (idNode != null) {
+                            int id = idNode.asInt();
+                            if (id >= newId) {
+                                newId = id + 1;
+                            }
+                        }
+                    }
+                } else {
+                    configurazioni = objectMapper.createArrayNode();
+                }
+
+                Configurazione configurazione = new Configurazione(newId, selectedMarca, selectedModello, selectedColore, selectedMotorizzazione, selectedOptionals, totalePrezzo, session.getEmail());
+                configurazioni.add(objectMapper.valueToTree(configurazione));
+
+                objectMapper.writeValue(file, configurazioni);
+                showAlert("Successo", "Configurazione salvata con successo.");
+            } catch (IOException e) {
+                e.printStackTrace();
+                showAlert("Errore", "Errore durante il salvataggio della configurazione.");
+            }
+
+            String path = getPercorsoIMGPerModello(selectedMarca, selectedModello) + getSecondaParteIMG(selectedOptionals, selectedColore);
+            loadImage(path);
+        } else {
+            showAlert("Errore", "Seleziona marca, modello, colore e motorizzazione per configurare l'auto.");
+        }
+    }
+
     // Costruisce il percorso all'interno della directory del modello
     private String getSecondaParteIMG(List<String> optionalsForModello, String selectedColore) {
         StringBuilder risultato = new StringBuilder();
+        risultato.append(selectedColore.split(" ")[0]);
 
-        // Aggiungo il colore
-        risultato.append(selectedColore.toLowerCase().split("€")[0].replace(" ", ""));
-
-        // Per ogni possibile optional controllo se è stato selezionato
-        // e se è presente tra gli optional possibili del modello
-        // Altrimenti potrebbe essere un optional non disponibile per quel modello perchè disattivato
-        // ma disattivato solo per quel modello
-
-        if(cerchiScuriCheck.isSelected() && optionalsForModello.contains("cerchi neri")){
+        if (optionalsForModello.toString().contains("cerchi neri") && cerchiScuriCheck.isSelected()) {
             risultato.append("cerchineri");
         }
-
-        if(cerchiCheck.isSelected() && optionalsForModello.contains("cerchi maggiorati")){
+        if (optionalsForModello.toString().contains("cerchi maggiorati") && cerchiCheck.isSelected()) {
             risultato.append("cerchimaggiorati");
         }
-
-        if(vetriCheck.isSelected() && optionalsForModello.contains("vetri oscurati")){
+        if (optionalsForModello.toString().contains("vetri oscurati") && vetriCheck.isSelected()) {
             risultato.append("vetrioscurati");
         }
-
-        if(pinzeCheck.isSelected() && optionalsForModello.contains("freni rossi")){
+        if (optionalsForModello.toString().contains("freni rossi") && pinzeCheck.isSelected()) {
             risultato.append("frenirossi");
         }
-
-        return risultato.append(".png").toString().toLowerCase();
+        risultato.append(".png");
+        return risultato.toString().toLowerCase();
     }
-    public int prezzoOptional(){
+
+    public int prezzoOptional() {
         int prezzoDaAggiungere = 0;
-        // Aggiungo il colore
-        if(coloreComboBox.getValue() != null) {
-            String tot = coloreComboBox.getValue();
-            String colore = tot.split(" ")[0];
-            prezzoDaAggiungere += Integer.parseInt(tot.split("€")[1]);
+
+        // Verifica se il colore è selezionato e aggiungi il prezzo
+        if (coloreComboBox.getValue() != null) {
+            prezzoDaAggiungere += estraiPrezzoDaStringa(coloreComboBox.getValue());
         }
 
-        // CheckBox degli optional
-        if(cerchiCheck.isSelected()){
-            cerchiCheck.getText()
-        }
+        // Verifica ogni checkbox se è selezionata e aggiungi il prezzo
+        List<String> optionals = getOptionalsForModello(selectedMarca, modelloComboBox.getValue());
 
-        if(cerchiScuriCheck.isSelected()){
-            prezzoDaAggiungere += Integer.parseInt(cerchiScuriCheck.getText().split("€")[1]);
-        }
-
-        if(vetriCheck.isSelected()){
-            prezzoDaAggiungere += 300;
-        }
-
-        if(pinzeCheck.isSelected()){
-            prezzoDaAggiungere += Integer.parseInt(pinzeCheck.getText().split("€")[1]);
-        }
-
-        if(internoCheck.isSelected()){
-            prezzoDaAggiungere += Integer.parseInt(internoCheck.getText().split("€")[1]);
-        }
-
-        if(impiantoAudioCheck.isSelected()){
-            prezzoDaAggiungere += 800;
+        for (String optional : optionals) {
+            if (cerchiCheck.isSelected() && optional.contains("cerchi maggiorati")) {
+                prezzoDaAggiungere += estraiPrezzoDaStringa(optional);
+            }
+            if (cerchiScuriCheck.isSelected() && optional.contains("cerchi neri")) {
+                prezzoDaAggiungere += estraiPrezzoDaStringa(optional);
+            }
+            if(vetriCheck.isSelected() && optional.contains("vetri oscurati")){
+                prezzoDaAggiungere += estraiPrezzoDaStringa(optional);
+            }
+            if (pinzeCheck.isSelected() && optional.contains("freni rossi")) {
+                prezzoDaAggiungere += estraiPrezzoDaStringa(optional);
+            }
+            if (internoCheck.isSelected() && optional.contains("interni pelle")) {
+                prezzoDaAggiungere += estraiPrezzoDaStringa(optional);
+            }
+            if (impiantoAudioCheck.isSelected() && optional.contains("impianto Audio maggiorato")) {
+                prezzoDaAggiungere += estraiPrezzoDaStringa(optional);
+            }
+            if (abbonamentoCheck.isSelected() && optional.contains("Abbonamento annuale per ricarica")) {
+                prezzoDaAggiungere += estraiPrezzoDaStringa(optional);
+            }
+            // Aggiungi altre condizioni per gli optional rimanenti come necessario
         }
 
         return prezzoDaAggiungere;
     }
+    private int estraiPrezzoDaStringa(String testo) {
+        int prezzo = 0;
+        try {
+            String prezzoString = testo.split("€")[1].trim();
+            prezzo = Integer.parseInt(prezzoString);
+        } catch (NumberFormatException | ArrayIndexOutOfBoundsException e) {
+            // Gestione dell'errore nel caso in cui il formato non sia corretto
+            System.err.println("Errore nell'estrazione del prezzo da: " + testo);
+        }
+        return prezzo;
+    }
     // Aggiorna l'immagine caricata in base al modello e al colore selezionati e optionals
     public void updateImage() {
-        // chiama l'aggiornamento della label
-        updatePrezzo(prezzoOptional());
         if (modelloComboBox.getValue() != null &&
                 coloreComboBox.getValue() != null &&
                 motorizzazioneComboBox.getValue() != null) {
@@ -486,6 +523,11 @@ public class CarConfiguratorController {
                     getSecondaParteIMG(getOptionalsForModello(selectedMarca, modelloComboBox.getValue()), coloreComboBox.getValue());
             loadImage(path);
         }
+        updatePrezzo();
+    }
+    private void updatePrezzo() {
+        int prezzoTotale = prezzoBase + prezzoOptional();
+        prezzoLbl.setText(prezzoTotale + " €");
     }
     // Restituisce i modelli per la marca selezionata in una LISTA di stringhe
     private List<String> getModelliForMarca(String marca) {
@@ -500,24 +542,27 @@ public class CarConfiguratorController {
         }
         return modelli;
     }
+
     // DAto il percorso dell'immagine, la carica
     private void loadImage(String path) {
         try {
             File file = new File(path);
+            System.out.println(path);
             Image image = new Image(file.toURI().toString());
             carImageView.setImage(image);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
     // per tornare alla home
     @FXML
     private void handleHomeButton(ActionEvent event) {
         Node source = (Node) event.getSource();
         Stage currentStage = (Stage) source.getScene().getWindow();
-
         changeScene("/com/example/configuratoreautoonline/Home-view.fxml", currentStage);
     }
+
     private void changeScene(String fxmlFile, Stage currentStage) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlFile));
@@ -531,6 +576,7 @@ public class CarConfiguratorController {
             e.printStackTrace();
         }
     }
+
     private void showAlert(String title, String content) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle(title);
