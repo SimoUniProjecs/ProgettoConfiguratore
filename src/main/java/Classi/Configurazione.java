@@ -1,56 +1,48 @@
 package Classi;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import Enums.Alimentazioni;
-import Enums.Optionals;
-
 public class Configurazione {
     private int idConfigurazione;
-    private Automobile modelloAutomobile;
-    private Motore motore;
-    private List<Optionals> optionals = new ArrayList<>();
+    private String marcaAutomobile;
+    private String modelloAutomobile;
+    private String optionals;
+    private int prezzo;
+    private String emailCliente;
 
-    public Configurazione(int idConfigurazione, Automobile modelloAutomobile, Motore motore, Alimentazioni alimentazione, Optionals optionals) {
+
+    public Configurazione(int idConfigurazione, String marca ,String modello ,String optionals, int prezzo, String emailCliente) {
+        this.marcaAutomobile = marca;
         this.idConfigurazione = idConfigurazione;
-        this.modelloAutomobile = modelloAutomobile;
-        this.motore = motore;
+        this.modelloAutomobile = modello;
+        this.optionals = optionals;
+        this.prezzo = prezzo;
+        this.emailCliente = emailCliente;
     }
 
     public int getIdConfigurazione() {
         return idConfigurazione;
     }
 
-    public Automobile getModelloAutomobile() {
+    public String getModelloAutomobile() {
         return modelloAutomobile;
     }
 
-    public Motore getMotore() {
-        return motore;
-    }
-
-    public List<Optionals> getOptionals() {
+    public String getOptionals() {
         return optionals;
     }
 
     public String toString() {
-        return "Configurazione: " + idConfigurazione + ", " + modelloAutomobile.toString() + ", " + motore.toString();
+        return "Configurazione: " + idConfigurazione + ", " + modelloAutomobile.toString();
     }
 
     public void setIdConfigurazione(int idConfigurazione) {
         this.idConfigurazione = idConfigurazione;
     }
 
-    public void setModelloAutomobile(Automobile modelloAutomobile) {
+    public void setModelloAutomobile(String modelloAutomobile) {
         this.modelloAutomobile = modelloAutomobile;
     }
 
-    public void setMotore(Motore motore) {
-        this.motore = motore;
-    }
-
-    public void setOptionals(Optionals optional) {
-        this.optionals.add(optional);
+    public void setOptionals(String optional) {
+        this.optionals = optionals;
     }
 }

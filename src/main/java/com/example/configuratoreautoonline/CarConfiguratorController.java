@@ -1,5 +1,6 @@
 package com.example.configuratoreautoonline;
 
+import Classi.Configurazione;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import javafx.collections.FXCollections;
@@ -346,8 +347,27 @@ public class CarConfiguratorController {
     }
     @FXML
     private void onConfiguraButtonClicked() {
+        String marca = selectedMarca;
         String selectedModello = modelloComboBox.getValue();
         String selectedColore = coloreComboBox.getValue();
+        String motore = motorizzazioneComboBox.getValue();
+
+        optionals.add(selectedColore);
+        optionals.add(motore);
+
+        UserSession session = new UserSession();
+
+
+        Configurazione configurazione = new Configurazione(1,marca,selectedModello, selectedColore, prezzo, session.getEmail() );
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        try {
+            objectMapper.writeValue(new File("public/res/data/configurazioni.json"), configurazione);
+            showAlert("Successo", "Configurazione salvata con successo.");
+        } catch (IOException e) {
+            e.printStackTrace();
+            showAlert("Errore", "Errore durante il salvataggio della configurazione.");
+        }
 
         if (selectedMarca != null && selectedModello != null && selectedColore != null ) {
             String path = getPercorsoIMGPerModello(selectedMarca, selectedModello) + getSecondaParteIMG(getOptionalsForModello(selectedMarca, selectedModello), selectedColore);
