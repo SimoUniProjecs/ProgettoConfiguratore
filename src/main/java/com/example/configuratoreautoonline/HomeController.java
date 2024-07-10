@@ -248,7 +248,9 @@ public class HomeController {
     //effettua il logout
     public void handleLogoutClick(ActionEvent actionEvent) {
         // Clear the user session
-        UserSession.getInstance().setLoggato(false);
+        UserSession session = UserSession.getInstance();
+        session.disconnetti();
+        updateMenuVisibility();
     }
 
     // Se utente vuole sloggarsi e rimuovere dal JSON il suo userame
