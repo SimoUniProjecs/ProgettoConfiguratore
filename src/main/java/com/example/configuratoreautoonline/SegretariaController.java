@@ -3,14 +3,15 @@ package com.example.configuratoreautoonline;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
 public class SegretariaController {
-
+    @FXML
+    private AnchorPane pannelloAncora;
     @FXML
     private MenuButton sceltaMarca;
 
@@ -49,37 +50,19 @@ public class SegretariaController {
         // Implementazione dell'aggiunta dell'auto al catalogo
         return true; // Ritorna true se l'aggiunta è avvenuta con successo, altrimenti false
     }
-
-    @FXML
-    private void handleValutaUsati(ActionEvent event) {
-        Node source = (Node) event.getSource();
-        Stage currentStage = (Stage) source.getScene().getWindow();
-
-        changeScene("/com/example/configuratoreautoonline/valutaUsati.fxml", currentStage);
-    }
-
-    @FXML
-    private void handleHomeButton(ActionEvent event) {
-        Node source = (Node) event.getSource();
-        Stage currentStage = (Stage) source.getScene().getWindow();
-
-        changeScene("/com/example/configuratoreautoonline/Home-view.fxml", currentStage);
-    }
-
-    private void changeScene(String fxmlFile, Stage currentStage) {
+    private void changeScene(String fxmlFile) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlFile));
             Parent root = loader.load();
             Scene scene = new Scene(root);
-
+            Stage currentStage = (Stage) pannelloAncora.getScene().getWindow();
             currentStage.setScene(scene);
             currentStage.show();
         } catch (Exception e) {
             showAlert("Error loading scene", "Cannot load scene from file: " + fxmlFile + "\n" + e.getMessage());
-            e.printStackTrace();
+            e.printStackTrace(); // Stampa lo stack trace per il debug
         }
     }
-
     private void showAlert(String title, String s) {
         Alert alert = null;
         alert = new Alert(Alert.AlertType.ERROR);
@@ -91,6 +74,22 @@ public class SegretariaController {
 
     @FXML
     private void handleInserisciVeicolo(ActionEvent event) {
-        // Da implementare
+        // Da implementare perchè deve inserirsi nell'albero originale con tutte le relative foto annesse
+    }
+
+    public void handleValutaUsati(ActionEvent event) {
+        changeScene("/com/example/configuratoreautoonline/valutaUsati.fxml");
+    }
+
+    public void handleSwitchHome(ActionEvent event) {
+        changeScene("/com/example/configuratoreautoonline/Home-View.fxml");
+    }
+
+    public void onAcquistaBtnClicked(ActionEvent event) {
+        System.out.println("Acquista button clicked");
+    }
+
+    public void onProssimoVeicoloClicked(ActionEvent event) {
+        System.out.println("Prossimo veicolo button clicked");
     }
 }

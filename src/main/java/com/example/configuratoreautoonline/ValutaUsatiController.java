@@ -197,4 +197,6 @@ public class ValutaUsatiController extends Application {
             e.printStackTrace(); // Stampa lo stack trace per il debug
         }
     }
+
+
 }
