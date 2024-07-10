@@ -74,23 +74,18 @@ public class SegretariaController {
     }
 
     private void loadOrdini(String filtro) {
-        UserSession session = UserSession.getInstance();
-        String userEmail = session.getEmail();
         ordini = FXCollections.observableArrayList();
         ObjectMapper objectMapper = new ObjectMapper();
-        File file = new File("public/res/data/preventivi.json");
+        File file = new File("public/res/data/ordini.json");
 
         if (file.exists() && file.length() != 0) {
             try {
                 JsonNode root = objectMapper.readTree(file);
                 if (root.isArray()) {
                     for (JsonNode node : root) {
-                        JsonNode emailNode = node.get("emailCliente");
-                        if (emailNode != null && emailNode.asText().equals(userEmail)) {
-                            Configurazione configurazione = objectMapper.treeToValue(node, Configurazione.class);
-                            if (filtro == null || filtro.isEmpty() || matchesFilter(configurazione, filtro)) {
-                                ordini.add(configurazione);
-                            }
+                        Configurazione configurazione = objectMapper.treeToValue(node, Configurazione.class);
+                        if (matchesFilter(configurazione, filtro)) {
+                            ordini.add(configurazione);
                         }
                     }
                 }
@@ -103,18 +98,22 @@ public class SegretariaController {
     }
 
     private boolean matchesFilter(Configurazione configurazione, String filtro) {
+        if (filtro == null || filtro.isEmpty()) {
+            return true; // Se il filtro è vuoto, mostra tutti gli ordini
+        }
+
         String selectedFilter = filtra.getValue();
-        if (selectedFilter == null || filtro == null || filtro.isEmpty()) {
-            return true;
+        if (selectedFilter == null) {
+            return true; // Se non è stato selezionato un filtro, mostra tutti gli ordini
         }
 
         switch (selectedFilter) {
             case "email":
-                return configurazione.getEmailCliente().contains(filtro);
+                return configurazione.getEmailCliente().toLowerCase().contains(filtro.toLowerCase());
             case "marca":
-                return configurazione.getMarcaAutomobile().equalsIgnoreCase(filtro);
+                return configurazione.getMarcaAutomobile().toLowerCase().contains(filtro.toLowerCase());
             case "sede":
-                return configurazione.getLuogoConcessionario().getNome().equalsIgnoreCase(filtro);
+                return configurazione.getLuogoConcessionario().getNome().toLowerCase().contains(filtro.toLowerCase());
             default:
                 return true;
         }
@@ -165,6 +164,7 @@ public class SegretariaController {
                             showEditOrderDialog(data);
                         });
                     }
+
                     @Override
                     public void updateItem(Void item, boolean empty) {
                         super.updateItem(item, empty);
@@ -198,7 +198,7 @@ public class SegretariaController {
         alert.getButtonTypes().setAll(buttonTypeYes, buttonTypeNo);
 
         Optional<ButtonType> result = alert.showAndWait();
-        if (result.get() == buttonTypeYes) {
+        if (result.isPresent() && result.get() == buttonTypeYes) {
             deleteConfiguration(data);
         }
     }
@@ -234,7 +234,7 @@ public class SegretariaController {
         ObjectMapper objectMapper = new ObjectMapper();
 
         try {
-            objectMapper.writeValue(new File("public/res/data/preventivi.json"), ordini);
+            objectMapper.writeValue(new File("public/res/data/ordini.json"), ordini);
         } catch (IOException e) {
             e.printStackTrace();
         }
