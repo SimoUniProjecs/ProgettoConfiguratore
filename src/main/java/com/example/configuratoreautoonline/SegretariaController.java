@@ -34,25 +34,6 @@ public class SegretariaController {
 
     @FXML
     private TextArea listaOptionals;
-
-    // Metodo chiamato quando l'utente seleziona Audi
-    @FXML
-    void handleSceltaAudi() {
-        impostaTesto("Audi"); // Imposta il testo nella Label per mostrare la marca selezionata
-    }
-
-    // Metodo chiamato quando l'utente seleziona Alfa Romeo
-    @FXML
-    void handleSceltaAlfaRomeo() {
-        impostaTesto("Alfa Romeo"); // Imposta il testo nella Label per mostrare la marca selezionata
-    }
-
-    // Metodo chiamato quando l'utente seleziona BMW
-    @FXML
-    void handleSceltaBMW() {
-        impostaTesto("BMW"); // Imposta il testo nella Label per mostrare la marca selezionata
-    }
-
     private void impostaTesto(String marca) {
         textMarcaSeg.setText(marca); // Imposta il testo nella Label per mostrare la marca selezionata
     }

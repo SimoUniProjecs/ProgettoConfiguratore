@@ -123,8 +123,6 @@ public class HomeController {
         }
     }
 
-
-
     private void changeScene(String fxmlFile) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlFile));
@@ -140,8 +138,6 @@ public class HomeController {
             e.printStackTrace(); // Stampa lo stack trace per il debug
         }
     }
-
-
 
     private void showDialog(String fxmlFile) {
         try {
@@ -207,6 +203,7 @@ public class HomeController {
         loadImage(audiImageView, "/img/LOGHI/Audi-Logo_2016.svg.png");
         loadImage(bmwImageView, "/img/LOGHI/BMW.svg.png");
         loadImage(alfaImageView, "/img/LOGHI/alfa.svg.png");
+        loadImage(bigImageView, "/img/LOGHI/home.png");
     }
 
     // Carica le 3 immagini dei loghi delle marche

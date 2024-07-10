@@ -1,24 +1,43 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.example.configuratoreautoonline.ValutaUsati"
-            prefHeight="400.0" prefWidth="600.0">
-    <MenuBar VBox.vgrow="NEVER">
-        <menus>
-            <Menu mnemonicParsing="false" text="Azioni">
-                <items>
-                    MenuItem mnemonicParsing="false" onAction="#handleSwitchHome" text="Torna alla Home" />
-                    <MenuItem mnemonicParsing="false" onAction="#" text="Valuta Usati" />
-                    <MenuItem mnemonicParsing="false" onAction="#" text="Inserisci Veicolo" />
-                </items>
-            </Menu>
-        </menus>
-    </MenuBar>
+<AnchorPane fx:id="pannelloAncora" prefHeight="564.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.configuratoreautoonline.ValutaUsatiController">
+    <children>
+        <MenuBar VBox.vgrow="NEVER">
+            <menus>
+                <Menu mnemonicParsing="false" text="Azioni">
+                    <items>
+                        <MenuItem mnemonicParsing="false" onAction="#handleSwitchHome" text="Torna alla Home" />
+                        <MenuItem mnemonicParsing="false" onAction="#onValutaUsatiClicked" text="Valuta Usati" />
+                        <MenuItem mnemonicParsing="false" onAction="#onInserisciVeicoloClicked" text="Inserisci Veicolo" />
+                    </items>
+                </Menu>
+            </menus>
+        </MenuBar>
+      <ImageView fx:id="imageView" fitHeight="190.0" fitWidth="298.0" layoutX="151.0" layoutY="41.0" pickOnBounds="true" preserveRatio="true" />
+      <Label layoutX="246.0" layoutY="245.0" text="DATI DEL VEICOLO" />
+      <Label layoutX="231.0" layoutY="276.0" text="Marca:" />
+      <Label layoutX="231.0" layoutY="303.0" text="Modello:" />
+      <Label layoutX="231.0" layoutY="328.0" text="km:" />
+      <Label layoutX="231.0" layoutY="357.0" text="Numero proprietari:" />
+      <Label layoutX="231.0" layoutY="390.0" text="anno prima immatricolazione:" />
+      <Label fx:id="marcaTxt" layoutX="275.0" layoutY="276.0" />
+      <Label fx:id="modelloTxt" layoutX="285.0" layoutY="303.0" />
+      <Label fx:id="kmTxt" layoutX="260.0" layoutY="328.0" />
+      <Label fx:id="proprietariTxt" layoutX="340.0" layoutY="357.0" />
+      <Label fx:id="immatricolazione" layoutX="395.0" layoutY="390.0" />
+      <Button fx:id="stimaBtn" layoutX="177.0" layoutY="509.0" mnemonicParsing="false" onAction="#onStimaBtnClicked" text="SALVA STIMA" />
+      <Button fx:id="prossimoVeicolo" layoutX="306.0" layoutY="509.0" mnemonicParsing="false" onAction="#onProssimoVeicoloClicked" text="PROSSIMO VEICOLO" />
+      <TextField fx:id="prezzoStimatoField" layoutX="221.0" layoutY="466.0" promptText="Inserire Prezzo" />
+      <Label layoutX="258.0" layoutY="432.0" text="VALUTAZIONE" />
+    </children>
 </AnchorPane>
