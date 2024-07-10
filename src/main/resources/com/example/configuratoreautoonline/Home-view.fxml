@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<VBox prefHeight="400.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.configuratoreautoonline.HomeController">
+    <children>
+        <MenuBar VBox.vgrow="NEVER">
+            <menus>
+                <Menu fx:id="loginVisibilityMenu" mnemonicParsing="false" text="Accedi">
+                    <items>
+                        <MenuItem fx:id="switchToViewSingIn" mnemonicParsing="false" onAction="#handleSwitchToViewSignInClick" text="Sing In" />
+                        <MenuItem fx:id="switchToViewLogin" mnemonicParsing="false" onAction="#handleSwitchToViewLoginClick" text="Login" />
+                    </items>
+                </Menu>
+                <Menu fx:id="secretaryVisibilityMenu" mnemonicParsing="false" text="Accedi">
+                    <items>
+                        <MenuItem fx:id="switchToValutaUsati" mnemonicParsing="false" onAction="#handleSwitchToValutaUsatiClick" text="Valuta Usati" />
+                        <MenuItem fx:id="switchToSegretaria" mnemonicParsing="false" onAction="#handleSwitchToSegretariaClick" text="Inserisci Autovettura" />
+                    </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="Compra" />
+                <Menu  mnemonicParsing="false" text="Configura">
+                    <items>
+                        <MenuItem onAction="#handleOpenConfiguratoreAUDI" mnemonicParsing="false" text="Audi" />
+                        <MenuItem onAction="#handleOpenConfiguratoreBMW" mnemonicParsing="false" text="BMW" />
+                        <MenuItem onAction="#handleOpenConfiguratoreALFA" mnemonicParsing="false" text="Alfa Romeo" />
+                    </items>
+                </Menu>
+                <Menu fx:id="userNameMenu" mnemonicParsing="false" text="Utente">
+                    <items>
+                        <MenuItem fx:id="vediDettagliUtente" mnemonicParsing="false" onAction="#handleViewUserDetailsClick" text="Dettagli Utente" />
+                    </items>
+                    <items>
+                        <MenuItem mnemonicParsing="false" onAction="#handleVendiClick" text="Vendi autovettura" />
+                        <MenuItem fx:id="logout" mnemonicParsing="false" onAction="#handleLogoutClick" text="Logout" />
+                        <MenuItem fx:id="eliminaUtente" mnemonicParsing="false" onAction="#handleEliminaUtenteClick" text="Elimina Utente" />
+                        <MenuItem fx:id="gestisciDipendenti" mnemonicParsing="false" onAction="#handlePopUpDipendent" text="Gestisci Dipendente" />
+                    </items>
+                </Menu>
+            </menus>
+        </MenuBar>
+        <AnchorPane fx:id="pannelloAncora" VBox.vgrow="ALWAYS">
+            <children>
+                <Label alignment="CENTER" text="MODELLI ATTUALMENTE DISPONIBILI" textAlignment="CENTER" textFill="#9f9f9f" wrapText="false" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="10.0">
+                    <font>
+                        <Font size="18.0" />
+                    </font>
+                </Label>
+                <HBox alignment="CENTER" spacing="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="50.0">
+                    <children>
+
+                        <ImageView fx:id="bmwImageView" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="@../../../img/LOGHI/BMW.svg.png" />
+                            </image>
+                        </ImageView>
+                        <ImageView fx:id="audiImageView" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="@../../../img/LOGHI/Audi-Logo_2016.svg.png" />
+                            </image>
+                        </ImageView>
+                        <ImageView fx:id="alfaImageView" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="@../../../img/LOGHI/alfa.svg.png" />
+                            </image>
+                        </ImageView>
+                    </children>
+                </HBox>
+                <!-- ImageView per l'immagine grande -->
+                <!-- ImageView per l'immagine grande -->
+                <!-- ImageView per l'immagine grande -->
+                <!-- ImageView per l'immagine grande -->
+                <ImageView fx:id="bigImageView" preserveRatio="true" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="200.0" />
+            </children>
+        </AnchorPane>
+    </children>
+</VBox>

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.collections.FXCollections?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import java.lang.*?>
+<VBox prefHeight="787.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.configuratoreautoonline.VendiController">
+
+    <!-- Barra di navigazione -->
+    <HBox alignment="CENTER" style="-fx-background-color: #f0f0f0;">
+        <Button onAction="#handleHomeButton" text="Home" />
+    </HBox>
+
+    <!-- Contenuto principale -->
+    <VBox alignment="CENTER" prefHeight="727.0" prefWidth="600.0" spacing="10">
+        <!-- Etichetta per il titolo -->
+        <Label text="VENDITA AUTO USATE:" />
+
+        <!-- ImageView per mostrare l'immagine selezionata -->
+        <ImageView fx:id="imageView" fitHeight="250.0" fitWidth="350.0" preserveRatio="true" />
+
+        <!-- Pulsante per aprire il file chooser -->
+        <Button fx:id="selectBtn" onAction="#handleImageSelection" text="Seleziona Immagine" />
+
+        <!-- Campi di testo per l'inserimento delle informazioni -->
+        <TextField fx:id="marcaTxt" maxWidth="160.0" promptText="Inserisci Marca" />
+        <TextField fx:id="modelloTxt" maxWidth="160.0" promptText="Inserisci Modello" />
+        <DatePicker fx:id="immatricolazione" maxWidth="160.0" promptText="Data immatricolazione" />
+        <TextField fx:id="kmTxt" maxWidth="160.0" promptText="Inserisci km" />
+        <TextField fx:id="proprietariTxt" maxWidth="160.0" promptText="Numero proprietari" />
+
+        <Label text="Stato del veicolo:" />
+        <ChoiceBox fx:id="statoChoiceBox" prefWidth="160.0">
+            <items>
+                <FXCollections fx:factory="observableArrayList">
+                    <Integer fx:value="1" />
+                    <Integer fx:value="2" />
+                    <Integer fx:value="3" />
+                    <Integer fx:value="4" />
+                    <Integer fx:value="5" />
+                    <Integer fx:value="6" />
+                    <Integer fx:value="7" />
+                    <Integer fx:value="8" />
+                    <Integer fx:value="9" />
+                    <Integer fx:value="10" />
+                </FXCollections>
+            </items>
+        </ChoiceBox>
+
+        <Label text="Cambio:" />
+        <!-- ChoiceBox per il tipo di trasmissione -->
+        <ChoiceBox fx:id="trasmissioniChoiceBox" prefWidth="160.0">
+            <items>
+                <FXCollections fx:factory="observableArrayList">
+                    <String fx:value="Manuale" />
+                    <String fx:value="Automatico" />
+                </FXCollections>
+            </items>
+        </ChoiceBox>
+
+        <Label text="Alimentazione:" />
+        <!-- ChoiceBox per il tipo di carburante -->
+        <ChoiceBox fx:id="carburanteChoiceBox" prefWidth="160.0">
+            <items>
+                <FXCollections fx:factory="observableArrayList">
+                    <String fx:value="Benzina" />
+                    <String fx:value="Diesel" />
+                    <String fx:value="Ibrida" />
+                    <String fx:value="Elettrica" />
+                    <String fx:value="Plug-in Hybrid" />
+                </FXCollections>
+            </items>
+        </ChoiceBox>
+
+
+        <Button fx:id="btnPreventivo" mnemonicParsing="false" onAction="#richiediPreventivo" prefHeight="29.0" prefWidth="146.0" text="RICHIEDI PREVENTIVO" />
+    </VBox>
+</VBox>

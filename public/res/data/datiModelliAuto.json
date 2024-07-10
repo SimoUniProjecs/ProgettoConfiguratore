@@ -1,0 +1,202 @@
+{
+  "datiModelliAuto": [
+    {
+      "bmw": [
+        {
+          "modelli": [
+            {
+              "M2": {
+                "optionals": [
+                  "cerchi maggiorati",
+                  "vetri oscurati",
+                  "interni pelle"
+                ],
+                "colori": [
+                  "Azzurro",
+                  "Grigio",
+                  "Rosso"
+                ],
+                "motorizzazioni": [
+                  {
+                    "cilindrata": "3.0 L",
+                    "potenza": "410 CV",
+                    "coppia": "550 Nm",
+                    "alimentazione": "Diesel",
+                    "prezzo": "70.000 EUR"
+                  },
+                  {
+                    "cilindrata": "3.0 L",
+                    "potenza": "450 CV",
+                    "coppia": "550 Nm",
+                    "alimentazione": "Benzina",
+                    "prezzo": "75.000 EUR"
+                  }
+                ],
+                "percorsoImg": "src/main/resources/img/BMW/M2/"
+              },
+              "XM": {
+                "optionals": [
+                  "cerchi neri",
+                  "freni rossi",
+                  "impianto audio HarmanCardon"
+                ],
+                "colori": [
+                  "grigio"
+                ],
+                "motorizzazioni": [
+                  {
+                    "cilindrata": "4.4 L",
+                    "potenza": "653 CV",
+                    "coppia": "800 Nm",
+                    "alimentazione": "Ibrida Plug-in",
+                    "prezzo": "150.000 EUR"
+                  },
+                  {
+                    "cilindrata": "3.2 L",
+                    "potenza": "150 CV",
+                    "coppia": "600 Nm",
+                    "alimentazione": "Elettrica",
+                    "prezzo": "130.000 EUR"
+                  }
+                ],
+                "percorsoImg": "src/main/resources/img/BMW/XM/"
+              }
+            }
+          ]
+        }
+      ],
+      "audi": [
+        {
+          "modelli": [
+            {
+              "RS3": {
+                "optionals": [
+                  "interni pelle",
+                  "cerchi neri",
+                  "vetri oscurati"
+                ],
+                "colori": [
+                  "giallo",
+                  "grigio",
+                  "nero",
+                  "verde"
+                ],
+                "motorizzazioni": [
+                  {
+                    "cilindrata": "2.5 L",
+                    "potenza": "400 CV",
+                    "coppia": "500 Nm",
+                    "alimentazione": "Benzina",
+                    "prezzo": "65.000 EUR"
+                  },
+                  {
+                    "cilindrata": "2.5 L",
+                    "potenza": "420 CV",
+                    "coppia": "500 Nm",
+                    "alimentazione": "Benzina",
+                    "prezzo": "68.000 EUR"
+                  }
+                ],
+                "percorsoImg": "src/main/resources/img/AUDI/RS3/"
+              },
+              "RS4": {
+                "optionals": [
+                  "interni pelle",
+                  "cerchi neri",
+                  "vetri oscurati"
+                ],
+                "colori": [
+                  "bianco",
+                  "blu",
+                  "grigio"
+                ],
+                "motorizzazioni": [
+                  {
+                    "cilindrata": "2.9 L",
+                    "potenza": "450 CV",
+                    "coppia": "600 Nm",
+                    "alimentazione": "Benzina",
+                    "prezzo": "90.000 EUR"
+                  },
+                  {
+                    "cilindrata": "2.9 L",
+                    "potenza": "500 CV",
+                    "coppia": "600 Nm",
+                    "alimentazione": "Benzina",
+                    "prezzo": "95.000 EUR"
+                  }
+                ],
+                "percorsoImg": "src/main/resources/img/AUDI/RS4/"
+              }
+            }
+          ]
+        }
+      ],
+      "alfa romeo": [
+        {
+          "modelli": [
+            {
+              "GIULIA": {
+                "optionals": [
+                  "cerchi maggiorati",
+                  "freni rossi"
+                ],
+                "colori": [
+                  "grigio",
+                  "rosso",
+                  "verde"
+                ],
+                "motorizzazioni": [
+                  {
+                    "cilindrata": "2.9 L",
+                    "potenza": "510 CV",
+                    "coppia": "600 Nm",
+                    "alimentazione": "Benzina",
+                    "prezzo": "85.000 EUR"
+                  },
+                  {
+                    "cilindrata": "2.0 L",
+                    "potenza": "280 CV",
+                    "coppia": "400 Nm",
+                    "alimentazione": "Benzina",
+                    "prezzo": "50.000 EUR"
+                  }
+                ],
+                "percorsoImg": "src/main/resources/img/ALFA/GIULIA/"
+              },
+              "STELVIO": {
+                "optionals": [
+                  "cerchi maggiorati",
+                  "freni rossi",
+                  "interni pelle"
+                ],
+                "colori": [
+                  "blu",
+                  "rosso",
+                  "verde"
+                ],
+                "motorizzazioni": [
+                  {
+                    "cilindrata": "2.9 L",
+                    "potenza": "510 CV",
+                    "coppia": "600 Nm",
+                    "alimentazione": "Elettrica",
+                    "prezzo": "95.000 EUR"
+                  },
+                  {
+                    "cilindrata": "2.0 L",
+                    "potenza": "280 CV",
+                    "coppia": "400 Nm",
+                    "alimentazione": "Benzina",
+                    "prezzo": "70.000 EUR"
+                  }
+                ],
+                "percorsoImg": "src/main/resources/img/ALFA/STELVIO/"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
