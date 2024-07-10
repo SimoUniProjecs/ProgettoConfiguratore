@@ -1,1 +1,222 @@
-[{"idConfigurazione":1,"marcaAutomobile":"AUDI","modelloAutomobile":"RS3","colore":"grigio €1500","motorizzazione":{"cilindrata":"2.5 L","potenza":"420 CV","coppia":"500 Nm","alimentazione":"Benzina","prezzo":"68.000 EUR"},"optionals":["vetri oscurati €800","cerchi neri €1000","interni pelle €2590"],"prezzo":71392,"emailCliente":"segretaria@example.com","luogoConcessionario":"CONCESSIONARIO1","dataArrivo":"2024-09-06","pagato":true,"dataPreventivo":"2024-07-10"},{"idConfigurazione":1,"marcaAutomobile":"AUDI","modelloAutomobile":"RS3","colore":"nero €2000","motorizzazione":{"cilindrata":"2.5 L","potenza":"400 CV","coppia":"500 Nm","alimentazione":"Benzina","prezzo":"65.000 EUR"},"optionals":["vetri oscurati €800"],"prezzo":65378,"emailCliente":"segretaria@example.com","luogoConcessionario":"CONCESSIONARIO1","dataArrivo":"2024-08-17","pagato":true,"dataPreventivo":"2024-07-10"},{"idConfigurazione":1,"marcaAutomobile":"BMW","modelloAutomobile":"XM","colore":"grigio €2000","motorizzazione":{"cilindrata":"4.4 L","potenza":"653 CV","coppia":"800 Nm","alimentazione":"Ibrida Plug-in","prezzo":"150.000 EUR"},"optionals":["cerchi neri €1000","freni rossi €800"],"prezzo":149186,"emailCliente":"segretaria@example.com","luogoConcessionario":"CONCESSIONARIO1","dataArrivo":"2024-08-27","pagato":true,"dataPreventivo":"2024-07-10"}]
+[
+  {
+    "idConfigurazione": 1,
+    "marcaAutomobile": "audi",
+    "modelloAutomobile": "RS4",
+    "colore": "bianco €1000",
+    "motorizzazione": {
+      "cilindrata": "2.9 L",
+      "potenza": "450 CV",
+      "coppia": "600 Nm",
+      "alimentazione": "Benzina",
+      "prezzo": "90.000 EUR"
+    },
+    "optionals": [
+      "vetri oscurati €800",
+      "cerchi neri €1000"
+    ],
+    "prezzo": 89822,
+    "emailCliente": "prova@gmail.com",
+    "luogoConcessionario": "CONCESSIONARIO1",
+    "dataArrivo": "2024-08-27",
+    "pagato": true
+  },
+  {
+    "idConfigurazione": 2,
+    "marcaAutomobile": "BMW",
+    "modelloAutomobile": "M5",
+    "colore": "grigio €1200",
+    "motorizzazione": {
+      "cilindrata": "4.4 L",
+      "potenza": "600 CV",
+      "coppia": "750 Nm",
+      "alimentazione": "Benzina",
+      "prezzo": "120.000 EUR"
+    },
+    "optionals": [
+      "head-up display €1500",
+      "sospensioni adattive €2000"
+    ],
+    "prezzo": 123700,
+    "emailCliente": "cliente2@gmail.com",
+    "luogoConcessionario": "CONCESSIONARIO2",
+    "dataArrivo": "2024-09-05",
+    "pagato": false
+  },
+  {
+    "idConfigurazione": 3,
+    "marcaAutomobile": "Mercedes-Benz",
+    "modelloAutomobile": "AMG GT",
+    "colore": "rosso €1500",
+    "motorizzazione": {
+      "cilindrata": "4.0 L",
+      "potenza": "550 CV",
+      "coppia": "700 Nm",
+      "alimentazione": "Benzina",
+      "prezzo": "130.000 EUR"
+    },
+    "optionals": [
+      "impianto audio Burmester €3000",
+      "ceramica freni €5000"
+    ],
+    "prezzo": 139500,
+    "emailCliente": "cliente3@gmail.com",
+    "luogoConcessionario": "CONCESSIONARIO3",
+    "dataArrivo": "2024-09-10",
+    "pagato": true
+  },
+  {
+    "idConfigurazione": 4,
+    "marcaAutomobile": "Porsche",
+    "modelloAutomobile": "911 Turbo S",
+    "colore": "nero €2000",
+    "motorizzazione": {
+      "cilindrata": "3.8 L",
+      "potenza": "650 CV",
+      "coppia": "800 Nm",
+      "alimentazione": "Benzina",
+      "prezzo": "180.000 EUR"
+    },
+    "optionals": [
+      "tetto panoramico €2500",
+      "cerchi in carbonio €3000"
+    ],
+    "prezzo": 187500,
+    "emailCliente": "cliente4@gmail.com",
+    "luogoConcessionario": "CONCESSIONARIO1",
+    "dataArrivo": "2024-09-15",
+    "pagato": false
+  },
+  {
+    "idConfigurazione": 5,
+    "marcaAutomobile": "Ferrari",
+    "modelloAutomobile": "F8 Tributo",
+    "colore": "giallo €3000",
+    "motorizzazione": {
+      "cilindrata": "3.9 L",
+      "potenza": "720 CV",
+      "coppia": "770 Nm",
+      "alimentazione": "Benzina",
+      "prezzo": "250.000 EUR"
+    },
+    "optionals": [
+      "kit estetico carbonio €5000",
+      "sistema di sollevamento asse anteriore €3500"
+    ],
+    "prezzo": 259500,
+    "emailCliente": "cliente5@gmail.com",
+    "luogoConcessionario": "CONCESSIONARIO2",
+    "dataArrivo": "2024-09-20",
+    "pagato": true
+  },
+  {
+    "idConfigurazione": 6,
+    "marcaAutomobile": "Lamborghini",
+    "modelloAutomobile": "Aventador SVJ",
+    "colore": "verde €2500",
+    "motorizzazione": {
+      "cilindrata": "6.5 L",
+      "potenza": "770 CV",
+      "coppia": "720 Nm",
+      "alimentazione": "Benzina",
+      "prezzo": "380.000 EUR"
+    },
+    "optionals": [
+      "ceramica freni CCB €10000",
+      "sistema di sollevamento asse anteriore €4000"
+    ],
+    "prezzo": 394000,
+    "emailCliente": "cliente6@gmail.com",
+    "luogoConcessionario": "CONCESSIONARIO3",
+    "dataArrivo": "2024-09-25",
+    "pagato": false
+  },
+  {
+    "idConfigurazione": 7,
+    "marcaAutomobile": "Aston Martin",
+    "modelloAutomobile": "DBS Superleggera",
+    "colore": "blu €1800",
+    "motorizzazione": {
+      "cilindrata": "5.2 L",
+      "potenza": "715 CV",
+      "coppia": "900 Nm",
+      "alimentazione": "Benzina",
+      "prezzo": "270.000 EUR"
+    },
+    "optionals": [
+      "interni in pelle anilina €4000",
+      "sistema di navigazione satellitare €3000"
+    ],
+    "prezzo": 278800,
+    "emailCliente": "cliente7@gmail.com",
+    "luogoConcessionario": "CONCESSIONARIO1",
+    "dataArrivo": "2024-09-30",
+    "pagato": true
+  },
+  {
+    "idConfigurazione": 8,
+    "marcaAutomobile": "Maserati",
+    "modelloAutomobile": "Levante Trofeo",
+    "colore": "nero opaco €1500",
+    "motorizzazione": {
+      "cilindrata": "3.8 L",
+      "potenza": "580 CV",
+      "coppia": "730 Nm",
+      "alimentazione": "Benzina",
+      "prezzo": "140.000 EUR"
+    },
+    "optionals": [
+      "cerchi in lega da 22\" €2000",
+      "sedili sportivi in pelle €3000"
+    ],
+    "prezzo": 146500,
+    "emailCliente": "cliente8@gmail.com",
+    "luogoConcessionario": "CONCESSIONARIO2",
+    "dataArrivo": "2024-10-05",
+    "pagato": false
+  },
+  {
+    "idConfigurazione": 9,
+    "marcaAutomobile": "Jaguar",
+    "modelloAutomobile": "F-Type SVR",
+    "colore": "bianco perlato €2000",
+    "motorizzazione": {
+      "cilindrata": "5.0 L",
+      "potenza": "575 CV",
+      "coppia": "700 Nm",
+      "alimentazione": "Benzina",
+      "prezzo": "160.000 EUR"
+    },
+    "optionals": [
+      "impianto audio Meridian €2500",
+      "sedili in pelle premium €3500"
+    ],
+    "prezzo": 167500,
+    "emailCliente": "cliente9@gmail.com",
+    "luogoConcessionario": "CONCESSIONARIO3",
+    "dataArrivo": "2024-10-10",
+    "pagato": true
+  },
+  {
+    "idConfigurazione": 10,
+    "marcaAutomobile": "Bentley",
+    "modelloAutomobile": "Continental GT",
+    "colore": "argento €1800",
+    "motorizzazione": {
+      "cilindrata": "6.0 L",
+      "potenza": "635 CV",
+      "coppia": "900 Nm",
+      "alimentazione": "Benzina",
+      "prezzo": "200.000 EUR"
+    },
+    "optionals": [
+      "tetto panoramico in vetro €3000",
+      "cerchi da 22\" €4000"
+    ],
+    "prezzo": 208800,
+    "emailCliente": "cliente10@gmail.com",
+    "luogoConcessionario": "CONCESSIONARIO1",
+    "dataArrivo": "2024-10-15",
+    "pagato": false
+  }
+]
