@@ -76,7 +76,7 @@ public class MieiOrdiniController {
         String userEmail = session.getEmail();
         ordini = FXCollections.observableArrayList();
         ObjectMapper objectMapper = new ObjectMapper();
-        File file = new File("public/res/data/configurazioni.json");
+        File file = new File("public/res/data/ordini.json");
 
         if (file.exists() && file.length() != 0) {
             try {
@@ -244,7 +244,7 @@ public class MieiOrdiniController {
         ObjectMapper objectMapper = new ObjectMapper();
 
         try {
-            objectMapper.writeValue(new File("public/res/data/configurazioni.json"), ordini);
+            objectMapper.writeValue(new File("public/res/data/ordini.json"), ordini);
         } catch (IOException e) {
             e.printStackTrace();
         }
