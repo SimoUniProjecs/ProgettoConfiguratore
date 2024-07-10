@@ -108,7 +108,7 @@ public class PreventiviController {
                     {
                         btn.setOnAction((ActionEvent event) -> {
                             Configurazione data = getTableView().getItems().get(getIndex());
-                            confermaPreventivo(data);
+                            showConfirmDialog(data);
                         });
                     }
 
@@ -128,6 +128,23 @@ public class PreventiviController {
 
         colBtn.setCellFactory(cellFactory);
         tableView.getColumns().add(colBtn);
+    }
+
+    private void showConfirmDialog(Configurazione preventivo) {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Conferma Preventivo");
+        alert.setHeaderText(null);
+        alert.setContentText("Sei sicuro di voler confermare questo preventivo?");
+
+        ButtonType buttonTypeYes = new ButtonType("Sì");
+        ButtonType buttonTypeNo = new ButtonType("No", ButtonBar.ButtonData.CANCEL_CLOSE);
+
+        alert.getButtonTypes().setAll(buttonTypeYes, buttonTypeNo);
+
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.isPresent() && result.get() == buttonTypeYes) {
+            confermaPreventivo(preventivo);
+        }
     }
 
     private void confermaPreventivo(Configurazione preventivo) {
