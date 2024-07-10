@@ -307,8 +307,10 @@ public class HomeController {
     }
 
     public void handleSwitchToValutaUsatiClick(ActionEvent event) {
+    changeScene("/com/example/configuratoreautoonline/valutaUsati.fxml");
     }
 
     public void handleSwitchToSegretariaClick(ActionEvent event) {
+        changeScene("/com/example/configuratoreautoonline/segretaria.fxml");
     }
 }

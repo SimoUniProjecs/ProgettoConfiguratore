@@ -150,7 +150,7 @@ public class VendiController extends Application {
                 auto.put("alimentazione", carburanteChoiceBox.getValue());
                 auto.put("cambio", trasmissioniChoiceBox.getValue());
                 auto.put("anno", immatricolazione.getValue().toString());
-                String imagePath = "res/images/" + new File(imageView.getImage().getUrl()).getName();
+                String imagePath = "public/res/images/" + new File(imageView.getImage().getUrl()).getName();
                 auto.put("immagine", imagePath);
                 auto.put("km", kmTxt.getText());
                 auto.put("prezzo", -1); // Prezzo non specificato (da calcolare in seguito dalla segretaria)
