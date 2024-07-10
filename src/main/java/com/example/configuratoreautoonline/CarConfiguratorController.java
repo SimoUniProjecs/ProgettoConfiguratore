@@ -31,6 +31,7 @@ import java.util.Iterator;
 import java.util.List;
 
 
+
 public class CarConfiguratorController {
     @FXML
     public Label scontoMensile;
@@ -103,8 +104,10 @@ public class CarConfiguratorController {
             document.add(new Paragraph("Modello Combox: " + modelloComboBox.getValue()));
             document.add(new Paragraph("Colore Combox: " + coloreComboBox.getValue()));
             document.add(new Paragraph("Prezzo Combox: " + prezzoLbl.getText()));
-            document.add(new com.itextpdf.layout.element.Image(ImageDataFactory.create())));
+
+            document.add(new com.itextpdf.layout.element.Image(ImageDataFactory.create(path)));
             document.add(new com.itextpdf.layout.element.Image(ImageDataFactory.create(generaPathInterni(selectedMarca, modelloComboBox.getValue()))));
+
             // Chiudere il document
             document.close();
 
