@@ -286,6 +286,9 @@ public class CarConfiguratorController {
 
     //scelta motorizzazione
     public void onMotoSelected(ActionEvent event) {
+        // Aggiorna il prezzo base con quel motore
+        this.prezzo = Integer.parseInt(Objects.requireNonNull(getPrezzo(selectedMarca, modelloComboBox.getValue(), motorizzazioneComboBox.getValue()).split(" ")[0].replace(".", "")));
+
         String selectedModello = modelloComboBox.getValue();
         if (selectedModello != null) {
             List<String> motori = getMotorizzazioniForModello(selectedMarca, selectedModello);
@@ -335,10 +338,6 @@ public class CarConfiguratorController {
             } else {
                 abbonamentoCheck.setDisable(true);
             }
-
-            // Aggiorna il prezzo base con quel motore
-            this.prezzo = Integer.parseInt(Objects.requireNonNull(getPrezzo(selectedMarca, modelloComboBox.getValue(), motorizzazioneComboBox.getValue())));
-            prezzoLbl.setText(getPrezzo(selectedMarca, modelloComboBox.getValue(), motorizzazioneComboBox.getValue()) + " €");
 
             // do la possibilità di vedere gli interni
             interniBtn.setDisable(false);
@@ -415,7 +414,7 @@ public class CarConfiguratorController {
         StringBuilder risultato = new StringBuilder();
 
         // Aggiungo il colore
-        risultato.append(selectedColore);
+        risultato.append(selectedColore.toLowerCase().split("€")[0].replace(" ", ""));
 
         // Per ogni possibile optional controllo se è stato selezionato
         // e se è presente tra gli optional possibili del modello
@@ -455,7 +454,7 @@ public class CarConfiguratorController {
         }
 
         if(cerchiScuriCheck.isSelected()){
-            prezzoDaAggiungere += 500;
+            prezzoDaAggiungere += Integer.parseInt(cerchiScuriCheck.getText().split("€")[1]);
         }
 
         if(vetriCheck.isSelected()){
@@ -463,17 +462,16 @@ public class CarConfiguratorController {
         }
 
         if(pinzeCheck.isSelected()){
-            prezzoDaAggiungere += 400;
+            prezzoDaAggiungere += Integer.parseInt(pinzeCheck.getText().split("€")[1]);
         }
 
         if(internoCheck.isSelected()){
-            prezzoDaAggiungere += 1000;
+            prezzoDaAggiungere += Integer.parseInt(internoCheck.getText().split("€")[1]);
         }
 
         if(impiantoAudioCheck.isSelected()){
             prezzoDaAggiungere += 800;
         }
-
 
         return prezzoDaAggiungere;
     }
