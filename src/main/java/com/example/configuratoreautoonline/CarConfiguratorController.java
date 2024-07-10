@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
 
 public class CarConfiguratorController {
     @FXML
@@ -335,6 +336,7 @@ public class CarConfiguratorController {
             }
 
             // Aggiorna il prezzo base con quel motore
+            this.prezzo = Integer.parseInt(Objects.requireNonNull(getPrezzo(selectedMarca, modelloComboBox.getValue(), motorizzazioneComboBox.getValue())));
             prezzoLbl.setText(getPrezzo(selectedMarca, modelloComboBox.getValue(), motorizzazioneComboBox.getValue()) + " €");
 
             // do la possibilità di vedere gli interni
@@ -418,8 +420,47 @@ public class CarConfiguratorController {
 
         return risultato.append(".png").toString().toLowerCase();
     }
+    public int prezzoOptional(){
+        int prezzoDaAggiungere = 0;
+        // Aggiungo il colore
+        if(coloreComboBox.getValue() != null) {
+            String tot = coloreComboBox.getValue();
+            String colore = tot.split(" ")[0];
+            prezzoDaAggiungere += Integer.parseInt(tot.split("€")[1]);
+        }
+
+        // CheckBox degli optional
+        if(cerchiCheck.isSelected()){
+            cerchiCheck.getText()
+        }
+
+        if(cerchiScuriCheck.isSelected()){
+            prezzoDaAggiungere += 500;
+        }
+
+        if(vetriCheck.isSelected()){
+            prezzoDaAggiungere += 300;
+        }
+
+        if(pinzeCheck.isSelected()){
+            prezzoDaAggiungere += 400;
+        }
+
+        if(internoCheck.isSelected()){
+            prezzoDaAggiungere += 1000;
+        }
+
+        if(impiantoAudioCheck.isSelected()){
+            prezzoDaAggiungere += 800;
+        }
+
+
+        return prezzoDaAggiungere;
+    }
     // Aggiorna l'immagine caricata in base al modello e al colore selezionati e optionals
     public void updateImage() {
+        // chiama l'aggiornamento della label
+        updatePrezzo(prezzoOptional());
         if (modelloComboBox.getValue() != null &&
                 coloreComboBox.getValue() != null &&
                 motorizzazioneComboBox.getValue() != null) {

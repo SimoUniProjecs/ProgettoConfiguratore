@@ -7,14 +7,14 @@
             {
               "M2": {
                 "optionals": [
-                  "cerchi maggiorati",
-                  "vetri oscurati",
-                  "interni pelle"
+                  "cerchi maggiorati €500",
+                  "vetri oscurati €800",
+                  "interni pelle €2590"
                 ],
                 "colori": [
-                  "Azzurro",
-                  "Grigio",
-                  "Rosso"
+                  "Azzurro €400",
+                  "Grigio €500",
+                  "Rosso €800"
                 ],
                 "motorizzazioni": [
                   {
@@ -36,12 +36,12 @@
               },
               "XM": {
                 "optionals": [
-                  "cerchi neri",
-                  "freni rossi",
-                  "impianto audio HarmanCardon"
+                  "cerchi neri €1000",
+                  "freni rossi €800",
+                  "impianto audio HarmanCardon €1500"
                 ],
                 "colori": [
-                  "grigio"
+                  "grigio €2000"
                 ],
                 "motorizzazioni": [
                   {
@@ -71,15 +71,15 @@
             {
               "RS3": {
                 "optionals": [
-                  "interni pelle",
-                  "cerchi neri",
-                  "vetri oscurati"
+                  "interni pelle €2500",
+                  "cerchi neri €1200",
+                  "vetri oscurati €400"
                 ],
                 "colori": [
-                  "giallo",
-                  "grigio",
-                  "nero",
-                  "verde"
+                  "giallo €1000",
+                  "grigio €1500",
+                  "nero €2000",
+                  "verde €1800"
                 ],
                 "motorizzazioni": [
                   {
@@ -101,14 +101,14 @@
               },
               "RS4": {
                 "optionals": [
-                  "interni pelle",
-                  "cerchi neri",
-                  "vetri oscurati"
+                  "interni pelle €2500",
+                  "cerchi neri €1200",
+                  "vetri oscurati €400"
                 ],
                 "colori": [
-                  "bianco",
-                  "blu",
-                  "grigio"
+                  "bianco €1000",
+                  "blu €1500",
+                  "grigio €2000"
                 ],
                 "motorizzazioni": [
                   {
@@ -138,13 +138,13 @@
             {
               "GIULIA": {
                 "optionals": [
-                  "cerchi maggiorati",
-                  "freni rossi"
+                  "cerchi maggiorati €1000",
+                  "freni rossi €800"
                 ],
                 "colori": [
-                  "grigio",
-                  "rosso",
-                  "verde"
+                  "grigio €1200",
+                  "rosso €1800",
+                  "verde €1600"
                 ],
                 "motorizzazioni": [
                   {
@@ -166,14 +166,14 @@
               },
               "STELVIO": {
                 "optionals": [
-                  "cerchi maggiorati",
-                  "freni rossi",
-                  "interni pelle"
+                  "cerchi maggiorati €1000",
+                  "freni rossi €800",
+                  "interni pelle €3000"
                 ],
                 "colori": [
-                  "blu",
-                  "rosso",
-                  "verde"
+                  "blu €1500",
+                  "rosso €1800",
+                  "verde €1600"
                 ],
                 "motorizzazioni": [
                   {
