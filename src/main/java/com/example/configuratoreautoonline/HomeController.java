@@ -188,6 +188,7 @@ public class HomeController {
 
         bigImageView.setFitWidth(width);
         bigImageView.setFitHeight(height);
+        
     }
 
     private void updateLayout(double width, double height) {
