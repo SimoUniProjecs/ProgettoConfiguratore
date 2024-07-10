@@ -1,8 +1,6 @@
 package com.example.configuratoreautoonline;
 
 import Classi.Configurazione;
-import Classi.Motorizzazione;
-import Enums.Concessionari;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -12,18 +10,14 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Insets;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 
 import java.io.File;
 import java.io.IOException;
-import java.time.LocalDate;
 import java.util.Optional;
 
 public class PreventiviController {
@@ -103,7 +97,7 @@ public class PreventiviController {
             public TableCell<Configurazione, Void> call(final TableColumn<Configurazione, Void> param) {
                 final TableCell<Configurazione, Void> cell = new TableCell<>() {
 
-                    private final Button btn = new Button("Conferma");
+                    private final Button btn = new Button("Paga Acconto");
 
                     {
                         btn.setOnAction((ActionEvent event) -> {

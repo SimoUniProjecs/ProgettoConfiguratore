@@ -16,6 +16,7 @@ public class Configurazione {
     private String emailCliente;
     private Concessionari luogoConcessionario;
     private String dataArrivo;
+    private boolean pagato = false;
 
     public Configurazione() {}
 
@@ -111,5 +112,13 @@ public class Configurazione {
 
     public void setLuogoConcessionario(Concessionari luogoConcessionario) {
         this.luogoConcessionario = luogoConcessionario;
+    }
+
+    public boolean setPagato(boolean b) {
+        return this.pagato = b;
+    }
+
+    public boolean getPagato() {
+        return this.pagato;
     }
 }

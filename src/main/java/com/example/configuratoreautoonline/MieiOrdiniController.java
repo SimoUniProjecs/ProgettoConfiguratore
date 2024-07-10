@@ -1,11 +1,9 @@
 package com.example.configuratoreautoonline;
 
 import Classi.Configurazione;
-import Classi.Motorizzazione;
 import Enums.Concessionari;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -18,12 +16,10 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 
 import java.io.File;
 import java.io.IOException;
-import java.time.LocalDate;
 import java.util.Optional;
 
 public class MieiOrdiniController {
@@ -130,8 +126,9 @@ public class MieiOrdiniController {
 
 
     private void addButtonToTable() {
-        TableColumn<Configurazione, Void> colBtnAnnulla = new TableColumn("Azione");
-        TableColumn<Configurazione, Void> colBtnModifica = new TableColumn("Modifica");
+        TableColumn<Configurazione, Void> colBtnAnnulla = new TableColumn<>("Azione");
+        TableColumn<Configurazione, Void> colBtnModifica = new TableColumn<>("Modifica");
+        TableColumn<Configurazione, Void> colBtnSalda = new TableColumn<>("Salda");
 
         javafx.util.Callback<TableColumn<Configurazione, Void>, TableCell<Configurazione, Void>> cellFactoryAnnulla = new javafx.util.Callback<>() {
             @Override
@@ -189,10 +186,54 @@ public class MieiOrdiniController {
             }
         };
 
+        // Creo pulsante SALDA in base a se è stato già pagato o meno
+        javafx.util.Callback<TableColumn<Configurazione, Void>, TableCell<Configurazione, Void>> cellFactorySalda = new javafx.util.Callback<>() {
+            @Override
+            public TableCell<Configurazione, Void> call(final TableColumn<Configurazione, Void> param) {
+                final TableCell<Configurazione, Void> cell = new TableCell<>() {
+
+                    private final Button btn = new Button("Salda");
+
+                    {
+                        btn.setOnAction((ActionEvent event) -> {
+                            Configurazione data = getTableView().getItems().get(getIndex());
+                            markAsPaid(data);
+                        });
+                    }
+
+                    @Override
+                    public void updateItem(Void item, boolean empty) {
+                        super.updateItem(item, empty);
+                        if (empty) {
+                            setGraphic(null);
+                        } else {
+                            Configurazione data = getTableView().getItems().get(getIndex());
+                            if (data.getPagato()) {
+                                btn.setDisable(true); // Disabilita il pulsante se la configurazione è già saldata
+                            } else {
+                                btn.setDisable(false); // Abilita il pulsante se la configurazione non è saldata
+                            }
+                            setGraphic(btn);
+                        }
+                    }
+                };
+                return cell;
+            }
+        };
+
         colBtnAnnulla.setCellFactory(cellFactoryAnnulla);
         colBtnModifica.setCellFactory(cellFactoryModifica);
+        colBtnSalda.setCellFactory(cellFactorySalda);
 
-        tableView.getColumns().addAll(colBtnAnnulla, colBtnModifica);
+        tableView.getColumns().addAll(colBtnAnnulla, colBtnModifica, colBtnSalda);
+    }
+
+    private void markAsPaid(Configurazione data) {
+        // Implementa la logica per segnare la configurazione come saldata
+        // Potresti aggiornare una proprietà dell'oggetto Configurazione e poi salvare le configurazioni
+        data.setPagato(true); // Esempio: assuming there's a setPaid method
+        saveConfigurations();
+        tableView.refresh();
     }
 
     private void showConfirmDeleteDialog(Configurazione data) {
