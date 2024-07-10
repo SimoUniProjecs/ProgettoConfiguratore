@@ -5,6 +5,11 @@ import Classi.Motorizzazione;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.itextpdf.io.image.ImageDataFactory;
+import com.itextpdf.kernel.pdf.PdfDocument;
+import com.itextpdf.kernel.pdf.PdfWriter;
+import com.itextpdf.layout.Document;
+import com.itextpdf.layout.element.Paragraph;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -15,6 +20,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import java.io.File;
@@ -23,6 +29,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+
 
 public class CarConfiguratorController {
     @FXML
@@ -53,6 +60,7 @@ public class CarConfiguratorController {
     private Label prezzoLbl;
     @FXML
     private Button interniBtn;
+    private Button downloadPdfButton;
     private Stage stage;
     private String selectedMarca;
     private JsonNode datiModelliAuto;
@@ -68,7 +76,43 @@ public class CarConfiguratorController {
         loadJsonData();
         initializeModelComboBox();
     }
+    public void onDownloadPdfButtonClicked(ActionEvent event) {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Save PDF");
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("PDF Files", "*.pdf"));
+        File file = fileChooser.showSaveDialog(new Stage());
+        if (file != null) {
+            generatePdf(file.getAbsolutePath());
+        }
+    }
 
+    public void generatePdf(String dest) {
+        try {
+            // Creare un nuovo PdfWriter
+            PdfWriter writer = new PdfWriter(dest);
+
+            // Creare un nuovo PdfDocument
+            PdfDocument pdf = new PdfDocument(writer);
+
+            // Creare un nuovo Document
+            Document document = new Document(pdf);
+
+            // Aggiungere il testo al PDF
+            document.add(new Paragraph("Sono una prova"));
+            document.add(new Paragraph("Marca Combox: " + selectedMarca));
+            document.add(new Paragraph("Modello Combox: " + modelloComboBox.getValue()));
+            document.add(new Paragraph("Colore Combox: " + coloreComboBox.getValue()));
+            document.add(new Paragraph("Prezzo Combox: " + prezzoLbl.getText()));
+            document.add(new com.itextpdf.layout.element.Image(ImageDataFactory.create())));
+            document.add(new com.itextpdf.layout.element.Image(ImageDataFactory.create(generaPathInterni(selectedMarca, modelloComboBox.getValue()))));
+            // Chiudere il document
+            document.close();
+
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
     @FXML
     public void initialize() {
         stage = new Stage();
