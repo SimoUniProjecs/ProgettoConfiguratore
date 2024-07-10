@@ -70,12 +70,13 @@
                             </image>
                         </ImageView>
                     </children>
+
                 </HBox>
                 <!-- ImageView per l'immagine grande -->
                 <!-- ImageView per l'immagine grande -->
                 <!-- ImageView per l'immagine grande -->
                 <!-- ImageView per l'immagine grande -->
-                <ImageView fx:id="bigImageView" preserveRatio="true" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="200.0" />
+                <ImageView fx:id="bigImageView" preserveRatio="true" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="220.0" />
             </children>
         </AnchorPane>
     </children>
