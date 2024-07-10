@@ -4,8 +4,6 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import javafx.animation.Animation;
-import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -19,12 +17,10 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-import javafx.util.Duration;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.Objects;
-import java.util.Random;
 
 public class HomeController {
     public MenuItem logout;
@@ -218,8 +214,6 @@ public class HomeController {
 
         pannelloAncora.widthProperty().addListener((obs, oldVal, newVal) -> resizeBigImage());
         pannelloAncora.heightProperty().addListener((obs, oldVal, newVal) -> resizeBigImage());
-        // Inizializza e avvia il cambio delle immagini ogni 5 secondi
-        initializeImageSlider();
     }
 
     private void resizeBigImage() {
@@ -309,7 +303,7 @@ public class HomeController {
         try {
             // Leggi il file JSON esistente o esce se non esiste
             if (!file.exists()) {
-                System.out.println("File datiUtenti.json non trovato.");
+                showAlert("File Not Found", "File datiUtenti.json non trovato.");
                 return;
             }
 
@@ -333,7 +327,7 @@ public class HomeController {
                 mapper.writeValue(file, root);
                 System.out.println("Utente rimosso con successo.");
             } else {
-                System.out.println("Utente non trovato.");
+                showAlert("Utente non trovato", "L'utente con l'email " + email + " non è stato trovato.");
             }
 
         } catch (IOException e) {

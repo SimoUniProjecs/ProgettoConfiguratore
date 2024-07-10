@@ -547,14 +547,12 @@ public class CarConfiguratorController {
     private void loadImage(String path) {
         try {
             File file = new File(path);
-            System.out.println(path);
             Image image = new Image(file.toURI().toString());
             carImageView.setImage(image);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-
     // per tornare alla home
     @FXML
     private void handleHomeButton(ActionEvent event) {
