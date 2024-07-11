@@ -17,6 +17,9 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import Classi.Concessionario;
+import java.util.List;
+import Classi.DataLoader;
 
 import java.io.File;
 import java.io.IOException;
@@ -24,6 +27,7 @@ import java.util.Objects;
 
 public class HomeController {
     public MenuItem logout;
+    private List<Concessionario> concessionari;
     @FXML
     private MenuItem mieiOrdini;
     @FXML
@@ -179,13 +183,30 @@ public class HomeController {
     public void initialize() {
         updateMenuVisibility();
         loadImages();
-
         pannelloAncora.sceneProperty().addListener((obs, oldScene, newScene) -> {
             if (newScene != null) {
                 newScene.widthProperty().addListener((observable, oldValue, newValue) -> updateLayout(newScene.getWidth(), newScene.getHeight()));
                 newScene.heightProperty().addListener((observable, oldValue, newValue) -> updateLayout(newScene.getWidth(), newScene.getHeight()));
             }
         });
+
+        // Carica i dati degli ordini dal file JSON
+        try {
+            concessionari = DataLoader.loadConcessionari("public/res/data/ordini.json");
+            /*System.out.println("Dati caricati correttamente.");
+            for (Concessionario concessionario : concessionari) {
+                System.out.println(concessionario);
+                for (Sede sede : concessionario.getSedi()) {
+                    System.out.println(sede);
+                    for (Configurazione ordine : sede.getOrdini()) {
+                        System.out.println(ordine);
+                    }
+                }
+            }*/
+        } catch (IOException e) {
+            showAlert("Error", "Cannot load data from JSON file: " + e.getMessage());
+            e.printStackTrace();
+        }
 
         // Aggiungi listener per aggiornare la visibilità del menu e la label del nome utente
         UserSession.getInstance().loggatoProperty().addListener((obs, wasLoggato, isNowLoggato) -> {

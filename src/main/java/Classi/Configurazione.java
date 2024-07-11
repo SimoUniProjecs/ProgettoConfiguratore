@@ -36,6 +36,11 @@ public class Configurazione {
         this.dataPreventivo = LocalDate.now().toString();
     }
 
+    public Configurazione(int idConfigurazione, String marcaAutomobile, String modelloAutomobile, String colore, Motorizzazione motorizzazione, List<String> optionals, int prezzo, String emailCliente, Concessionari luogoConcessionario, String dataArrivo, boolean pagato) {
+        this(idConfigurazione, marcaAutomobile, modelloAutomobile, colore, motorizzazione, optionals, prezzo, emailCliente, luogoConcessionario);
+        this.dataArrivo = dataArrivo;
+    }
+
     public int getIdConfigurazione() {
         return idConfigurazione;
     }

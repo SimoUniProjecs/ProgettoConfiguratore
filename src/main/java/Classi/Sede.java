@@ -6,7 +6,7 @@ import java.util.List;
 public class Sede {
     private String nome;
     private Indirizzo luogo;
-    private List<Integer> idOrdini = new ArrayList<>();
+    private List<Configurazione> ordini = new ArrayList<>();
 
     public Sede(String nome, Indirizzo luogo) {
         this.nome = nome;
@@ -16,7 +16,6 @@ public class Sede {
     public Sede(String nome, Indirizzo luogo, List<Integer> idOrdini) {
         this.nome = nome;
         this.luogo = luogo;
-        this.idOrdini = idOrdini;
     }
 
     public String getNome() {
@@ -27,15 +26,15 @@ public class Sede {
         return luogo;
     }
 
-    public List<Integer> getIdOrdini() {
-        return idOrdini;
+    public List<Configurazione> getOrdini() {
+        return ordini;
     }
 
     public String toString() {
         return "Nome: " + nome + ", si trova in " + luogo.toString();
     }
 
-    public void addOrdine(int idOrdine) {
-        idOrdini.add(idOrdine);
+    public void addOrdine(Configurazione configurazione) {
+        ordini.add(configurazione);
     }
 }
