@@ -100,11 +100,11 @@ public class CarConfiguratorController {
             Document document = new Document(pdf);
 
             // Aggiungere il testo al PDF
-            document.add(new Paragraph("Sono una prova"));
-            document.add(new Paragraph("Marca Combox: " + selectedMarca));
-            document.add(new Paragraph("Modello Combox: " + modelloComboBox.getValue()));
-            document.add(new Paragraph("Colore Combox: " + coloreComboBox.getValue()));
-            document.add(new Paragraph("Prezzo Combox: " + prezzoLbl.getText()));
+            document.add(new Paragraph("PREVENTIVO AUTO"));
+            document.add(new Paragraph("Marca: " + selectedMarca));
+            document.add(new Paragraph("Modello: " + modelloComboBox.getValue()));
+            document.add(new Paragraph("Colore: " + coloreComboBox.getValue()));
+            document.add(new Paragraph("Prezzo: " + prezzoLbl.getText()));
 
             document.add(new com.itextpdf.layout.element.Image(ImageDataFactory.create(path)));
             document.add(new com.itextpdf.layout.element.Image(ImageDataFactory.create(generaPathInterni(selectedMarca, modelloComboBox.getValue()))));
