@@ -30,6 +30,6 @@
    <Button layoutX="29.0" layoutY="485.0" onAction="#onConfiguraButtonClicked" prefHeight="26.0" prefWidth="103.0" text="Configura" AnchorPane.leftAnchor="29.0" AnchorPane.bottomAnchor="10.0" />
    <Label fx:id="prezzoLbl" prefHeight="17.0" prefWidth="120.0" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="10.0" />
    <Button fx:id="interniBtn" layoutX="149.0" layoutY="485.0" onAction="#onInterniClicked" prefHeight="26.0" prefWidth="130.0" text="Visualizza Interni" AnchorPane.leftAnchor="149.0" AnchorPane.bottomAnchor="10.0" />
-   <Button layoutX="300.0" layoutY="485.0" onAction="#onDownloadPdfButtonClicked" prefHeight="26.0" prefWidth="160.0" text="Genera e Scarica PDF" AnchorPane.leftAnchor="300.0" AnchorPane.bottomAnchor="10.0" />
+   <Button layoutX="300.0" layoutY="485.0" onAction="#onDownloadPdfButtonClicked" prefHeight="26.0" prefWidth="160.0" text="Genera e Scarica PDF" fx:id="downloadPdfButton" AnchorPane.leftAnchor="300.0" AnchorPane.bottomAnchor="10.0" />
 
 </AnchorPane>

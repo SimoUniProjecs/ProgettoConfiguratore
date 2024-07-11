@@ -24,11 +24,6 @@
                 </Menu>
                 <Menu mnemonicParsing="false" text="Compra" />
                 <Menu fx:id="configuraMenu" mnemonicParsing="false" text="Configura">
-                    <items>
-                        <MenuItem mnemonicParsing="false" onAction="#handleOpenConfiguratoreAUDI" text="Audi" />
-                        <MenuItem mnemonicParsing="false" onAction="#handleOpenConfiguratoreBMW" text="BMW" />
-                        <MenuItem mnemonicParsing="false" onAction="#handleOpenConfiguratoreALFA" text="Alfa Romeo" />
-                    </items>
                 </Menu>
                 <Menu fx:id="userNameMenu" mnemonicParsing="false" text="Utente">
                     <items>

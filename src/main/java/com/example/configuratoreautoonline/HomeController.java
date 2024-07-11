@@ -74,25 +74,33 @@ public class HomeController {
     public void setStage(Stage stage) {
         this.stage = stage;
     }
+
     @FXML
     private void handleSwitchToViewLoginClick(ActionEvent event) {
         showDialog("/com/example/configuratoreautoonline/login-view.fxml");
     }
+
     @FXML
     private void handlePopUpDipendent(ActionEvent event){
         showDialog("/com/example/configuratoreautoonline/gestisci-dipendenti.fxml");
     }
+
     @FXML
     private void handleSwitchToMieiOrdiniClick(ActionEvent event) {
         changeScene("/com/example/configuratoreautoonline/miei-ordini.fxml");
     }
+
     @FXML
     private void handleSwitchToPreventiviClick(ActionEvent event) {
         changeScene("/com/example/configuratoreautoonline/preventivi.fxml");
     }
-    @FXML private void handleVendiClick(ActionEvent event) {
+
+    @FXML
+    private void handleVendiClick(ActionEvent event) {
         changeScene("/com/example/configuratoreautoonline/vendi.fxml");
-    }@FXML
+    }
+
+    @FXML
     private void handleSwitchToViewSignInClick(ActionEvent event) {
         showSignInDialog();
     }
@@ -100,26 +108,6 @@ public class HomeController {
     @FXML
     private void handleViewUserDetailsClick(ActionEvent event) {
         showDialog("/com/example/configuratoreautoonline/user-details.fxml");
-    }
-
-    @FXML
-    private void handleOpenConfiguratoreBMW(ActionEvent event ){
-        changeSceneToConfiguratore("/com/example/configuratoreautoonline/configuratore.fxml", "BMW");
-    }
-
-    @FXML
-    private void handleSwitchToMessaggiClick(ActionEvent event) {
-        changeScene("/com/example/configuratoreautoonline/comunicazioni.fxml");
-    }
-
-    @FXML
-    private void handleOpenConfiguratoreAUDI(ActionEvent event ){
-        changeSceneToConfiguratore("/com/example/configuratoreautoonline/configuratore.fxml", "AUDI");
-    }
-
-    @FXML
-    private void handleOpenConfiguratoreALFA(ActionEvent event ){
-        changeSceneToConfiguratore("/com/example/configuratoreautoonline/configuratore.fxml", "ALFA ROMEO");
     }
 
     // Metodo per cambiare la scena al configuratore per una marca specifica
@@ -186,12 +174,12 @@ public class HomeController {
         File jsonFile = new File("public/res/data/datiModelliAuto.json");
 
         try {
-
             datiModelliAuto = objectMapper.readTree(jsonFile).get("datiModelliAuto");
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
+
     public List<String> restituisciMarche() {
         List<String> marcheTrovate = new ArrayList<>();
 
@@ -200,17 +188,19 @@ public class HomeController {
             showAlert("Errore", "Impossibile caricare i dati del file JSON.");
             return marcheTrovate;
         }
+
         // Itera attraverso gli elementi di datiModelliAuto
         for (JsonNode concessionarioNode : datiModelliAuto) {
             Iterator<String> keys = concessionarioNode.fieldNames();
             while (keys.hasNext()) {
                 String key = keys.next();
-                    marcheTrovate.add(key); // Aggiungi la marca trovata alla lista
+                marcheTrovate.add(key); // Aggiungi la marca trovata alla lista
             }
         }
 
         return marcheTrovate;
     }
+
     // Metodo per aggiornare dinamicamente il menu "configura" con le marche disponibili
     private void updateConfiguraMenu() {
         List<String> marche = restituisciMarche();
@@ -225,12 +215,14 @@ public class HomeController {
             configuraMenu.getItems().add(menuItem);
         }
     }
+
     // Metodo per gestire il click su una marca nel menu "configura"
     private void handleConfiguraMarcaClick(ActionEvent event, String marca) {
         // Cambia la scena al configuratore per la marca specificata
         String fxmlFile = "/com/example/configuratoreautoonline/configuratore.fxml";
         changeSceneToConfiguratore(fxmlFile, marca);
     }
+
     @FXML
     public void initialize() {
         updateMenuVisibility();
@@ -250,7 +242,6 @@ public class HomeController {
         try {
             concessionari = DataLoader.loadConcessionari("public/res/data/ordini.json");
 
-
         } catch (IOException e) {
             showAlert("Error", "Cannot load data from JSON file: " + e.getMessage());
             e.printStackTrace();
@@ -260,19 +251,15 @@ public class HomeController {
         UserSession.getInstance().loggatoProperty().addListener((obs, wasLoggato, isNowLoggato) -> {
             updateMenuVisibility();
         });
-
         pannelloAncora.widthProperty().addListener((obs, oldVal, newVal) -> resizeBigImage());
         pannelloAncora.heightProperty().addListener((obs, oldVal, newVal) -> resizeBigImage());
     }
-
-
     private void resizeBigImage() {
         double width = pannelloAncora.getWidth() - 20; // 10 pixels padding on each side
         double height = pannelloAncora.getHeight() - 210; // Adjust for other components and padding
 
         bigImageView.setFitWidth(width);
         bigImageView.setFitHeight(height);
-
     }
 
     private void updateLayout(double width, double height) {
@@ -393,13 +380,16 @@ public class HomeController {
     }
 
     public void handleSwitchToValutaUsatiClick(ActionEvent event) {
-    changeScene("/com/example/configuratoreautoonline/valutaUsati.fxml");
+        changeScene("/com/example/configuratoreautoonline/valutaUsati.fxml");
     }
 
     public void handleInserisciVeicoloClick(ActionEvent event) {
         changeScene("/com/example/configuratoreautoonline/inserisci-veicolo.fxml");
     }
-
+    @FXML
+    private void handleSwitchToMessaggiClick(ActionEvent event) {
+        changeScene("/com/example/configuratoreautoonline/comunicazioni.fxml");
+    }
     public void handleSwitchToSegretariaClick(ActionEvent event) {
         changeScene("/com/example/configuratoreautoonline/segretaria.fxml");
     }

@@ -60,6 +60,7 @@ public class CarConfiguratorController {
     private Label prezzoLbl;
     @FXML
     private Button interniBtn;
+    @FXML
     private Button downloadPdfButton;
     private Stage stage;
     private String selectedMarca;
@@ -143,6 +144,9 @@ public class CarConfiguratorController {
         internoCheck.setOnAction(this::onInternoCheckChanged);
         impiantoAudioCheck.setOnAction(event -> updateImage());
         abbonamentoCheck.setOnAction(event -> updateImage());
+
+        // Inizializza il pulsante downloadPdfButton
+        downloadPdfButton.setOnAction(this::onDownloadPdfButtonClicked);
     }
 
     @FXML
@@ -648,8 +652,14 @@ public class CarConfiguratorController {
         if (marcaNode != null) {
             Iterator<JsonNode> modelliIterator = marcaNode.elements();
             while (modelliIterator.hasNext()) {
-                JsonNode modelloNode = modelliIterator.next().get("modelli").get(0);
-                modelloNode.fieldNames().forEachRemaining(modelli::add);
+                JsonNode nextNode = modelliIterator.next();
+                JsonNode modelliNode = nextNode.get("modelli");
+                if (modelliNode != null && modelliNode.isArray() && modelliNode.size() > 0) {
+                    JsonNode primoModello = modelliNode.get(0);
+                    if (primoModello != null) {
+                        primoModello.fieldNames().forEachRemaining(modelli::add);
+                    }
+                }
             }
         }
         return modelli;
