@@ -61,7 +61,7 @@ public class ValutaUsatiController extends Application {
         Parent root = loader.load();
         Scene scene = new Scene(root);
         primaryStage.setScene(scene);
-        primaryStage.setTitle("Configuratore Auto Online - Valuta Usati");
+        primaryStage.setTitle("Valuta Usati");
         primaryStage.show();
     }
 
@@ -173,15 +173,6 @@ public class ValutaUsatiController extends Application {
         alert.setContentText(content);
         alert.show();
     }
-
-    public void handleSwitchHome(ActionEvent event) {
-        changeScene("/com/example/configuratoreautoonline/Home-view.fxml");
-    }
-
-    public void onInserisciVeicoloClicked(ActionEvent event) {
-        changeScene("/com/example/configuratoreautoonline/segretaria.fxml");
-    }
-
     private void changeScene(String fxmlFile) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlFile));
@@ -199,4 +190,7 @@ public class ValutaUsatiController extends Application {
     }
 
 
+    public void handleHomeButtonAction(ActionEvent event) {
+        changeScene("/com/example/configuratoreautoonline/Home-view.fxml");
+    }
 }

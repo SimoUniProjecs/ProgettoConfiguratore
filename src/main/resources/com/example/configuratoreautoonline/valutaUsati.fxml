@@ -6,17 +6,6 @@
 
 <AnchorPane fx:id="pannelloAncora" prefHeight="564.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.configuratoreautoonline.ValutaUsatiController">
     <children>
-        <MenuBar VBox.vgrow="NEVER">
-            <menus>
-                <Menu mnemonicParsing="false" text="Azioni">
-                    <items>
-                        <MenuItem mnemonicParsing="false" onAction="#handleSwitchHome" text="Torna alla Home" />
-                        <MenuItem mnemonicParsing="false" text="Valuta Usati" />
-                        <MenuItem mnemonicParsing="false" onAction="#onInserisciVeicoloClicked" text="Inserisci Veicolo" />
-                    </items>
-                </Menu>
-            </menus>
-        </MenuBar>
         <ImageView fx:id="imageView" fitHeight="190.0" fitWidth="298.0" layoutX="151.0" layoutY="41.0" pickOnBounds="true" preserveRatio="true" />
         <Label layoutX="246.0" layoutY="245.0" text="DATI DEL VEICOLO" />
         <Label layoutX="231.0" layoutY="276.0" text="Marca:" />
@@ -33,5 +22,6 @@
         <Button fx:id="prossimoVeicolo" layoutX="306.0" layoutY="509.0" mnemonicParsing="false" onAction="#onProssimoVeicoloClicked" text="PROSSIMO VEICOLO" />
         <TextField fx:id="prezzoStimatoField" layoutX="221.0" layoutY="466.0" promptText="Inserire Prezzo" />
         <Label layoutX="258.0" layoutY="432.0" text="VALUTAZIONE" />
+        <Button fx:id="homeButton" text="Home" layoutX="14.0" layoutY="370.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" onAction="#handleHomeButtonAction"/>
     </children>
 </AnchorPane>
