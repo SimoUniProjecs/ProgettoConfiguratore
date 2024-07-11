@@ -2,6 +2,8 @@ package com.example.configuratoreautoonline;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -148,24 +150,188 @@ public class InserisciVeicoloController {
             String modello = modelloTxt.getText();
             List<String> colori = List.of(coloriTxt.getText().split(","));
             List<String> optionals = List.of(optionalsTxt.getText().split(","));
-            List<String> motorizzazioni = List.of(motorizzazioniTxt.getText().split(","));
+            List<String> motorizzazioni = List.of(motorizzazioniTxt.getText().split(";")); // Assume motorizzazioni are separated by semicolons
 
             String pathRadice;
-            if (marcaEsistente(marca)) {
-                pathRadice = "src/main/resources/json/" + marca + ".json";
+
+            if (marcaEsistente(marca.toUpperCase())) {
+                if (modelloEsistente(modello, marca)) {
+                    showAlert("Errore: duplicato trovato", "Il modello inserito è già presente nel database.");
+                    return;
+                }
+                pathRadice = "src/main/resources/img/" + marca.toUpperCase() + "/";
             } else {
-                pathRadice = "src/main/resources/json/" + marca + ".json";
+                // Crea la nuova cartella per la marca
+                String percorsoCartellaMarca = "src/main/resources/img/" + marca.toUpperCase();
+                File cartellaMarca = new File(percorsoCartellaMarca);
+
+                if (!cartellaMarca.exists()) {
+                    boolean creata = cartellaMarca.mkdirs(); // mkdirs() crea tutte le directory necessarie
+                    if (!creata) {
+                        showAlert("Errore", "Impossibile creare la cartella per la marca.");
+                        return;
+                    }
+                    System.out.println("Cartella per la marca creata con successo.");
+                }
+                pathRadice = percorsoCartellaMarca + "/";
             }
 
-            System.out.println(marcaEsistente(marca));
+            // Crea la nuova cartella per il modello
+            String percorsoModello = pathRadice + modello.toUpperCase();
+            File cartellaModello = new File(percorsoModello);
 
-            // Torna alla home
-            //changeScene("/com/example/configuratoreautoonline/Home-view.fxml");
+            if (!cartellaModello.exists()) {
+                boolean creata = cartellaModello.mkdirs(); // mkdirs() crea tutte le directory necessarie
+                if (!creata) {
+                    showAlert("Errore", "Impossibile creare la cartella per il modello.");
+                    return;
+                }
+                System.out.println("Cartella per il modello creata con successo.");
+            }
+
+            // Path completo per il file
+            pathRadice = percorsoModello + "/";
+            System.out.println("Path radice: " + pathRadice);
+
+            // Aggiungo al file JSON
+            aggiungiAutoAlJson(marca, modello, colori, optionals, motorizzazioni);
 
             // Mostra un messaggio di successo
             showAlert("Successo", "Auto aggiunta correttamente.");
+
+            // Torna alla home (scommenta se necessario)
+            // changeScene("/com/example/configuratoreautoonline/Home-view.fxml");
         }
     }
+
+
+    // Metodo per controllare se il modello è presente nel JSON
+    public boolean modelloEsistente(String modello, String marca) {
+        if (datiModelliAuto == null || datiModelliAuto.isEmpty()) {
+            showAlert("Errore", "Impossibile caricare i dati del file JSON.");
+            return false;
+        }
+
+        modello = modello.toLowerCase(); // Converte in lowercase per il confronto
+        marca = marca.toLowerCase(); // Converte in lowercase per il confronto
+
+        // Cerca all'interno della marca specificata
+        for (JsonNode concessionarioNode : datiModelliAuto) {
+            Iterator<String> concessionarioKeys = concessionarioNode.fieldNames();
+            while (concessionarioKeys.hasNext()) {
+                String concessionarioKey = concessionarioKeys.next();
+                if (concessionarioKey.equalsIgnoreCase(marca)) {
+                    JsonNode modelliNode = concessionarioNode.get(concessionarioKey).get("modelli");
+                    for (JsonNode modelloNode : modelliNode) {
+                        Iterator<String> modelliKeys = modelloNode.fieldNames();
+                        while (modelliKeys.hasNext()) {
+                            String modelloKey = modelliKeys.next();
+                            if (modelloKey.equalsIgnoreCase(modello)) {
+                                return true; // Trovato corrispondenza
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        return false; // Modello non trovato nella marca specificata
+    }
+
+
+    private ObjectNode creaModelloNode(ObjectMapper objectMapper, List<String> colori, List<String> optionals, List<String> motorizzazioni) {
+        ObjectNode modelloNode = objectMapper.createObjectNode();
+
+        ArrayNode coloriArray = objectMapper.createArrayNode();
+        for (String colore : colori) {
+            coloriArray.add(colore.trim());
+        }
+
+        ArrayNode optionalsArray = objectMapper.createArrayNode();
+        for (String optional : optionals) {
+            optionalsArray.add(optional.trim());
+        }
+
+        ArrayNode motorizzazioniArray = objectMapper.createArrayNode();
+        for (String motorizzazione : motorizzazioni) {
+            String[] parts = motorizzazione.split(",");
+            if (parts.length == 5) {
+                ObjectNode motorizzazioneNode = objectMapper.createObjectNode();
+                motorizzazioneNode.put("cilindrata", parts[0].trim());
+                motorizzazioneNode.put("potenza", parts[1].trim());
+                motorizzazioneNode.put("coppia", parts[2].trim());
+                motorizzazioneNode.put("alimentazione", parts[3].trim());
+                motorizzazioneNode.put("prezzo", parts[4].trim());
+                motorizzazioniArray.add(motorizzazioneNode);
+            } else {
+                System.out.println("Motorizzazione data format is incorrect: " + motorizzazione);
+            }
+        }
+
+        modelloNode.set("colori", coloriArray);
+        modelloNode.set("optionals", optionalsArray);
+        modelloNode.set("motorizzazioni", motorizzazioniArray);
+        modelloNode.put("percorsoImg", "src/main/resources/img/" + marcaTxt.getText() + "/" + modelloTxt.getText() + "/");
+
+        return modelloNode;
+    }
+
+
+
+
+    private void aggiungiAutoAlJson(String marca, String modello, List<String> colori, List<String> optionals, List<String> motorizzazioni) {
+        ObjectMapper objectMapper = new ObjectMapper();
+        try {
+            File file = new File("public/res/data/datiModelliAuto.json");
+            JsonNode root = objectMapper.readTree(file);
+            JsonNode datiModelliAutoNode = root.get("datiModelliAuto");
+
+            boolean marcaTrovata = false;
+            JsonNode marcaNode = null;
+
+            // Cerca se la marca esiste già
+            for (JsonNode concessionarioNode : datiModelliAutoNode) {
+                Iterator<String> keys = concessionarioNode.fieldNames();
+                while (keys.hasNext()) {
+                    String key = keys.next();
+                    if (key.equalsIgnoreCase(marca)) {
+                        marcaNode = concessionarioNode.get(key);
+                        marcaTrovata = true;
+                        break;
+                    }
+                }
+                if (marcaTrovata) {
+                    break;
+                }
+            }
+
+            // Crea il nuovo modello da aggiungere
+            ObjectNode nuovoModello = objectMapper.createObjectNode();
+            nuovoModello.set(modello, creaModelloNode(objectMapper, colori, optionals, motorizzazioni));
+
+            if (marcaTrovata && marcaNode != null) {
+                // Aggiungi il modello alla marca esistente
+                ((ArrayNode) marcaNode.get("modelli")).add(nuovoModello);
+            } else {
+                // Crea una nuova marca
+                ObjectNode nuovaMarca = objectMapper.createObjectNode();
+                ArrayNode modelliArray = objectMapper.createArrayNode();
+                modelliArray.add(nuovoModello);
+                nuovaMarca.set("modelli", modelliArray);
+                ((ObjectNode) datiModelliAutoNode.get(0)).set(marca, nuovaMarca);
+            }
+
+            // Scrivi i cambiamenti nel file JSON
+            objectMapper.writerWithDefaultPrettyPrinter().writeValue(file, root);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            showAlert("Errore", "Impossibile scrivere i dati nel file JSON.");
+        }
+    }
+
+
+
 
     // Verifica se la marca esiste già nel JSON
     public boolean marcaEsistente(String marca) {
