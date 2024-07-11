@@ -18,7 +18,7 @@
                 <Menu fx:id="secretaryVisibilityMenu" mnemonicParsing="false" text="Gestione Vetture">
                     <items>
                         <MenuItem fx:id="switchToValutaUsati" mnemonicParsing="false" onAction="#handleSwitchToValutaUsatiClick" text="Valuta Usati" />
-                        <MenuItem fx:id="switchToSegretaria" mnemonicParsing="false" onAction="#handleSwitchToSegretariaClick" text="Visualizza preventivi" />
+                        <MenuItem fx:id="switchToSegretaria" mnemonicParsing="false" onAction="#handleSwitchToSegretariaClick" text="Visualizza Ordini" />
                   <MenuItem fx:id="switchToInserisciVeicolo" mnemonicParsing="false" onAction="#handleInserisciVeicoloClick" text="Inserisci Veicolo" />
                     </items>
                 </Menu>
