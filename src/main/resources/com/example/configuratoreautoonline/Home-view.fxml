@@ -47,6 +47,7 @@
                         <MenuItem fx:id="gestisciDipendenti" mnemonicParsing="false" onAction="#handlePopUpDipendent" text="Gestisci Dipendente" />
                         <MenuItem fx:id="mieiPreventivi" mnemonicParsing="false" onAction="#handleSwitchToPreventiviClick" text="Miei Preventivi" />
                         <MenuItem fx:id="mieiOrdini" mnemonicParsing="false" onAction="#handleSwitchToMieiOrdiniClick" text="Miei Ordini" />
+                        <MenuItem fx:id="messaggi" mnemonicParsing="false" onAction="#handleSwitchToMessaggiClick" text="Messaggi" />
                     </items>
                 </Menu>
             </menus>

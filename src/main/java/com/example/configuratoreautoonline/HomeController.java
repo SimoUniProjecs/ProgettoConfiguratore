@@ -45,6 +45,8 @@ public class HomeController {
     @FXML
     private MenuItem switchToInserisciVeicolo;
     @FXML
+    private MenuItem messaggi;
+    @FXML
     private Menu userNameMenu;
     @FXML
     private Menu VendiMenu;
@@ -98,6 +100,11 @@ public class HomeController {
     @FXML
     private void handleOpenConfiguratoreBMW(ActionEvent event ){
         changeSceneToConfiguratore("/com/example/configuratoreautoonline/configuratore.fxml", "BMW");
+    }
+
+    @FXML
+    private void handleSwitchToMessaggiClick(ActionEvent event) {
+        changeScene("/com/example/configuratoreautoonline/comunicazioni.fxml");
     }
 
     @FXML
