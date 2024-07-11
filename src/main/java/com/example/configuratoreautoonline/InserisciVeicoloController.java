@@ -357,6 +357,7 @@ public class InserisciVeicoloController {
         return false; // Marca non trovata
     }
 
+
     // Verifica se i dati inseriti dall'utente sono validi
     public boolean isValid() {
         if (marcaTxt.getText().isEmpty() || modelloTxt.getText().isEmpty() || coloriTxt.getText().isEmpty() || optionalsTxt.getText().isEmpty() || motorizzazioniTxt.getText().isEmpty()) {
@@ -365,4 +366,5 @@ public class InserisciVeicoloController {
         }
         return true;
     }
+
 }
