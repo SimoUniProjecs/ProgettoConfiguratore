@@ -275,10 +275,6 @@ public class InserisciVeicoloController {
 
         return modelloNode;
     }
-
-
-
-
     private void aggiungiAutoAlJson(String marca, String modello, List<String> colori, List<String> optionals, List<String> motorizzazioni) {
         ObjectMapper objectMapper = new ObjectMapper();
         try {
@@ -329,9 +325,6 @@ public class InserisciVeicoloController {
             showAlert("Errore", "Impossibile scrivere i dati nel file JSON.");
         }
     }
-
-
-
 
     // Verifica se la marca esiste già nel JSON
     public boolean marcaEsistente(String marca) {

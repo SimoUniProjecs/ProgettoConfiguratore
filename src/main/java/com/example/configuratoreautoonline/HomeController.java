@@ -1,5 +1,7 @@
 package com.example.configuratoreautoonline;
 
+import Classi.Concessionario;
+import Classi.DataLoader;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
@@ -17,12 +19,12 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-import Classi.Concessionario;
-import java.util.List;
-import Classi.DataLoader;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Objects;
 
 public class HomeController {
@@ -62,6 +64,9 @@ public class HomeController {
     private MenuItem gestisciDipendenti;
     private Stage stage;
     @FXML
+    private Menu configuraMenu;
+    private static JsonNode datiModelliAuto;
+    @FXML
     private ImageView bigImageView;
     @FXML
     private Timeline timeline;
@@ -77,19 +82,15 @@ public class HomeController {
     private void handlePopUpDipendent(ActionEvent event){
         showDialog("/com/example/configuratoreautoonline/gestisci-dipendenti.fxml");
     }
-
     @FXML
     private void handleSwitchToMieiOrdiniClick(ActionEvent event) {
         changeScene("/com/example/configuratoreautoonline/miei-ordini.fxml");
     }
-
     @FXML
     private void handleSwitchToPreventiviClick(ActionEvent event) {
         changeScene("/com/example/configuratoreautoonline/preventivi.fxml");
     }
-
-    @FXML
-    private void handleVendiClick(ActionEvent event) {
+    @FXML private void handleVendiClick(ActionEvent event) {
         changeScene("/com/example/configuratoreautoonline/vendi.fxml");
     }@FXML
     private void handleSwitchToViewSignInClick(ActionEvent event) {
@@ -121,6 +122,7 @@ public class HomeController {
         changeSceneToConfiguratore("/com/example/configuratoreautoonline/configuratore.fxml", "ALFA ROMEO");
     }
 
+    // Metodo per cambiare la scena al configuratore per una marca specifica
     private void changeSceneToConfiguratore(String fxmlFile, String marca) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlFile));
@@ -179,10 +181,61 @@ public class HomeController {
         updateMenuVisibility();
     }
 
+    public static void loadJsonData() {
+        ObjectMapper objectMapper = new ObjectMapper();
+        File jsonFile = new File("public/res/data/datiModelliAuto.json");
+
+        try {
+
+            datiModelliAuto = objectMapper.readTree(jsonFile).get("datiModelliAuto");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    public List<String> restituisciMarche() {
+        List<String> marcheTrovate = new ArrayList<>();
+
+        if (datiModelliAuto == null || datiModelliAuto.isEmpty()) {
+            // Gestione dell'errore nel caricamento dei dati JSON
+            showAlert("Errore", "Impossibile caricare i dati del file JSON.");
+            return marcheTrovate;
+        }
+        // Itera attraverso gli elementi di datiModelliAuto
+        for (JsonNode concessionarioNode : datiModelliAuto) {
+            Iterator<String> keys = concessionarioNode.fieldNames();
+            while (keys.hasNext()) {
+                String key = keys.next();
+                    marcheTrovate.add(key); // Aggiungi la marca trovata alla lista
+            }
+        }
+
+        return marcheTrovate;
+    }
+    // Metodo per aggiornare dinamicamente il menu "configura" con le marche disponibili
+    private void updateConfiguraMenu() {
+        List<String> marche = restituisciMarche();
+
+        // Pulisci il menu "configura" se ci sono già elementi
+        configuraMenu.getItems().clear();
+
+        // Aggiungi ogni marca come un MenuItem nel menu "configura"
+        for (String marca : marche) {
+            MenuItem menuItem = new MenuItem(marca);
+            menuItem.setOnAction(event -> handleConfiguraMarcaClick(event, marca));
+            configuraMenu.getItems().add(menuItem);
+        }
+    }
+    // Metodo per gestire il click su una marca nel menu "configura"
+    private void handleConfiguraMarcaClick(ActionEvent event, String marca) {
+        // Cambia la scena al configuratore per la marca specificata
+        String fxmlFile = "/com/example/configuratoreautoonline/configuratore.fxml";
+        changeSceneToConfiguratore(fxmlFile, marca);
+    }
     @FXML
     public void initialize() {
         updateMenuVisibility();
         loadImages();
+        loadJsonData();
         pannelloAncora.sceneProperty().addListener((obs, oldScene, newScene) -> {
             if (newScene != null) {
                 newScene.widthProperty().addListener((observable, oldValue, newValue) -> updateLayout(newScene.getWidth(), newScene.getHeight()));
@@ -190,19 +243,14 @@ public class HomeController {
             }
         });
 
+        // Aggiorna il menu "configura" con le marche disponibili
+        updateConfiguraMenu();
+
         // Carica i dati degli ordini dal file JSON
         try {
             concessionari = DataLoader.loadConcessionari("public/res/data/ordini.json");
-            /*System.out.println("Dati caricati correttamente.");
-            for (Concessionario concessionario : concessionari) {
-                System.out.println(concessionario);
-                for (Sede sede : concessionario.getSedi()) {
-                    System.out.println(sede);
-                    for (Configurazione ordine : sede.getOrdini()) {
-                        System.out.println(ordine);
-                    }
-                }
-            }*/
+
+
         } catch (IOException e) {
             showAlert("Error", "Cannot load data from JSON file: " + e.getMessage());
             e.printStackTrace();
