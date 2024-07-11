@@ -48,7 +48,7 @@ public class InserisciVeicoloController {
         try {
             File file = new File("public/res/data/datiModelliAuto.json");
             JsonNode root = objectMapper.readTree(file);
-            datiModelliAuto = root.get("datiModelliAuto").get(0); // Prendiamo solo il primo elemento dell'array
+            datiModelliAuto = root.get("datiModelliAuto"); // Prendiamo l'array principale
         } catch (IOException e) {
             e.printStackTrace();
             showAlert("Errore di caricamento", "Impossibile caricare i dati del file JSON.");
@@ -179,11 +179,10 @@ public class InserisciVeicoloController {
         marca = marca.toLowerCase(); // Converte in lowercase per il confronto
 
         // Itera attraverso gli elementi di datiModelliAuto
-        for (JsonNode marcaNode : datiModelliAuto) {
-            Iterator<String> keys = marcaNode.fieldNames();
+        for (JsonNode concessionarioNode : datiModelliAuto) {
+            Iterator<String> keys = concessionarioNode.fieldNames();
             while (keys.hasNext()) {
                 String key = keys.next();
-                // Confronta la chiave con il nome della marca convertito in lowercase
                 if (key.equalsIgnoreCase(marca)) {
                     return true; // Trovata corrispondenza
                 }
