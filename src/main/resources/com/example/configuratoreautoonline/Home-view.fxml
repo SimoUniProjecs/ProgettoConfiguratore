@@ -1,11 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.image.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<VBox prefHeight="400.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.configuratoreautoonline.HomeController">
+<VBox prefHeight="400.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.configuratoreautoonline.HomeController">
     <children>
         <MenuBar VBox.vgrow="NEVER">
             <menus>
@@ -19,14 +25,15 @@
                     <items>
                         <MenuItem fx:id="switchToValutaUsati" mnemonicParsing="false" onAction="#handleSwitchToValutaUsatiClick" text="Valuta Usati" />
                         <MenuItem fx:id="switchToSegretaria" mnemonicParsing="false" onAction="#handleSwitchToSegretariaClick" text="Visualizza preventivi" />
+                  <MenuItem fx:id="switchToInserisciVeicolo" mnemonicParsing="false" onAction="#handleInserisciVeicoloClick" text="Inserisci Veicolo" />
                     </items>
                 </Menu>
                 <Menu mnemonicParsing="false" text="Compra" />
-                <Menu  mnemonicParsing="false" text="Configura">
+                <Menu mnemonicParsing="false" text="Configura">
                     <items>
-                        <MenuItem onAction="#handleOpenConfiguratoreAUDI" mnemonicParsing="false" text="Audi" />
-                        <MenuItem onAction="#handleOpenConfiguratoreBMW" mnemonicParsing="false" text="BMW" />
-                        <MenuItem onAction="#handleOpenConfiguratoreALFA" mnemonicParsing="false" text="Alfa Romeo" />
+                        <MenuItem mnemonicParsing="false" onAction="#handleOpenConfiguratoreAUDI" text="Audi" />
+                        <MenuItem mnemonicParsing="false" onAction="#handleOpenConfiguratoreBMW" text="BMW" />
+                        <MenuItem mnemonicParsing="false" onAction="#handleOpenConfiguratoreALFA" text="Alfa Romeo" />
                     </items>
                 </Menu>
                 <Menu fx:id="userNameMenu" mnemonicParsing="false" text="Utente">

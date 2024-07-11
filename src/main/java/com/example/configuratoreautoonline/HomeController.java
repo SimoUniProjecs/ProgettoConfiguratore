@@ -43,6 +43,8 @@ public class HomeController {
     @FXML
     private MenuItem vediDettagliUtente;
     @FXML
+    private MenuItem switchToInserisciVeicolo;
+    @FXML
     private Menu userNameMenu;
     @FXML
     private Menu VendiMenu;
@@ -316,6 +318,10 @@ public class HomeController {
 
     public void handleSwitchToValutaUsatiClick(ActionEvent event) {
     changeScene("/com/example/configuratoreautoonline/valutaUsati.fxml");
+    }
+
+    public void handleInserisciVeicoloClick(ActionEvent event) {
+        changeScene("/com/example/configuratoreautoonline/inserisci-veicolo.fxml");
     }
 
     public void handleSwitchToSegretariaClick(ActionEvent event) {
