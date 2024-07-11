@@ -16,10 +16,15 @@ public class ReplyController {
 
     private Comunicazione comunicazione;
     private boolean replySent = false;
+    private Stage parentStage;
 
     public void setComunicazione(Comunicazione comunicazione) {
         this.comunicazione = comunicazione;
         this.titoloField.setText("Re: " + comunicazione.getTitolo());
+    }
+
+    public void setParentStage(Stage parentStage) {
+        this.parentStage = parentStage;
     }
 
     @FXML
@@ -46,6 +51,10 @@ public class ReplyController {
         comunicazione = nuovaComunicazione;
         Stage stage = (Stage) titoloField.getScene().getWindow();
         stage.close();
+
+        if (parentStage != null) {
+            parentStage.close();
+        }
     }
 
     public boolean isReplySent() {

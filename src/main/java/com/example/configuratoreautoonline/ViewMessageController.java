@@ -5,7 +5,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.stage.Modality;
@@ -49,6 +48,7 @@ public class ViewMessageController {
 
             ReplyController controller = loader.getController();
             controller.setComunicazione(comunicazione);
+            controller.setParentStage((Stage) mittenteLabel.getScene().getWindow());
 
             Stage stage = new Stage();
             stage.initModality(Modality.APPLICATION_MODAL);
@@ -57,11 +57,9 @@ public class ViewMessageController {
             stage.showAndWait();
 
             if (controller.isReplySent()) {
-                messageDeleted = true;
-                comunicazione = controller.getReplyComunicazione();
+                Comunicazione reply = controller.getReplyComunicazione();
+                ComunicazioniController.getInstance().addComunicazione(reply);
             }
-            stage = (Stage) mittenteLabel.getScene().getWindow();
-            stage.close();
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -37,6 +37,16 @@ public class ComunicazioniController {
 
     private List<Comunicazione> comunicazioni;
 
+    private static ComunicazioniController instance;
+
+    public ComunicazioniController() {
+        instance = this;
+    }
+
+    public static ComunicazioniController getInstance() {
+        return instance;
+    }
+
     public void initialize() {
         ObjectMapper objectMapper = new ObjectMapper();
         String userEmail = UserSession.getInstance().getEmail();
@@ -154,6 +164,11 @@ public class ComunicazioniController {
         showSent();
     }
 
+    public void addComunicazione(Comunicazione comunicazione) {
+        comunicazioni.add(comunicazione);
+        saveComunicazioni();
+    }
+
     private void saveComunicazioni() {
         ObjectMapper objectMapper = new ObjectMapper();
         try {
@@ -205,8 +220,8 @@ public class ComunicazioniController {
                 stage.showAndWait();
 
                 if (controller.isReplySent()) {
-                    comunicazioni.add(controller.getReplyComunicazione());
-                    saveComunicazioni();
+                    Comunicazione reply = controller.getReplyComunicazione();
+                    addComunicazione(reply);
                     showInbox();
                 }
             } catch (IOException e) {
