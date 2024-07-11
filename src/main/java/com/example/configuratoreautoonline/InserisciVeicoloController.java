@@ -21,6 +21,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
+import java.util.Iterator;
 import java.util.List;
 
 public class InserisciVeicoloController {
@@ -168,8 +169,29 @@ public class InserisciVeicoloController {
 
     // Verifica se la marca esiste già nel JSON
     public boolean marcaEsistente(String marca) {
+        loadJsonData();
+
+        if (datiModelliAuto == null || datiModelliAuto.isEmpty()) {
+            showAlert("Errore", "Impossibile caricare i dati del file JSON.");
+            return false;
+        }
+
+        marca = marca.toLowerCase(); // Converte in lowercase per il confronto
+
+        // Itera attraverso gli elementi di datiModelliAuto
+        for (JsonNode marcaNode : datiModelliAuto) {
+            Iterator<String> keys = marcaNode.fieldNames();
+            while (keys.hasNext()) {
+                String key = keys.next();
+                // Confronta la chiave con il nome della marca convertito in lowercase
+                if (key.equalsIgnoreCase(marca)) {
+                    return true; // Trovata corrispondenza
+                }
+            }
+        }
         return false; // Marca non trovata
     }
+
     // Verifica se i dati inseriti dall'utente sono validi
     public boolean isValid() {
         if (marcaTxt.getText().isEmpty() || modelloTxt.getText().isEmpty() || coloriTxt.getText().isEmpty() || optionalsTxt.getText().isEmpty() || motorizzazioniTxt.getText().isEmpty()) {
