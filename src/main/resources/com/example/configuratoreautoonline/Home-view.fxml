@@ -22,7 +22,6 @@
                   <MenuItem fx:id="switchToInserisciVeicolo" mnemonicParsing="false" onAction="#handleInserisciVeicoloClick" text="Inserisci Veicolo" />
                     </items>
                 </Menu>
-                <Menu mnemonicParsing="false" text="Compra" />
                 <Menu fx:id="configuraMenu" mnemonicParsing="false" text="Configura">
                 </Menu>
                 <Menu fx:id="userNameMenu" mnemonicParsing="false" text="Utente">

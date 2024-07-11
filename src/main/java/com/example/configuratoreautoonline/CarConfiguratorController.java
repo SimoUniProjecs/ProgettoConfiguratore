@@ -654,8 +654,10 @@ public class CarConfiguratorController {
             while (modelliIterator.hasNext()) {
                 JsonNode nextNode = modelliIterator.next();
                 JsonNode modelliNode = nextNode.get("modelli");
+                System.out.println("modelliNode: " + modelliNode);
                 if (modelliNode != null && modelliNode.isArray() && modelliNode.size() > 0) {
                     JsonNode primoModello = modelliNode.get(0);
+                    System.out.println("primoModello: " + primoModello);
                     if (primoModello != null) {
                         primoModello.fieldNames().forEachRemaining(modelli::add);
                     }

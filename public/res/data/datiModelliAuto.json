@@ -119,20 +119,40 @@
           "percorsoImg" : "src/main/resources/img/ALFA/STELVIO/"
         }
       } ]
-    } ],
+    } ]
+  }, {
     "davidong" : {
       "modelli" : [ {
-        "yoink" : {
-          "colori" : [ "giallo", "verde", "rosso", "blu" ],
-          "optionals" : [ "cerchi maggiorati €20000", "freni rossi €1000" ],
-          "motorizzazioni" : [ {
-            "cilindrata" : "6.2 L",
-            "potenza" : "3000 CV",
-            "coppia" : "1500Nm",
-            "alimentazione" : "Benzina",
-            "prezzo" : "20 EUR"
-          } ],
-          "percorsoImg" : "src/main/resources/img/DAVIDONG/YOINK/"
+        "Yoink" : {
+          "colori" : [ "blu €1500", " rosso €1800", " verde €1600" ],
+          "optionals" : [ "cerchi maggiorati €450", " freni rossi €500" ],
+          "motorizzazioni" : [ "6.2 L, 260 CV, 340Nm, Elettrica, 50000 EUR" ]
+        }
+      } ]
+    }
+  }, {
+    "simo" : {
+      "modelli" : [ {
+        "rsa" : {
+          "colori" : [ "blu €1500", " rosso €1800", " verde €1600" ],
+          "optionals" : [ "cerchi maggiorati €900", " freni rossi €400", " interni pelle €3000" ],
+          "motorizzazioni" : [ "2.9 L, 432 CV, 234Nm , Benzina, 120000 EUR" ]
+        }
+      }, {
+        "db" : {
+          "colori" : [ "blu €1500", " rosso €1800", " verde €1600" ],
+          "optionals" : [ "cerchi maggiorati €900", " freni rossi €400", " interni pelle €3000" ],
+          "motorizzazioni" : [ "2.9 L, 432 CV, 234Nm , Benzina, 120000 EUR" ]
+        }
+      } ]
+    }
+  }, {
+    "elsimo" : {
+      "modelli" : [ {
+        "powers" : {
+          "colori" : [ "blu €1500", " rosso €1800", " verde €1600" ],
+          "optionals" : [ "cerchi maggiorati €900", " freni rossi €400" ],
+          "motorizzazioni" : [ "2.9 L, 432 CV, 234Nm , Benzina, 120000 EUR" ]
         }
       } ]
     }

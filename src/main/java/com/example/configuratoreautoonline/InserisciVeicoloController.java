@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -21,6 +22,8 @@ import javafx.stage.Stage;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.util.Iterator;
@@ -68,7 +71,6 @@ public class InserisciVeicoloController {
     public void handleHomeButtonAction(ActionEvent event) {
         changeScene("/com/example/configuratoreautoonline/Home-view.fxml");
     }
-
     private void showAlert(String title, String content) {
         Alert alert;
         if(title.equals("Successo"))
@@ -80,7 +82,6 @@ public class InserisciVeicoloController {
         alert.setContentText(content);
         alert.showAndWait();
     }
-
     @FXML
     private void handleImageSelection(ActionEvent event) {
         FileChooser fileChooser = new FileChooser();
@@ -96,36 +97,23 @@ public class InserisciVeicoloController {
         // Apri la finestra di dialogo per selezionare i file
         List<File> selectedFiles = fileChooser.showOpenMultipleDialog(((Button) event.getSource()).getScene().getWindow());
 
-        // Se dei file sono stati selezionati, carica le immagini e impostale nel VBox
+        // Se dei file sono stati selezionati, aggiungi le immagini visivamente all'HBox
         if (selectedFiles != null && !selectedFiles.isEmpty()) {
             for (File selectedFile : selectedFiles) {
-                // Copia l'immagine nel percorso desiderato (es. public/res/images/)
-                String imageFileName = selectedFile.getName();
-                String targetPath = "src/main/resources/img/" + imageFileName;
+                // Crea l'immagine e l'ImageView
+                Image image = new Image(selectedFile.toURI().toString());
+                ImageView imageView = new ImageView(image);
+                imageView.setFitWidth(200); // Imposta la larghezza desiderata
+                imageView.setPreserveRatio(true);
+                imageView.setSmooth(true);
 
-                // Crea un nuovo file nel percorso target
-                File targetFile = new File(targetPath);
-
-                try {
-                    // Copia il file selezionato nel percorso target
-                    Files.copy(selectedFile.toPath(), targetFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
-
-                    // Imposta l'immagine nel VBox
-                    Image image = new Image(targetFile.toURI().toString());
-                    ImageView imageView = new ImageView(image);
-                    imageView.setFitWidth(200); // Imposta la larghezza desiderata
-                    imageView.setPreserveRatio(true);
-                    imageView.setSmooth(true);
-
-                    // Aggiungi l'ImageView al VBox
-                    imageContainer.getChildren().add(imageView);
-
-                } catch (IOException e) {
-                    showAlert("Errore", "Impossibile copiare l'immagine nel percorso desiderato.");
-                    e.printStackTrace();
-                }
+                // Aggiungi l'ImageView all'HBox per la visualizzazione
+                imageContainer.getChildren().add(imageView);
             }
         }
+    }
+    private String calcolaPercorso() {
+        return "src/main/resources/img/" + marcaTxt.getText().toUpperCase() + "/" + modelloTxt.getText().toUpperCase() + "/";
     }
 
     private void changeScene(String fxmlFile) {
@@ -141,7 +129,6 @@ public class InserisciVeicoloController {
             e.printStackTrace();
         }
     }
-
     // Scrivi la modifica nel json delle auto disponibili
     public void oncaricaConfigurazioneBtnClicked(ActionEvent event) {
         if (isValid()) {
@@ -168,7 +155,6 @@ public class InserisciVeicoloController {
                         showAlert("Errore", "Impossibile creare la cartella per la marca.");
                         return;
                     }
-                    System.out.println("Cartella per la marca creata con successo.");
                 }
                 pathRadice = percorsoCartellaMarca + "/";
             }
@@ -183,25 +169,44 @@ public class InserisciVeicoloController {
                     showAlert("Errore", "Impossibile creare la cartella per il modello.");
                     return;
                 }
-                System.out.println("Cartella per il modello creata con successo.");
             }
 
-            // Path completo per il file
-            pathRadice = percorsoModello + "/";
-            System.out.println("Path radice: " + pathRadice);
+            // Copia le immagini selezionate nella cartella del modello
+            try {
+                for (Node node : imageContainer.getChildren()) {
+                    if (node instanceof ImageView) {
+                        ImageView imageView = (ImageView) node;
+                        Image image = imageView.getImage();
+                        String imageName = extractFileName(image.getUrl()); // Ottieni il nome dell'immagine
+                        String imagePath = percorsoModello + "/" + imageName;
 
-            // Aggiungo al file JSON
-            aggiungiAutoAlJson(marca, modello, colori, optionals, motorizzazioni);
+                        // Esegui la copia effettiva del file
+                        File selectedFile = new File(new URI(image.getUrl()));
+                        File targetFile = new File(imagePath);
+                        Files.copy(selectedFile.toPath(), targetFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+                    }
+                }
 
-            // Mostra un messaggio di successo
-            showAlert("Successo", "Auto aggiunta correttamente.");
+                // Aggiungi l'auto al JSON
+                aggiungiAutoAlJson(marca, modello, colori, optionals, motorizzazioni);
 
-            // Torna alla home (scommenta se necessario)
-            changeScene("/com/example/configuratoreautoonline/Home-view.fxml");
+                // Mostra un messaggio di successo
+                showAlert("Successo", "Auto aggiunta correttamente.");
+
+                // Torna alla home (scommenta se necessario)
+                changeScene("/com/example/configuratoreautoonline/Home-view.fxml");
+
+            } catch (IOException | URISyntaxException e) {
+                showAlert("Errore", "Impossibile copiare le immagini nella cartella del modello.");
+                e.printStackTrace();
+            }
         }
     }
 
-
+    private String extractFileName(String url) {
+        int lastIndex = url.lastIndexOf('/');
+        return url.substring(lastIndex + 1);
+    }
     // Metodo per controllare se il modello è presente nel JSON
     public boolean modelloEsistente(String modello, String marca) {
         if (datiModelliAuto == null || datiModelliAuto.isEmpty()) {
@@ -235,54 +240,24 @@ public class InserisciVeicoloController {
         return false; // Modello non trovato nella marca specificata
     }
 
-
-    private ObjectNode creaModelloNode(ObjectMapper objectMapper, List<String> colori, List<String> optionals, List<String> motorizzazioni) {
-        ObjectNode modelloNode = objectMapper.createObjectNode();
-
-        ArrayNode coloriArray = objectMapper.createArrayNode();
-        for (String colore : colori) {
-            coloriArray.add(colore.trim());
-        }
-
-        ArrayNode optionalsArray = objectMapper.createArrayNode();
-        for (String optional : optionals) {
-            optionalsArray.add(optional.trim());
-        }
-
-        ArrayNode motorizzazioniArray = objectMapper.createArrayNode();
-        for (String motorizzazione : motorizzazioni) {
-            String[] parts = motorizzazione.split(",");
-            if (parts.length == 5) {
-                ObjectNode motorizzazioneNode = objectMapper.createObjectNode();
-                motorizzazioneNode.put("cilindrata", parts[0].trim());
-                motorizzazioneNode.put("potenza", parts[1].trim());
-                motorizzazioneNode.put("coppia", parts[2].trim());
-                motorizzazioneNode.put("alimentazione", parts[3].trim());
-                motorizzazioneNode.put("prezzo", parts[4].trim());
-                motorizzazioniArray.add(motorizzazioneNode);
-            } else {
-                System.out.println("Motorizzazione data format is incorrect: " + motorizzazione);
-            }
-        }
-
-        modelloNode.set("colori", coloriArray);
-        modelloNode.set("optionals", optionalsArray);
-        modelloNode.set("motorizzazioni", motorizzazioniArray);
-        modelloNode.put("percorsoImg", pathRadice);
-
-        return modelloNode;
-    }
     private void aggiungiAutoAlJson(String marca, String modello, List<String> colori, List<String> optionals, List<String> motorizzazioni) {
         ObjectMapper objectMapper = new ObjectMapper();
         try {
             File file = new File("public/res/data/datiModelliAuto.json");
             JsonNode root = objectMapper.readTree(file);
-            JsonNode datiModelliAutoNode = root.get("datiModelliAuto");
+            ArrayNode datiModelliAutoNode = (ArrayNode) root.get("datiModelliAuto");
 
             boolean marcaTrovata = false;
             JsonNode marcaNode = null;
 
-            marcaTrovata = marcaEsistente(marca.toUpperCase());
+            // Controlla se la marca esiste già nel JSON
+            for (JsonNode node : datiModelliAutoNode) {
+                marcaNode = node.get(marca.toLowerCase());
+                if (marcaNode != null && !marcaNode.isNull()) {
+                    marcaTrovata = true;
+                    break;
+                }
+            }
 
             // Crea il nuovo modello da aggiungere
             ObjectNode nuovoModello = objectMapper.createObjectNode();
@@ -297,7 +272,10 @@ public class InserisciVeicoloController {
                 ArrayNode modelliArray = objectMapper.createArrayNode();
                 modelliArray.add(nuovoModello);
                 nuovaMarca.set("modelli", modelliArray);
-                ((ObjectNode) datiModelliAutoNode.get(0)).set(marca, nuovaMarca);
+                // Aggiungi la nuova marca alla radice del JSON
+                ObjectNode nuovaMarcaContainer = objectMapper.createObjectNode();
+                nuovaMarcaContainer.set(marca.toLowerCase(), nuovaMarca);
+                datiModelliAutoNode.add(nuovaMarcaContainer);
             }
 
             // Scrivi i cambiamenti nel file JSON
@@ -308,6 +286,26 @@ public class InserisciVeicoloController {
             showAlert("Errore", "Impossibile scrivere i dati nel file JSON.");
         }
     }
+
+    private ObjectNode creaModelloNode(ObjectMapper objectMapper, List<String> colori, List<String> optionals, List<String> motorizzazioni) {
+        ObjectNode modelloNode = objectMapper.createObjectNode();
+        ArrayNode coloriArray = objectMapper.createArrayNode();
+        colori.forEach(coloriArray::add);
+        modelloNode.set("colori", coloriArray);
+
+        ArrayNode optionalsArray = objectMapper.createArrayNode();
+        optionals.forEach(optionalsArray::add);
+        modelloNode.set("optionals", optionalsArray);
+
+        ArrayNode motorizzazioniArray = objectMapper.createArrayNode();
+        motorizzazioni.forEach(motorizzazioniArray::add);
+        modelloNode.set("motorizzazioni", motorizzazioniArray);
+
+        // Nota: Assicurati di impostare altri campi necessari come percorsoImg, ecc.
+
+        return modelloNode;
+    }
+
     // Verifica se la marca esiste già nel JSON
     public boolean marcaEsistente(String marca) {
         loadJsonData();

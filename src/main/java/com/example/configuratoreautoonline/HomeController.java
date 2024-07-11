@@ -79,37 +79,30 @@ public class HomeController {
     private void handleSwitchToViewLoginClick(ActionEvent event) {
         showDialog("/com/example/configuratoreautoonline/login-view.fxml");
     }
-
     @FXML
     private void handlePopUpDipendent(ActionEvent event){
         showDialog("/com/example/configuratoreautoonline/gestisci-dipendenti.fxml");
     }
-
     @FXML
     private void handleSwitchToMieiOrdiniClick(ActionEvent event) {
         changeScene("/com/example/configuratoreautoonline/miei-ordini.fxml");
     }
-
     @FXML
     private void handleSwitchToPreventiviClick(ActionEvent event) {
         changeScene("/com/example/configuratoreautoonline/preventivi.fxml");
     }
-
     @FXML
     private void handleVendiClick(ActionEvent event) {
         changeScene("/com/example/configuratoreautoonline/vendi.fxml");
     }
-
     @FXML
     private void handleSwitchToViewSignInClick(ActionEvent event) {
         showSignInDialog();
     }
-
     @FXML
     private void handleViewUserDetailsClick(ActionEvent event) {
         showDialog("/com/example/configuratoreautoonline/user-details.fxml");
     }
-
     // Metodo per cambiare la scena al configuratore per una marca specifica
     private void changeSceneToConfiguratore(String fxmlFile, String marca) {
         try {
@@ -131,7 +124,6 @@ public class HomeController {
             e.printStackTrace();
         }
     }
-
     private void changeScene(String fxmlFile) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlFile));
@@ -147,7 +139,6 @@ public class HomeController {
             e.printStackTrace(); // Stampa lo stack trace per il debug
         }
     }
-
     private void showDialog(String fxmlFile) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlFile));
@@ -160,15 +151,12 @@ public class HomeController {
             showAlert("Error", "Cannot open the dialog, please check your configuration.");
         }
     }
-
     private void showSignInDialog() {
         showDialog("/com/example/configuratoreautoonline/sign-in-view.fxml");
     }
-
     public void handleLoginSuccessful() {
         updateMenuVisibility();
     }
-
     public static void loadJsonData() {
         ObjectMapper objectMapper = new ObjectMapper();
         File jsonFile = new File("public/res/data/datiModelliAuto.json");
@@ -179,7 +167,6 @@ public class HomeController {
             e.printStackTrace();
         }
     }
-
     public List<String> restituisciMarche() {
         List<String> marcheTrovate = new ArrayList<>();
 
@@ -200,7 +187,6 @@ public class HomeController {
 
         return marcheTrovate;
     }
-
     // Metodo per aggiornare dinamicamente il menu "configura" con le marche disponibili
     private void updateConfiguraMenu() {
         List<String> marche = restituisciMarche();
@@ -215,14 +201,12 @@ public class HomeController {
             configuraMenu.getItems().add(menuItem);
         }
     }
-
     // Metodo per gestire il click su una marca nel menu "configura"
     private void handleConfiguraMarcaClick(ActionEvent event, String marca) {
         // Cambia la scena al configuratore per la marca specificata
         String fxmlFile = "/com/example/configuratoreautoonline/configuratore.fxml";
         changeSceneToConfiguratore(fxmlFile, marca);
     }
-
     @FXML
     public void initialize() {
         updateMenuVisibility();
@@ -261,7 +245,6 @@ public class HomeController {
         bigImageView.setFitWidth(width);
         bigImageView.setFitHeight(height);
     }
-
     private void updateLayout(double width, double height) {
         // Calculate the new sizes and positions based on the scene size
         double newWidth = width - 20; // Example margin
@@ -269,7 +252,6 @@ public class HomeController {
         bigImageView.setFitWidth(newWidth);
         bigImageView.setFitHeight(newHeight);
     }
-
     // Carica le immagini dei loghi delle marche
     public void loadImages() {
         loadImage(audiImageView, "/img/LOGHI/Audi-Logo_2016.svg.png");
@@ -277,7 +259,6 @@ public class HomeController {
         loadImage(alfaImageView, "/img/LOGHI/alfa.svg.png");
         loadImage(bigImageView, "/img/LOGHI/home.png");
     }
-
     // Carica le 3 immagini dei loghi delle marche
     private void loadImage(ImageView imageView, String path) {
         try {
@@ -287,7 +268,6 @@ public class HomeController {
             showAlert("Loading Error", "Failed to load image: " + path);
         }
     }
-
     public void updateMenuVisibility() {
         UserSession session = UserSession.getInstance();
         if (vediDettagliUtente != null) {
@@ -306,7 +286,6 @@ public class HomeController {
             secretaryVisibilityMenu.setVisible(session.getPermessi()>=2);
         }
     }
-
     // Stampare gli errori
     private void showAlert(String title, String content) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -315,7 +294,6 @@ public class HomeController {
         alert.setContentText(content);
         alert.show();
     }
-
     //effettua il logout
     public void handleLogoutClick(ActionEvent actionEvent) {
         // Clear the user session
@@ -323,7 +301,6 @@ public class HomeController {
         session.disconnetti();
         updateMenuVisibility();
     }
-
     // Se utente vuole sloggarsi e rimuovere dal JSON il suo userame
     public void handleEliminaUtenteClick(ActionEvent actionEvent) {
         // Clear the user session
@@ -338,7 +315,6 @@ public class HomeController {
         alert.setContentText("Utente rimosso con successo");
         alert.showAndWait();
     }
-
     // Rimuovi l'utente con l'email specificata dal file JSON
     private void rimuoviUtente(String email) {
         ObjectMapper mapper = new ObjectMapper();
@@ -378,11 +354,9 @@ public class HomeController {
             e.printStackTrace();  // Migliora la gestione degli errori in base alle necessità dell'applicazione
         }
     }
-
     public void handleSwitchToValutaUsatiClick(ActionEvent event) {
         changeScene("/com/example/configuratoreautoonline/valutaUsati.fxml");
     }
-
     public void handleInserisciVeicoloClick(ActionEvent event) {
         changeScene("/com/example/configuratoreautoonline/inserisci-veicolo.fxml");
     }
