@@ -12,7 +12,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.HBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
@@ -36,7 +36,7 @@ public class InserisciVeicoloController {
     @FXML
     private Button caricaConfigurazioneBtn;
     @FXML
-    private VBox imageContainer;
+    private HBox imageContainer;
 
     @FXML
     private AnchorPane pannelloAncora;
@@ -77,7 +77,7 @@ public class InserisciVeicoloController {
             for (File selectedFile : selectedFiles) {
                 // Copia l'immagine nel percorso desiderato (es. public/res/images/)
                 String imageFileName = selectedFile.getName();
-                String targetPath = "public/res/images/" + imageFileName;
+                String targetPath = "src/main/resources/img/" + imageFileName;
 
                 // Crea un nuovo file nel percorso target
                 File targetFile = new File(targetPath);
@@ -89,7 +89,7 @@ public class InserisciVeicoloController {
                     // Imposta l'immagine nel VBox
                     Image image = new Image(targetFile.toURI().toString());
                     ImageView imageView = new ImageView(image);
-                    imageView.setFitWidth(100); // Imposta la larghezza desiderata
+                    imageView.setFitWidth(200); // Imposta la larghezza desiderata
                     imageView.setPreserveRatio(true);
                     imageView.setSmooth(true);
 
