@@ -1,5 +1,7 @@
 package com.example.configuratoreautoonline;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -11,7 +13,6 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -20,6 +21,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
+import java.util.Iterator;
 import java.util.List;
 
 public class InserisciVeicoloController {
@@ -37,17 +39,35 @@ public class InserisciVeicoloController {
     private Button caricaConfigurazioneBtn;
     @FXML
     private HBox imageContainer;
+    private JsonNode datiModelliAuto;
+    private Stage stage;
+
+    // Carica datiModelliAuto.json in datiModelliAuto
+    private void loadJsonData() {
+        ObjectMapper objectMapper = new ObjectMapper();
+        try {
+            File file = new File("public/res/data/datiModelliAuto.json");
+            JsonNode root = objectMapper.readTree(file);
+            datiModelliAuto = root.get("datiModelliAuto").get(0); // Prendiamo solo il primo elemento dell'array
+        } catch (IOException e) {
+            e.printStackTrace();
+            showAlert("Errore di caricamento", "Impossibile caricare i dati del file JSON.");
+        }
+    }
 
     @FXML
-    private AnchorPane pannelloAncora;
-    private Stage stage;
+    public void initialize() {
+        loadJsonData();
+    }
 
     public void setStage(Stage stage) {
         this.stage = stage;
     }
+
     public void handleHomeButtonAction(ActionEvent event) {
         changeScene("/com/example/configuratoreautoonline/Home-view.fxml");
     }
+
     private void showAlert(String title, String content) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle(title);
@@ -55,6 +75,7 @@ public class InserisciVeicoloController {
         alert.setContentText(content);
         alert.showAndWait();
     }
+
     @FXML
     private void handleImageSelection(ActionEvent event) {
         FileChooser fileChooser = new FileChooser();
@@ -107,7 +128,7 @@ public class InserisciVeicoloController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlFile));
             Parent root = loader.load();
             Scene scene = new Scene(root);
-            Stage currentStage = (Stage) pannelloAncora.getScene().getWindow();
+            Stage currentStage = (Stage) motorizzazioniTxt.getScene().getWindow();
             currentStage.setScene(scene);
             currentStage.show();
         } catch (Exception e) {
@@ -116,24 +137,23 @@ public class InserisciVeicoloController {
         }
     }
 
-    // Scrivo la modifica nel json delle auto disponibili
+    // Scrivi la modifica nel json delle auto disponibili
     public void oncaricaConfigurazioneBtnClicked(ActionEvent event) {
         if (isValid()) {
-            String marca = marcaTxt.getText();
+            String marca = marcaTxt.getText().toLowerCase(); // Converte in lowercase
             String modello = modelloTxt.getText();
             List<String> colori = List.of(coloriTxt.getText().split(","));
             List<String> optionals = List.of(optionalsTxt.getText().split(","));
             List<String> motorizzazioni = List.of(motorizzazioniTxt.getText().split(","));
 
-            // devo gestire un immagine
-
-            // Devo aggiungere l'auto al file json
             String pathRadice;
-            if(marcaEsistente(marca)){
+            if (marcaEsistente(marca)) {
                 pathRadice = "src/main/resources/json/" + marca + ".json";
-            }else{
+            } else {
                 pathRadice = "src/main/resources/json/" + marca + ".json";
             }
+
+            System.out.println(marcaEsistente(marca));
 
             // Torna alla home
             changeScene("/com/example/configuratoreautoonline/Home-view.fxml");
@@ -143,12 +163,32 @@ public class InserisciVeicoloController {
         }
     }
 
-    private boolean marcaEsistente(String marca) {
-        return false;
+    // Verifica se la marca esiste già nel JSON
+    public boolean marcaEsistente(String marca) {
+        if (datiModelliAuto == null) {
+            return false;
+        }
+
+        marca = marca.toLowerCase(); // Converte in lowercase per il confronto
+
+        Iterator<String> keys = datiModelliAuto.fieldNames();
+        while (keys.hasNext()) {
+            String key = keys.next();
+            JsonNode modelliNode = datiModelliAuto.get(key);
+            Iterator<String> modelliKeys = modelliNode.fieldNames();
+            while (modelliKeys.hasNext()) {
+                String modelloKey = modelliKeys.next();
+                if (modelloKey.equalsIgnoreCase(marca)) {
+                    return true; // Trovata corrispondenza
+                }
+            }
+        }
+
+        return false; // Marca non trovata
     }
 
-    // controlla se i dati inseriti dall'user sono validi ( lascio la possiblità che l'utente possa inserire un auto senza immagine)
-    public boolean isValid(){
+    // Verifica se i dati inseriti dall'utente sono validi
+    public boolean isValid() {
         if (marcaTxt.getText().isEmpty() || modelloTxt.getText().isEmpty() || coloriTxt.getText().isEmpty() || optionalsTxt.getText().isEmpty() || motorizzazioniTxt.getText().isEmpty()) {
             showAlert("Errore", "Compilare tutti i campi.");
             return false;

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.Label?>
+
+<VBox xmlns:fx="http://javafx.com/fxml" fx:controller="com.example.configuratoreautoonline.ComunicazioniController" spacing="10" alignment="TOP_CENTER" style="-fx-padding: 20;">
+    <Label text="Casella di posta" style="-fx-font-size: 24px;"/>
+    <HBox spacing="10">
+        <Button text="Posta in arrivo" onAction="#handleShowInbox"/>
+        <Button text="Posta inviata" onAction="#handleShowSent"/>
+    </HBox>
+    <ListView fx:id="comunicazioniListView" style="-fx-pref-width: 600px; -fx-pref-height: 400px;"/>
+    <HBox spacing="10">
+        <Button text="Visualizza" onAction="#handleViewMessage"/>
+        <Button text="Elimina" onAction="#handleDeleteMessage"/>
+        <Button fx:id="homeButton" text="Home" onAction="#handleGoHome"/>
+    </HBox>
+    <VBox spacing="10" alignment="TOP_CENTER" style="-fx-padding: 20;">
+        <Label text="Invia un nuovo messaggio" style="-fx-font-size: 18px;"/>
+        <TextField fx:id="emailField" promptText="Email del destinatario" visible="false"/>
+        <TextField fx:id="titoloField" promptText="Titolo"/>
+        <TextArea fx:id="testoField" promptText="Testo del messaggio"/>
+        <Button text="Invia" onAction="#handleSendMessage"/>
+    </VBox>
+</VBox>
