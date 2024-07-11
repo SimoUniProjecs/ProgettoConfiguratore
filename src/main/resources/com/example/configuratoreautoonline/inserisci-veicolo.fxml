@@ -1,15 +1,52 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<AnchorPane prefHeight="513.0" prefWidth="692.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.configuratoreautoonline.InserisciVeicoloController">
-   <Button fx:id="homeButton" onAction="#handleHomeButtonAction" text="Home" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="14.0" />
-   <TextField fx:id="marcaTxt" promptText="Inserisci Marca" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="32.0" AnchorPane.rightAnchor="14.0" />
-   <TextField fx:id="modelloTxt" promptText="Inserisci Modello" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="83.0" AnchorPane.rightAnchor="14.0" />
-   <TextArea fx:id="coloriTxt" prefHeight="80.0" promptText="Inserisci colori separati da una virgola" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="125.0" AnchorPane.rightAnchor="14.0" />
-   <TextArea fx:id="optionalsTxt" prefHeight="80.0" promptText="Inserisci optionals separati da una virgola" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="221.0" AnchorPane.rightAnchor="14.0" />
-   <TextArea fx:id="motorizzazioniTxt" prefHeight="80.0" promptText="Inserisci motorizzazioni separati da una virgola" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="322.0" AnchorPane.rightAnchor="14.0" />
-   <Button fx:id="selezionaImagginiBtn" mnemonicParsing="false" onAction="#handleImageSelection" text="Seleziona immagini" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="412.0" />
-   <HBox fx:id="imageContainer" prefHeight="100.0" prefWidth="664.0" spacing="10.0" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="460.0" AnchorPane.rightAnchor="14.0" />
-   <Button fx:id="caricaConfigurazioneBtn" mnemonicParsing="false" onAction="#oncaricaConfigurazioneBtnClicked" prefHeight="26.0" text="CARICA CONFIGURAZIONE" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="680.0" />
-</AnchorPane>
+<VBox prefHeight="513.0" prefWidth="692.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.configuratoreautoonline.InserisciVeicoloController">
+   <Button fx:id="homeButton" onAction="#handleHomeButtonAction" text="Home" alignment="TOP_RIGHT">
+      <VBox.margin>
+         <Insets top="10.0" right="10.0" bottom="10.0" />
+      </VBox.margin>
+   </Button>
+   <TextField fx:id="marcaTxt" promptText="Inserisci Marca">
+      <VBox.margin>
+         <Insets top="10.0" right="10.0" bottom="10.0" left="10.0" />
+      </VBox.margin>
+   </TextField>
+   <TextField fx:id="modelloTxt" promptText="Inserisci Modello">
+      <VBox.margin>
+         <Insets top="10.0" right="10.0" bottom="10.0" left="10.0" />
+      </VBox.margin>
+   </TextField>
+   <TextArea fx:id="coloriTxt" prefHeight="80.0" promptText="Inserisci colori separati da una virgola">
+      <VBox.margin>
+         <Insets top="10.0" right="10.0" bottom="10.0" left="10.0" />
+      </VBox.margin>
+   </TextArea>
+   <TextArea fx:id="optionalsTxt" prefHeight="80.0" promptText="Inserisci optionals separati da una virgola">
+      <VBox.margin>
+         <Insets top="10.0" right="10.0" bottom="10.0" left="10.0" />
+      </VBox.margin>
+   </TextArea>
+   <TextArea fx:id="motorizzazioniTxt" prefHeight="80.0" promptText="Inserisci motorizzazioni separati da una virgola">
+      <VBox.margin>
+         <Insets top="10.0" right="10.0" bottom="10.0" left="10.0" />
+      </VBox.margin>
+   </TextArea>
+   <Button fx:id="selezionaImagginiBtn" mnemonicParsing="false" onAction="#handleImageSelection" text="Seleziona immagini">
+      <VBox.margin>
+         <Insets top="10.0" right="10.0" bottom="10.0" left="10.0" />
+      </VBox.margin>
+   </Button>
+   <HBox fx:id="imageContainer" prefHeight="100.0" prefWidth="664.0" spacing="10.0">
+      <VBox.margin>
+         <Insets top="10.0" right="10.0" bottom="10.0" left="10.0" />
+      </VBox.margin>
+   </HBox>
+   <Button fx:id="caricaConfigurazioneBtn" mnemonicParsing="false" onAction="#oncaricaConfigurazioneBtnClicked" prefHeight="26.0" text="CARICA CONFIGURAZIONE">
+      <VBox.margin>
+         <Insets top="10.0" right="10.0" bottom="10.0" left="10.0" />
+      </VBox.margin>
+   </Button>
+</VBox>
