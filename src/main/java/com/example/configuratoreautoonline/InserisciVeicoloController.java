@@ -21,7 +21,6 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
-import java.util.Iterator;
 import java.util.List;
 
 public class InserisciVeicoloController {
@@ -69,7 +68,11 @@ public class InserisciVeicoloController {
     }
 
     private void showAlert(String title, String content) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
+        Alert alert;
+        if(title.equals("Successo"))
+            alert = new Alert(Alert.AlertType.INFORMATION);
+        else
+            alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle(title);
         alert.setHeaderText(null);
         alert.setContentText(content);
@@ -156,7 +159,7 @@ public class InserisciVeicoloController {
             System.out.println(marcaEsistente(marca));
 
             // Torna alla home
-            changeScene("/com/example/configuratoreautoonline/Home-view.fxml");
+            //changeScene("/com/example/configuratoreautoonline/Home-view.fxml");
 
             // Mostra un messaggio di successo
             showAlert("Successo", "Auto aggiunta correttamente.");
@@ -165,28 +168,8 @@ public class InserisciVeicoloController {
 
     // Verifica se la marca esiste già nel JSON
     public boolean marcaEsistente(String marca) {
-        if (datiModelliAuto == null) {
-            return false;
-        }
-
-        marca = marca.toLowerCase(); // Converte in lowercase per il confronto
-
-        Iterator<String> keys = datiModelliAuto.fieldNames();
-        while (keys.hasNext()) {
-            String key = keys.next();
-            JsonNode modelliNode = datiModelliAuto.get(key);
-            Iterator<String> modelliKeys = modelliNode.fieldNames();
-            while (modelliKeys.hasNext()) {
-                String modelloKey = modelliKeys.next();
-                if (modelloKey.equalsIgnoreCase(marca)) {
-                    return true; // Trovata corrispondenza
-                }
-            }
-        }
-
         return false; // Marca non trovata
     }
-
     // Verifica se i dati inseriti dall'utente sono validi
     public boolean isValid() {
         if (marcaTxt.getText().isEmpty() || modelloTxt.getText().isEmpty() || coloriTxt.getText().isEmpty() || optionalsTxt.getText().isEmpty() || motorizzazioniTxt.getText().isEmpty()) {
