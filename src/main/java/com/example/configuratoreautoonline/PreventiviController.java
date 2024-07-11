@@ -148,7 +148,7 @@ public class PreventiviController {
 
     private void showConfirmDialog(Configurazione preventivo) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Conferma Preventivo");
+        alert.setTitle("Paga Acconto");
         alert.setHeaderText(null);
         alert.setContentText("Sei sicuro di voler confermare questo preventivo?");
 

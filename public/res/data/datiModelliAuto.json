@@ -120,22 +120,5 @@
         }
       } ]
     } ]
-  }, {
-    "sassoyoink" : {
-      "modelli" : [ {
-        "ST" : {
-          "colori" : [ "blu €1500, rosso €1800, verde €1600" ],
-          "optionals" : [ "cerchi maggiorati €900, freni rossi €400, interni pelle €3000" ],
-          "motorizzazioni" : [ {
-            "cilindrata" : "2.9 L",
-            "potenza" : "432 CV",
-            "coppia" : "234Nm",
-            "alimentazione" : "Benzina",
-            "prezzo" : "120000 EUR"
-          } ],
-          "percorsoImg" : "src/main/resources/img/SASSOYOINK/"
-        }
-      } ]
-    }
   } ]
 }

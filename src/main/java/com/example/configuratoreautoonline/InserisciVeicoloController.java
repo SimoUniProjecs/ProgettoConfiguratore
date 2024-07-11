@@ -248,34 +248,39 @@ public class InserisciVeicoloController {
             ArrayNode datiModelliAutoNode = (ArrayNode) root.get("datiModelliAuto");
 
             boolean marcaTrovata = false;
-            JsonNode marcaNode = null;
 
             // Cerca la marca nel JSON
             for (JsonNode node : datiModelliAutoNode) {
-                marcaNode = node.get(marca.toLowerCase());
-                if (marcaNode != null && !marcaNode.isNull()) {
+                if (node.has(marca.toLowerCase())) {
                     marcaTrovata = true;
+                    ObjectNode marcaNode = (ObjectNode) node.get(marca.toLowerCase());
+
+                    // Crea il nuovo modello da aggiungere
+                    ObjectNode nuovoModello = creaModelloNode(objectMapper, modello, colori, optionals, motorizzazioni);
+
+                    // Aggiungi il modello alla marca esistente
+                    ArrayNode modelliArray = (ArrayNode) marcaNode.get("modelli");
+                    modelliArray.add(nuovoModello);
                     break;
                 }
             }
 
-            // Crea il nuovo modello da aggiungere
-            ObjectNode nuovoModello = objectMapper.createObjectNode();
-            ObjectNode modelloNode = creaModelloNode(objectMapper, colori, optionals, motorizzazioni);
-            nuovoModello.set(modello, modelloNode);
-
-            if (marcaTrovata && marcaNode != null) {
-                // Aggiungi il modello alla marca esistente
-                ((ArrayNode) marcaNode.get("modelli")).add(nuovoModello);
-            } else {
+            if (!marcaTrovata) {
                 // Crea una nuova marca
                 ObjectNode nuovaMarca = objectMapper.createObjectNode();
                 ArrayNode modelliArray = objectMapper.createArrayNode();
+
+                // Crea il nuovo modello da aggiungere
+                ObjectNode nuovoModello = creaModelloNode(objectMapper, modello, colori, optionals, motorizzazioni);
                 modelliArray.add(nuovoModello);
+
                 nuovaMarca.set("modelli", modelliArray);
+
                 // Aggiungi la nuova marca alla radice del JSON
                 ObjectNode nuovaMarcaContainer = objectMapper.createObjectNode();
                 nuovaMarcaContainer.set(marca.toLowerCase(), nuovaMarca);
+
+                // Aggiungi la nuova marca all'array principale
                 datiModelliAutoNode.add(nuovaMarcaContainer);
             }
 
@@ -287,22 +292,23 @@ public class InserisciVeicoloController {
             showAlert("Errore", "Impossibile scrivere i dati nel file JSON.");
         }
     }
-    private ObjectNode creaModelloNode(ObjectMapper objectMapper, List<String> colori, List<String> optionals, List<String> motorizzazioni) {
+
+    private ObjectNode creaModelloNode(ObjectMapper objectMapper, String modello, List<String> colori, List<String> optionals, List<String> motorizzazioni) {
         ObjectNode modelloNode = objectMapper.createObjectNode();
 
         // Creazione dell'array per i colori
         ArrayNode coloriArray = objectMapper.createArrayNode();
-        coloriArray.add(coloriTxt.getText());
+        colori.forEach(coloriArray::add);
         modelloNode.set("colori", coloriArray);
 
         // Creazione dell'array per gli optionals
         ArrayNode optionalsArray = objectMapper.createArrayNode();
-        optionalsArray.add(optionalsTxt.getText());
+        optionals.forEach(optionalsArray::add);
         modelloNode.set("optionals", optionalsArray);
 
         // Creazione dell'array per le motorizzazioni
         ArrayNode motorizzazioniArray = objectMapper.createArrayNode();
-        motorizzazioni.forEach(motorizzazione -> {
+        for (String motorizzazione : motorizzazioni) {
             String[] parts = motorizzazione.split(", "); // Dividi la stringa per ottenere i dettagli della motorizzazione
             ObjectNode motorizzazioneNode = objectMapper.createObjectNode();
             motorizzazioneNode.put("cilindrata", parts[0].trim());
@@ -311,13 +317,15 @@ public class InserisciVeicoloController {
             motorizzazioneNode.put("alimentazione", parts[3].trim());
             motorizzazioneNode.put("prezzo", parts[4].trim());
             motorizzazioniArray.add(motorizzazioneNode);
-        });
+        }
         modelloNode.set("motorizzazioni", motorizzazioniArray);
 
+        // Aggiungi il percorso immagine
         modelloNode.put("percorsoImg", pathRadice);
 
         return modelloNode;
     }
+
     // Verifica se la marca esiste già nel JSON
     public boolean marcaEsistente(String marca) {
         loadJsonData();
