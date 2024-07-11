@@ -250,7 +250,7 @@ public class InserisciVeicoloController {
             boolean marcaTrovata = false;
             JsonNode marcaNode = null;
 
-            // Controlla se la marca esiste già nel JSON
+            // Cerca la marca nel JSON
             for (JsonNode node : datiModelliAutoNode) {
                 marcaNode = node.get(marca.toLowerCase());
                 if (marcaNode != null && !marcaNode.isNull()) {
@@ -261,7 +261,8 @@ public class InserisciVeicoloController {
 
             // Crea il nuovo modello da aggiungere
             ObjectNode nuovoModello = objectMapper.createObjectNode();
-            nuovoModello.set(modello, creaModelloNode(objectMapper, colori, optionals, motorizzazioni));
+            ObjectNode modelloNode = creaModelloNode(objectMapper, colori, optionals, motorizzazioni);
+            nuovoModello.set(modello, modelloNode);
 
             if (marcaTrovata && marcaNode != null) {
                 // Aggiungi il modello alla marca esistente
@@ -286,26 +287,37 @@ public class InserisciVeicoloController {
             showAlert("Errore", "Impossibile scrivere i dati nel file JSON.");
         }
     }
-
     private ObjectNode creaModelloNode(ObjectMapper objectMapper, List<String> colori, List<String> optionals, List<String> motorizzazioni) {
         ObjectNode modelloNode = objectMapper.createObjectNode();
+
+        // Creazione dell'array per i colori
         ArrayNode coloriArray = objectMapper.createArrayNode();
-        colori.forEach(coloriArray::add);
+        coloriArray.add(coloriTxt.getText());
         modelloNode.set("colori", coloriArray);
 
+        // Creazione dell'array per gli optionals
         ArrayNode optionalsArray = objectMapper.createArrayNode();
-        optionals.forEach(optionalsArray::add);
+        optionalsArray.add(optionalsTxt.getText());
         modelloNode.set("optionals", optionalsArray);
 
+        // Creazione dell'array per le motorizzazioni
         ArrayNode motorizzazioniArray = objectMapper.createArrayNode();
-        motorizzazioni.forEach(motorizzazioniArray::add);
+        motorizzazioni.forEach(motorizzazione -> {
+            String[] parts = motorizzazione.split(", "); // Dividi la stringa per ottenere i dettagli della motorizzazione
+            ObjectNode motorizzazioneNode = objectMapper.createObjectNode();
+            motorizzazioneNode.put("cilindrata", parts[0].trim());
+            motorizzazioneNode.put("potenza", parts[1].trim());
+            motorizzazioneNode.put("coppia", parts[2].trim());
+            motorizzazioneNode.put("alimentazione", parts[3].trim());
+            motorizzazioneNode.put("prezzo", parts[4].trim());
+            motorizzazioniArray.add(motorizzazioneNode);
+        });
         modelloNode.set("motorizzazioni", motorizzazioniArray);
 
-        // Nota: Assicurati di impostare altri campi necessari come percorsoImg, ecc.
+        modelloNode.put("percorsoImg", pathRadice);
 
         return modelloNode;
     }
-
     // Verifica se la marca esiste già nel JSON
     public boolean marcaEsistente(String marca) {
         loadJsonData();
