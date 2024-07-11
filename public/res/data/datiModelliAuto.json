@@ -120,26 +120,6 @@
         }
       } ]
     } ],
-    "asd" : {
-      "modelli" : [ {
-        "r2" : {
-          "colori" : [ "asd" ],
-          "optionals" : [ "ads" ],
-          "motorizzazioni" : [ ],
-          "percorsoImg" : "src/main/resources/img/asd/r2/"
-        }
-      } ]
-    },
-    "daivdpip" : {
-      "modelli" : [ {
-        "RSD" : {
-          "colori" : [ "asd" ],
-          "optionals" : [ "ads" ],
-          "motorizzazioni" : [ ],
-          "percorsoImg" : "src/main/resources/img/DAIVDPIP/RSD/"
-        }
-      } ]
-    },
     "davidong" : {
       "modelli" : [ {
         "yoink" : {
@@ -152,7 +132,7 @@
             "alimentazione" : "Benzina",
             "prezzo" : "20 EUR"
           } ],
-          "percorsoImg" : "src/main/resources/img/DAVIDONG/yoink/"
+          "percorsoImg" : "src/main/resources/img/DAVIDONG/YOINK/"
         }
       } ]
     }

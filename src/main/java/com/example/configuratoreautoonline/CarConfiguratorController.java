@@ -626,6 +626,7 @@ public class CarConfiguratorController {
     }
     // Aggiorna l'immagine caricata in base al modello e al colore selezionati e optionals
     public void updateImage() {
+        interniBtn.setText("Visualizza Interni");
         if (modelloComboBox.getValue() != null &&
                 coloreComboBox.getValue() != null &&
                 motorizzazioneComboBox.getValue() != null) {

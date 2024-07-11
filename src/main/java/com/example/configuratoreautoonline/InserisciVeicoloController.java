@@ -43,6 +43,7 @@ public class InserisciVeicoloController {
     private HBox imageContainer;
     private JsonNode datiModelliAuto;
     private Stage stage;
+    private String pathRadice;
 
     // Carica datiModelliAuto.json in datiModelliAuto
     private void loadJsonData() {
@@ -56,12 +57,10 @@ public class InserisciVeicoloController {
             showAlert("Errore di caricamento", "Impossibile caricare i dati del file JSON.");
         }
     }
-
     @FXML
     public void initialize() {
         loadJsonData();
     }
-
     public void setStage(Stage stage) {
         this.stage = stage;
     }
@@ -152,8 +151,6 @@ public class InserisciVeicoloController {
             List<String> optionals = List.of(optionalsTxt.getText().split(","));
             List<String> motorizzazioni = List.of(motorizzazioniTxt.getText().split(";")); // Assume motorizzazioni are separated by semicolons
 
-            String pathRadice;
-
             if (marcaEsistente(marca.toUpperCase())) {
                 if (modelloEsistente(modello, marca)) {
                     showAlert("Errore: duplicato trovato", "Il modello inserito è già presente nel database.");
@@ -200,7 +197,7 @@ public class InserisciVeicoloController {
             showAlert("Successo", "Auto aggiunta correttamente.");
 
             // Torna alla home (scommenta se necessario)
-            // changeScene("/com/example/configuratoreautoonline/Home-view.fxml");
+            changeScene("/com/example/configuratoreautoonline/Home-view.fxml");
         }
     }
 
@@ -271,7 +268,7 @@ public class InserisciVeicoloController {
         modelloNode.set("colori", coloriArray);
         modelloNode.set("optionals", optionalsArray);
         modelloNode.set("motorizzazioni", motorizzazioniArray);
-        modelloNode.put("percorsoImg", "src/main/resources/img/" + marcaTxt.getText() + "/" + modelloTxt.getText() + "/");
+        modelloNode.put("percorsoImg", pathRadice);
 
         return modelloNode;
     }
@@ -285,21 +282,7 @@ public class InserisciVeicoloController {
             boolean marcaTrovata = false;
             JsonNode marcaNode = null;
 
-            // Cerca se la marca esiste già
-            for (JsonNode concessionarioNode : datiModelliAutoNode) {
-                Iterator<String> keys = concessionarioNode.fieldNames();
-                while (keys.hasNext()) {
-                    String key = keys.next();
-                    if (key.equalsIgnoreCase(marca)) {
-                        marcaNode = concessionarioNode.get(key);
-                        marcaTrovata = true;
-                        break;
-                    }
-                }
-                if (marcaTrovata) {
-                    break;
-                }
-            }
+            marcaTrovata = marcaEsistente(marca.toUpperCase());
 
             // Crea il nuovo modello da aggiungere
             ObjectNode nuovoModello = objectMapper.createObjectNode();
@@ -325,7 +308,6 @@ public class InserisciVeicoloController {
             showAlert("Errore", "Impossibile scrivere i dati nel file JSON.");
         }
     }
-
     // Verifica se la marca esiste già nel JSON
     public boolean marcaEsistente(String marca) {
         loadJsonData();
@@ -349,8 +331,6 @@ public class InserisciVeicoloController {
         }
         return false; // Marca non trovata
     }
-
-
     // Verifica se i dati inseriti dall'utente sono validi
     public boolean isValid() {
         if (marcaTxt.getText().isEmpty() || modelloTxt.getText().isEmpty() || coloriTxt.getText().isEmpty() || optionalsTxt.getText().isEmpty() || motorizzazioniTxt.getText().isEmpty()) {
@@ -359,5 +339,4 @@ public class InserisciVeicoloController {
         }
         return true;
     }
-
 }
