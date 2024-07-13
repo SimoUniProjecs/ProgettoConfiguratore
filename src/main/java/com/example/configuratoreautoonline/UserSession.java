@@ -4,23 +4,24 @@ import Enums.Concessionari;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleStringProperty;
 
 public class UserSession extends PersonSession {
+    // Istanza unica della classe
     private static UserSession instance;
     private SimpleBooleanProperty loggato;
     private SimpleIntegerProperty permessi;
     private Concessionari concessionario;
 
-
-    public UserSession() {
+    // Costruttore privato per evitare la creazione di nuove istanze
+    private UserSession() {
         super();
         loggato = new SimpleBooleanProperty(false);
         permessi = new SimpleIntegerProperty();
         concessionario = Concessionari.CONCESSIONARIO1;
     }
 
-    public static UserSession getInstance() {
+    // Metodo pubblico statico per ottenere l'istanza unica della classe
+    public static synchronized UserSession getInstance() {
         if (instance == null) {
             instance = new UserSession();
         }
@@ -34,12 +35,15 @@ public class UserSession extends PersonSession {
     public void setPermessi(int permessi) {
         this.permessi.set(permessi);
     }
+
     public boolean isLoggato() {
         return loggato.get();
     }
+
     public void setLoggato(boolean loggato) {
         this.loggato.set(loggato);
     }
+
     public BooleanProperty loggatoProperty() {
         return loggato;
     }

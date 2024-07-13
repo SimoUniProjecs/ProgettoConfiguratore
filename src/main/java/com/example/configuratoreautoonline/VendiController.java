@@ -44,6 +44,8 @@ public class VendiController extends Application {
     @FXML
     private ChoiceBox<String> carburanteChoiceBox;
 
+    private String email;
+
     private Stage stage;
 
     public static void main(String[] args) {
@@ -132,6 +134,9 @@ public class VendiController extends Application {
             ObjectMapper mapper = new ObjectMapper();
             File file = new File("public/res/data/datiAutoUsate.json");
 
+            UserSession session = UserSession.getInstance();
+            email = session.getEmail();
+
             try {
                 // Leggi il file JSON esistente o crea uno nuovo se non esiste
                 ObjectNode root;
@@ -154,7 +159,7 @@ public class VendiController extends Application {
                 auto.put("immagine", imagePath);
                 auto.put("km", kmTxt.getText());
                 auto.put("prezzo", -1); // Prezzo non specificato (da calcolare in seguito dalla segretaria)
-
+                auto.put("email", email); // Email dell'utente che ha richiesto il preventivo (da recuperare dalla sessione
                 // Gestione dell'input per il campo proprietari
                 Integer proprietari = safelyParseInteger(proprietariTxt.getText());
                 if (proprietari == null) {

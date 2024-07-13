@@ -18,6 +18,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -43,6 +44,8 @@ public class ValutaUsatiController extends Application {
     private Label immatricolazione;
     @FXML
     private TextField prezzoStimatoField;
+    @FXML
+    private Label emailLabel;
 
     private Stage stage;
     private JsonNode rootNode;
@@ -50,6 +53,7 @@ public class ValutaUsatiController extends Application {
     private Iterator<JsonNode> autoIterator;
     private JsonNode currentAuto;
     private String jsonFilePath = "public/res/data/datiAutoUsate.json";
+    private String preventiviFilePath = "public/res/data/preventivi.json";
 
     public static void main(String[] args) {
         launch(args);
@@ -68,7 +72,6 @@ public class ValutaUsatiController extends Application {
     @FXML
     public void initialize() {
         stage = new Stage();
-        // Carica i dati dal JSON e imposta i campi nel controller
         loadJSONData(jsonFilePath);
         loadNextValidAuto();
     }
@@ -78,43 +81,71 @@ public class ValutaUsatiController extends Application {
         loadNextValidAuto();
     }
 
-    // Quando l'utente clicca sul pulsante "Stima" e viene salvato il prezzo stimato
     @FXML
     public void onStimaBtnClicked(ActionEvent event) {
         if (currentAuto != null) {
             try {
-                // Modifica il prezzo dell'auto corrente
-                ((ObjectNode) currentAuto).put("prezzo", prezzoStimatoField.getText());
+                // Modifica il prezzo dell'auto corrente e salva come numero
+                int prezzoStima = Integer.parseInt(prezzoStimatoField.getText());
+                ((ObjectNode) currentAuto).put("prezzo", prezzoStima);
 
-                // Scrivi il JSON modificato nel file
+                // Scrivi il JSON modificato nel file datiAutoUsate.json
                 ObjectMapper objectMapper = new ObjectMapper();
                 objectMapper.writerWithDefaultPrettyPrinter().writeValue(Paths.get(jsonFilePath).toFile(), rootNode);
 
-                // Mostra un messaggio di successo
-                showAlert("Stima", "Stima del veicolo effettuata con successo!");
+                // Aggiorna il preventivo associato
+                File preventiviFile = new File(preventiviFilePath);
+
+                if (preventiviFile.exists() && preventiviFile.length() != 0) {
+                    JsonNode preventiviRoot = objectMapper.readTree(preventiviFile);
+                    ArrayNode preventiviArray = (ArrayNode) preventiviRoot;
+
+                    boolean preventivoTrovato = false;
+
+                    for (JsonNode preventivoNode : preventiviArray) {
+                        if (preventivoNode.get("emailCliente").asText().equals(currentAuto.get("email").asText())) {
+                            // Modifica il prezzo del preventivo e imposta scontoUsato a true
+                            int prezzoPreventivo = preventivoNode.get("prezzo").asInt();
+                            int nuovoPrezzo = prezzoPreventivo - prezzoStima;
+
+                            ((ObjectNode) preventivoNode).put("prezzo", nuovoPrezzo);
+                            ((ObjectNode) preventivoNode).put("scontoUsato", true);
+
+                            // Salva i dati modificati nel file preventivi.json
+                            objectMapper.writerWithDefaultPrettyPrinter().writeValue(preventiviFile, preventiviRoot);
+
+                            showAlert("Stima", "Stima del veicolo effettuata con successo!");
+                            preventivoTrovato = true;
+                            break;
+                        }
+                    }
+
+                    if (!preventivoTrovato) {
+                        showAlert("Errore", "Non ci sono preventivi associati all'email del cliente.");
+                    }
+
+                } else {
+                    showAlert("Errore", "Il file dei preventivi non esiste o è vuoto.");
+                }
+
             } catch (IOException e) {
                 showAlert("JSON Error", "Errore durante la scrittura dei dati nel file JSON: " + e.getMessage());
-                e.printStackTrace(); // Stampa lo stack trace per il debug
+                e.printStackTrace();
+            } catch (NumberFormatException e) {
+                showAlert("Input Error", "Inserisci un prezzo valido.");
             }
         } else {
             showAlert("Stima", "Nessun dato di veicolo da stimare.");
         }
     }
 
-    // legge li file json e filtra le auto con prezzo minore di 0 ( quindi da valutare )
     private void loadJSONData(String jsonFilePath) {
         try {
-            // Legge il contenuto del file JSON
             String jsonContent = new String(Files.readAllBytes(Paths.get(jsonFilePath)));
-
-            // Converte il contenuto JSON in un oggetto JsonNode
             ObjectMapper objectMapper = new ObjectMapper();
             rootNode = objectMapper.readTree(jsonContent);
 
-            // Estrai l'array "datiAutoUsate"
             ArrayNode autoArray = (ArrayNode) rootNode.get("datiAutoUsate");
-
-            // Filtra le auto con prezzo diverso da -1
             filteredAutoList = new ArrayList<>();
             for (JsonNode auto : autoArray) {
                 if (auto.get("prezzo").asInt() < 0) {
@@ -125,11 +156,10 @@ public class ValutaUsatiController extends Application {
             autoIterator = filteredAutoList.iterator();
         } catch (IOException e) {
             showAlert("JSON Error", "Errore durante la lettura del file JSON: " + e.getMessage());
-            e.printStackTrace(); // Stampa lo stack trace per il debug
+            e.printStackTrace();
         }
     }
 
-    // Carica il prossimo veicolo valido
     private void loadNextValidAuto() {
         if (autoIterator.hasNext()) {
             currentAuto = autoIterator.next();
@@ -140,7 +170,6 @@ public class ValutaUsatiController extends Application {
         }
     }
 
-    // popola i campi con i dati dell'auto corrente
     private void updateUI(JsonNode autoNode) {
         marcaTxt.setText(autoNode.get("marca").asText());
         modelloTxt.setText(autoNode.get("modello").asText());
@@ -148,14 +177,13 @@ public class ValutaUsatiController extends Application {
         proprietariTxt.setText(String.valueOf(autoNode.get("proprietari").asInt()));
         immatricolazione.setText(autoNode.get("anno").asText());
         prezzoStimatoField.setText(autoNode.get("prezzo").asText());
+        emailLabel.setText("Email proprietario: " + autoNode.get("email").asText());
 
-        // Imposta l'immagine del veicolo
         String imagePath = autoNode.get("immagine").asText();
         Image image = new Image(Paths.get(imagePath).toUri().toString());
         imageView.setImage(image);
     }
 
-    // svuota tutti i campi
     private void resetUI() {
         marcaTxt.setText("");
         modelloTxt.setText("");
@@ -163,6 +191,7 @@ public class ValutaUsatiController extends Application {
         proprietariTxt.setText("");
         immatricolazione.setText("");
         prezzoStimatoField.setText("");
+        emailLabel.setText("");
         imageView.setImage(null);
     }
 
@@ -173,22 +202,20 @@ public class ValutaUsatiController extends Application {
         alert.setContentText(content);
         alert.show();
     }
+
     private void changeScene(String fxmlFile) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlFile));
             Parent root = loader.load();
             Scene scene = new Scene(root);
-
-            // Ottieni lo Stage dalla scena corrente
             Stage currentStage = (Stage) pannelloAncora.getScene().getWindow();
             currentStage.setScene(scene);
             currentStage.show();
         } catch (Exception e) {
             showAlert("Error loading scene", "Cannot load scene from file: " + fxmlFile + "\n" + e.getMessage());
-            e.printStackTrace(); // Stampa lo stack trace per il debug
+            e.printStackTrace();
         }
     }
-
 
     public void handleHomeButtonAction(ActionEvent event) {
         changeScene("/com/example/configuratoreautoonline/Home-view.fxml");

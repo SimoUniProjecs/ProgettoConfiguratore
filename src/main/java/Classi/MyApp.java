@@ -34,6 +34,7 @@ public class MyApp extends Application {
 
             // Mostra la finestra
             primaryStage.show();
+            primaryStage.setFullScreen(true);
         } catch (IOException e) {
             e.printStackTrace();
         }

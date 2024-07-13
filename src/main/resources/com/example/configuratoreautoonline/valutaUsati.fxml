@@ -8,6 +8,7 @@
     <children>
         <ImageView fx:id="imageView" fitHeight="190.0" fitWidth="298.0" layoutX="151.0" layoutY="41.0" pickOnBounds="true" preserveRatio="true" />
         <Label layoutX="246.0" layoutY="245.0" text="DATI DEL VEICOLO" />
+        <Label fx:id="emailLabel" layoutX="231.0" layoutY="214.0" />
         <Label layoutX="231.0" layoutY="276.0" text="Marca:" />
         <Label layoutX="231.0" layoutY="303.0" text="Modello:" />
         <Label layoutX="231.0" layoutY="328.0" text="km:" />

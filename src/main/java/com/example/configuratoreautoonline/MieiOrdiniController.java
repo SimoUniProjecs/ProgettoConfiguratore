@@ -306,7 +306,9 @@ public class MieiOrdiniController {
             Scene homeScene = new Scene(homeView);
             Stage stage = (Stage) homeButton.getScene().getWindow();
             stage.setScene(homeScene);
+
             stage.show();
+            stage.setFullScreen(true);
         } catch (IOException e) {
             e.printStackTrace();
             showAlert("Error", "Unable to load home view.");

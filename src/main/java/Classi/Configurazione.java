@@ -1,6 +1,8 @@
 package Classi;
 
 import Enums.Concessionari;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -13,11 +15,15 @@ public class Configurazione {
     private Motorizzazione motorizzazione;
     private List<String> optionals;
     private int prezzo;
+
     private String emailCliente;
     private Concessionari luogoConcessionario;
     private String dataArrivo;
     private boolean pagato = false;
     private String dataPreventivo;
+
+    private boolean scontoUsato = false;
+
 
     public Configurazione() {}
 
@@ -96,6 +102,16 @@ public class Configurazione {
     public void setPrezzo(int prezzo) {
         this.prezzo = prezzo;
     }
+
+    public boolean isScontoUsato() {
+        return scontoUsato;
+    }
+
+    public void setScontoUsato(boolean scontoUsato) {
+        this.scontoUsato = scontoUsato;
+    }
+
+
 
     public String getEmailCliente() {
         return emailCliente;

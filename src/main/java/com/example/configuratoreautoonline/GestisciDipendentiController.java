@@ -54,6 +54,7 @@ public class GestisciDipendentiController {
 
                 // Chiudi la finestra di modificare permessi
                 Stage stage = (Stage) numberFieldGD.getScene().getWindow();
+
                 stage.close();
 
             } catch (IOException e) {

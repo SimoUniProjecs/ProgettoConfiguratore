@@ -55,6 +55,8 @@ public class HomeController {
     @FXML
     private Menu userNameMenu;
     @FXML
+    private MenuItem switchToPreventiviSegretaria;
+    @FXML
     private Menu VendiMenu;
     @FXML
     private Menu loginVisibilityMenu;
@@ -116,9 +118,12 @@ public class HomeController {
             // Ottieni lo Stage dalla scena corrente
             Stage currentStage = (Stage) pannelloAncora.getScene().getWindow();
 
+
             Scene scene = new Scene(root);
+
             currentStage.setScene(scene); // Usa il currentStage
             currentStage.show();
+            currentStage.setFullScreen(true);
         } catch (IOException e) {
             showAlert("Error loading scene", "Cannot load scene from file: " + fxmlFile + "\n" + e.getMessage());
             e.printStackTrace();
@@ -134,6 +139,7 @@ public class HomeController {
             Stage currentStage = (Stage) pannelloAncora.getScene().getWindow();
             currentStage.setScene(scene);
             currentStage.show();
+            currentStage.setFullScreen(true);
         } catch (Exception e) {
             showAlert("Error loading scene", "Cannot load scene from file: " + fxmlFile + "\n" + e.getMessage());
             e.printStackTrace(); // Stampa lo stack trace per il debug
@@ -366,5 +372,9 @@ public class HomeController {
     }
     public void handleSwitchToSegretariaClick(ActionEvent event) {
         changeScene("/com/example/configuratoreautoonline/segretaria.fxml");
+    }
+
+    public void handleSwitchToPreventiviSegretariaClick(ActionEvent actionEvent) {
+        changeScene("/com/example/configuratoreautoonline/preventivi-segretaria.fxml");
     }
 }

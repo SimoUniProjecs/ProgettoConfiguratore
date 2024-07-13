@@ -7,9 +7,10 @@
     "anno" : "2011-07-08",
     "immagine" : "public/res/images/micra.jpg",
     "km" : "150000",
-    "prezzo" : "15000",
+    "prezzo" : 20000,
     "proprietari" : 1,
-    "condizioni" : 1
+    "condizioni" : 1,
+    "email" : "prova@gmail.com"
   }, {
     "marca" : "suzuki",
     "modello" : "vitara",
@@ -20,6 +21,7 @@
     "km" : "12313",
     "prezzo" : -1,
     "proprietari" : 1,
-    "condizioni" : 6
+    "condizioni" : 6,
+    "email" : "prova@gmail.com"
   } ]
 }

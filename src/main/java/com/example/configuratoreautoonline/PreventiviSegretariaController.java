@@ -4,7 +4,6 @@ import Classi.Configurazione;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -14,8 +13,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.File;
@@ -26,9 +25,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.Iterator;
 import java.util.Optional;
 
-public class PreventiviController {
-
-    public TableColumn<Configurazione, Boolean> scontoColum;
+public class PreventiviSegretariaController {
     @FXML
     private TableView<Configurazione> tableView;
     @FXML
@@ -49,8 +46,6 @@ public class PreventiviController {
     private TableColumn<Configurazione, String> concessionarioColumn;
     @FXML
     private TableColumn<Configurazione, String> giorniRimanentiColumn;
-    @FXML
-    private TableColumn<Configurazione, Void> actionColumn;
 
     @FXML
     private Button homeButton;
@@ -73,19 +68,11 @@ public class PreventiviController {
             return new SimpleStringProperty(giorniRimanenti > 0 ? String.valueOf(giorniRimanenti) : "Scaduto");
         });
 
-        scontoColum.setCellValueFactory(cellData -> {
-            Configurazione config = cellData.getValue();
-            return new SimpleBooleanProperty(config.isScontoUsato());
-        });
-        scontoColum.setCellFactory(CheckBoxTableCell.forTableColumn(scontoColum));
-
         loadPreventivi();
         addButtonToTable();
     }
 
     private void loadPreventivi() {
-        UserSession session = UserSession.getInstance();
-        String userEmail = session.getEmail();
         preventivi = FXCollections.observableArrayList();
         ObjectMapper objectMapper = new ObjectMapper();
         File file = new File("public/res/data/preventivi.json");
@@ -97,17 +84,14 @@ public class PreventiviController {
                     Iterator<JsonNode> iterator = root.iterator();
                     while (iterator.hasNext()) {
                         JsonNode node = iterator.next();
-                        JsonNode emailNode = node.get("emailCliente");
-                        if (emailNode != null && emailNode.asText().equals(userEmail)) {
-                            JsonNode dataPreventivoNode = node.get("dataPreventivo");
-                            if (dataPreventivoNode != null) {
-                                LocalDate dataPreventivo = LocalDate.parse(dataPreventivoNode.asText(), DateTimeFormatter.ISO_DATE);
-                                if (ChronoUnit.DAYS.between(dataPreventivo, LocalDate.now()) <= 20) {
-                                    Configurazione configurazione = objectMapper.treeToValue(node, Configurazione.class);
-                                    preventivi.add(configurazione);
-                                } else {
-                                    iterator.remove();
-                                }
+                        JsonNode dataPreventivoNode = node.get("dataPreventivo");
+                        if (dataPreventivoNode != null) {
+                            LocalDate dataPreventivo = LocalDate.parse(dataPreventivoNode.asText(), DateTimeFormatter.ISO_DATE);
+                            if (ChronoUnit.DAYS.between(dataPreventivo, LocalDate.now()) <= 20) {
+                                Configurazione configurazione = objectMapper.treeToValue(node, Configurazione.class);
+                                preventivi.add(configurazione);
+                            } else {
+                                iterator.remove();
                             }
                         }
                     }
@@ -129,12 +113,12 @@ public class PreventiviController {
             public TableCell<Configurazione, Void> call(final TableColumn<Configurazione, Void> param) {
                 final TableCell<Configurazione, Void> cell = new TableCell<>() {
 
-                    private final Button btn = new Button("Conferma");
+                    private final Button btn = new Button("Modifica Data");
 
                     {
                         btn.setOnAction((ActionEvent event) -> {
                             Configurazione data = getTableView().getItems().get(getIndex());
-                            showConfirmDialog(data);
+                            showEditDateDialog(data);
                         });
                     }
 
@@ -156,45 +140,35 @@ public class PreventiviController {
         tableView.getColumns().add(colBtn);
     }
 
-    private void showConfirmDialog(Configurazione preventivo) {
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Paga Acconto");
-        alert.setHeaderText(null);
-        alert.setContentText("Sei sicuro di voler confermare questo preventivo?");
+    private void showEditDateDialog(Configurazione configurazione) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/configuratoreautoonline/edit-dialog.fxml"));
+            Parent root = loader.load();
 
-        ButtonType buttonTypeYes = new ButtonType("Sì");
-        ButtonType buttonTypeNo = new ButtonType("No", ButtonBar.ButtonData.CANCEL_CLOSE);
+            EditDateController controller = loader.getController();
+            controller.setConfigurazione(configurazione);
 
-        alert.getButtonTypes().setAll(buttonTypeYes, buttonTypeNo);
+            Stage stage = new Stage();
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setTitle("Modifica Data Preventivo");
+            stage.setScene(new Scene(root));
+            stage.showAndWait();
 
-        Optional<ButtonType> result = alert.showAndWait();
-        if (result.isPresent() && result.get() == buttonTypeYes) {
-            confermaPreventivo(preventivo);
+            // Save changes and refresh table
+            saveConfigurations();
+            tableView.refresh();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
-    private void confermaPreventivo(Configurazione preventivo) {
+    private void saveConfigurations() {
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
-        File ordiniFile = new File("public/res/data/ordini.json");
-        File preventiviFile = new File("public/res/data/preventivi.json");
+        File file = new File("public/res/data/preventivi.json");
 
         try {
-            // Aggiungi il preventivo agli ordini
-            ObservableList<Configurazione> ordini = FXCollections.observableArrayList();
-            if (ordiniFile.exists() && ordiniFile.length() != 0) {
-                ordini.addAll(objectMapper.readValue(ordiniFile, Configurazione[].class));
-            }
-            ordini.add(preventivo);
-            objectMapper.writeValue(ordiniFile, ordini);
-
-            // Rimuovi il preventivo dai preventivi
-            preventivi.remove(preventivo);
-            objectMapper.writeValue(preventiviFile, preventivi);
-
-            // Aggiorna la tabella
-            tableView.setItems(preventivi);
-
+            objectMapper.writeValue(file, preventivi);
         } catch (IOException e) {
             e.printStackTrace();
         }

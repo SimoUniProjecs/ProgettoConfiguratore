@@ -120,5 +120,20 @@
         }
       } ]
     } ]
+  }, {
+    "fenomeno" : {
+      "modelli" : [ {
+        "colori" : [ "blu", " verde", " arancio\t" ],
+        "optionals" : [ "verde", " amaranto interior" ],
+        "motorizzazioni" : [ {
+          "cilindrata" : "2.9 L",
+          "potenza" : "432 CV",
+          "coppia" : "234Nm",
+          "alimentazione" : "Benzina",
+          "prezzo" : "120000 EUR"
+        } ],
+        "percorsoImg" : "src/main/resources/img/FENOMENO/"
+      } ]
+    }
   } ]
 }

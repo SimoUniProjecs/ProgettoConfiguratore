@@ -195,7 +195,9 @@ public class ComunicazioniController {
             Scene homeScene = new Scene(homeView);
             Stage stage = (Stage) homeButton.getScene().getWindow();
             stage.setScene(homeScene);
+
             stage.show();
+            stage.setFullScreen(true);
         } catch (IOException e) {
             e.printStackTrace();
         }
