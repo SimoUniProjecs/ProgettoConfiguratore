@@ -654,7 +654,7 @@ public class CarConfiguratorController {
             if (internoCheck.isSelected() && optional.contains("interni pelle")) {
                 prezzoDaAggiungere += estraiPrezzoDaStringa(optional);
             }
-            if (impiantoAudioCheck.isSelected() && optional.contains("impianto Audio maggiorato")) {
+            if (impiantoAudioCheck.isSelected() && optional.contains("impianto audio")) {
                 prezzoDaAggiungere += estraiPrezzoDaStringa(optional);
             }
             if (abbonamentoCheck.isSelected() && optional.contains("Abbonamento per ricarica")) {
