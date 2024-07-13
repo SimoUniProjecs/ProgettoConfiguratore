@@ -1,7 +1,7 @@
 {
   "datiAutoUsate" : [ {
     "marca" : "Nissan",
-    "modello" : "Microne del Vale",
+    "modello" : "Microne",
     "alimentazione" : "Plug-in Hybrid",
     "cambio" : "Manuale",
     "anno" : "2011-07-08",
@@ -11,17 +11,5 @@
     "proprietari" : 1,
     "condizioni" : 1,
     "email" : "prova@gmail.com"
-  }, {
-    "marca" : "suzuki",
-    "modello" : "vitara",
-    "alimentazione" : "Ibrida",
-    "cambio" : "Automatico",
-    "anno" : "2022-07-13",
-    "immagine" : "public/res/images/Screenshot%202024-06-18%20at%2008.34.28.png",
-    "km" : "12313",
-    "prezzo" : -1,
-    "proprietari" : 1,
-    "condizioni" : 6,
-    "email" : "prova@gmail.com"
-  } ]
+  }]
 }

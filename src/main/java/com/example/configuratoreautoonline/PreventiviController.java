@@ -26,6 +26,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.Iterator;
 import java.util.Optional;
 
+// controllore per la pagina fxml da parte del cliente per vedere i preventivi che ha richiesto, confermarli e modificarli
 public class PreventiviController {
 
     public TableColumn<Configurazione, Boolean> scontoColum;
@@ -83,6 +84,7 @@ public class PreventiviController {
         addButtonToTable();
     }
 
+    // carica i preventivi dal file json
     private void loadPreventivi() {
         UserSession session = UserSession.getInstance();
         String userEmail = session.getEmail();
@@ -121,6 +123,7 @@ public class PreventiviController {
         tableView.setItems(preventivi);
     }
 
+    // funzione che aggiunge i bottoni per modificare i preventivi, confermarli o annullarli
     private void addButtonToTable() {
         TableColumn<Configurazione, Void> colBtn = new TableColumn<>("Azione");
 
@@ -156,6 +159,7 @@ public class PreventiviController {
         tableView.getColumns().add(colBtn);
     }
 
+    // dialogo di conferma per il preventivo
     private void showConfirmDialog(Configurazione preventivo) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Paga Acconto");
@@ -173,6 +177,7 @@ public class PreventiviController {
         }
     }
 
+    // funzione per confermare il preventivo
     private void confermaPreventivo(Configurazione preventivo) {
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.enable(SerializationFeature.INDENT_OUTPUT);

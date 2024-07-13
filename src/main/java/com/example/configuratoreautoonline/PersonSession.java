@@ -4,8 +4,8 @@ import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 
+// classe astratta che viene utilizzata da UserSession
 public abstract class PersonSession {
-    // private static PersonSession instance;
     private SimpleStringProperty email;
     private SimpleStringProperty nome;
     private SimpleStringProperty cognome;
@@ -111,6 +111,7 @@ public abstract class PersonSession {
         return permessi.get();
     }
 
+    // funzione per aggiugere tutti i dati in una volta
     public void aggiungiTutto(String email, String nome, String cognome, String numero, String codiceFiscale, String citta, String via, String provincia, int civico, int permessi) {
         setEmail(email);
         setNome(nome);

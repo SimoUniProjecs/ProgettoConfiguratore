@@ -10,7 +10,7 @@ public class HomeApplication extends Application {
 
     private Stage stage;
     @Override
-    public void start(Stage primaryStage) throws Exception {
+    public void start(Stage primaryStage) throws Exception { // Fa partire la home page dell'applicazione
         this.stage = primaryStage;
 
         try {

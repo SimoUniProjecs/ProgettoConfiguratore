@@ -10,7 +10,7 @@ public class UserSession extends PersonSession {
     private static UserSession instance;
     private SimpleBooleanProperty loggato;
     private SimpleIntegerProperty permessi;
-    private Concessionari concessionario;
+    private Concessionari concessionario; // concessionario di riferimento
 
     // Costruttore privato per evitare la creazione di nuove istanze
     private UserSession() {
@@ -48,6 +48,7 @@ public class UserSession extends PersonSession {
         return loggato;
     }
 
+    // funzione per aggiungere tutti i dati
     public void aggiungiTutto(String email, String nome, String cognome, String numero, String codiceFiscale, String citta, String via, String provincia, int civico, int permessi) {
         super.aggiungiTutto(email, nome, cognome, numero, codiceFiscale, citta, via, provincia, civico, permessi);
         setLoggato(true);

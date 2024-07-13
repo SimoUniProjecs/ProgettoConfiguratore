@@ -26,8 +26,9 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-public class ValutaUsatiController extends Application {
+public class ValutaUsatiController {
 
+    // campi utilizzati per il file fxml
     @FXML
     private AnchorPane pannelloAncora;
     @FXML
@@ -43,31 +44,17 @@ public class ValutaUsatiController extends Application {
     @FXML
     private Label immatricolazione;
     @FXML
-    private TextField prezzoStimatoField;
+    private TextField prezzoStimatoField; // campo per inserire il prezzo valutato dalla segretaria
     @FXML
     private Label emailLabel;
 
     private Stage stage;
     private JsonNode rootNode;
     private List<JsonNode> filteredAutoList;
-    private Iterator<JsonNode> autoIterator;
-    private JsonNode currentAuto;
+    private Iterator<JsonNode> autoIterator; // si può iterare sui nodi che sono le auto da Valutare
+    private JsonNode currentAuto; // auto che si sta valutando in questo momento
     private String jsonFilePath = "public/res/data/datiAutoUsate.json";
-    private String preventiviFilePath = "public/res/data/preventivi.json";
-
-    public static void main(String[] args) {
-        launch(args);
-    }
-
-    @Override
-    public void start(Stage primaryStage) throws Exception {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/configuratoreautoonline/ValutaUsati.fxml"));
-        Parent root = loader.load();
-        Scene scene = new Scene(root);
-        primaryStage.setScene(scene);
-        primaryStage.setTitle("Valuta Usati");
-        primaryStage.show();
-    }
+    private String preventiviFilePath = "public/res/data/preventivi.json"; // si utilizza per aggiornare il preventivo e inserire se è stato utilizzato lo sconto
 
     @FXML
     public void initialize() {
@@ -76,11 +63,14 @@ public class ValutaUsatiController extends Application {
         loadNextValidAuto();
     }
 
+    // caricare il veicolo da valutare successivo a quello che si sta valutando
     @FXML
     public void onProssimoVeicoloClicked(ActionEvent event) {
         loadNextValidAuto();
     }
 
+    // funzione che salva la valutazione e imposta il valre della valutazione diverso da -1
+    // serve anche ad aggioranre il file dei preventivi in modo opportuno
     @FXML
     public void onStimaBtnClicked(ActionEvent event) {
         if (currentAuto != null) {
@@ -160,6 +150,7 @@ public class ValutaUsatiController extends Application {
         }
     }
 
+    // carica la prossima auto
     private void loadNextValidAuto() {
         if (autoIterator.hasNext()) {
             currentAuto = autoIterator.next();
@@ -170,6 +161,7 @@ public class ValutaUsatiController extends Application {
         }
     }
 
+    // aggiorna i campi della pagina
     private void updateUI(JsonNode autoNode) {
         marcaTxt.setText(autoNode.get("marca").asText());
         modelloTxt.setText(autoNode.get("modello").asText());
@@ -184,6 +176,7 @@ public class ValutaUsatiController extends Application {
         imageView.setImage(image);
     }
 
+    // resetta i campi della pagina
     private void resetUI() {
         marcaTxt.setText("");
         modelloTxt.setText("");

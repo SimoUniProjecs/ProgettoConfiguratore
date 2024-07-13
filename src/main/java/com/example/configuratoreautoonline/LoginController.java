@@ -1,14 +1,14 @@
 package com.example.configuratoreautoonline;
 
-import javafx.event.Event;
-import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.control.*;
-import javafx.stage.Stage;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import javafx.event.Event;
+import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
+import javafx.scene.control.TextField;
+import javafx.stage.Stage;
 
 import java.io.File;
 import java.io.IOException;
@@ -65,26 +65,63 @@ public class LoginController {
         return false;
     }
 
+    /**
+     * Ottiene le informazioni di un utente dal file JSON "datiUtenti.json" basandosi sull'email fornita.
+     * Restituisce il nodo JSON dell'utente corrispondente all'email, o null se l'utente non è trovato.
+     *
+     * @param email L'email dell'utente di cui si vogliono ottenere le informazioni.
+     * @return Il nodo JSON dell'utente corrispondente all'email, o null se non trovato.
+     * @throws IOException Se si verifica un errore durante la lettura del file JSON.
+     */
     private JsonNode getUserInfo(String email) throws IOException {
+        // Percorso del file JSON contenente i dati degli utenti
         File file = new File("public/res/data/datiUtenti.json");
+
+        // Creazione dell'oggetto ObjectMapper per gestire JSON
         ObjectMapper mapper = new ObjectMapper();
+
+        // Lettura del file JSON in un oggetto JsonNode
         JsonNode rootNode = mapper.readTree(file);
+
+        // Ottenere il nodo "datiUtenti" dal nodo radice
         JsonNode datiUtenti = rootNode.get("datiUtenti");
+
+        // Verifica se il nodo "datiUtenti" è un array
         if (datiUtenti.isArray()) {
+            // Itera attraverso ogni nodo utente nell'array "datiUtenti"
             for (JsonNode userNode : datiUtenti) {
+                // Verifica se il nodo utente ha la chiave "email" e se il suo valore corrisponde all'email fornita
                 if (userNode.has("email") && userNode.get("email").asText().equals(email)) {
+                    // Se l'email corrisponde, restituisci il nodo utente trovato
                     return userNode;
                 }
             }
         }
+
+        // Se l'utente non è trovato, restituisce null
         return null;
     }
 
+    /**
+     * Restituisce il valore di un nodo JSON per una chiave specificata.
+     * Se il nodo non contiene la chiave, restituisce una stringa vuota.
+     *
+     * @param node Il nodo JSON da cui ottenere il valore.
+     * @param key La chiave del valore desiderato nel nodo JSON.
+     * @return Il valore come stringa, o una stringa vuota se la chiave non è presente nel nodo.
+     */
     private String getNodeValue(JsonNode node, String key) {
-        return node.has(key) ? node.get(key).asText() : "";
+        // Verifica se il nodo contiene la chiave specificata
+        if (node.has(key)) {
+            // Restituisce il valore associato alla chiave come stringa
+            return node.get(key).asText();
+        } else {
+            // Se la chiave non è presente nel nodo, restituisce una stringa vuota
+            return "";
+        }
     }
     @FXML
-    protected boolean passwordValida(String email) {
+    protected boolean passwordValida(String email) { // Controllo la validità della password
         ControlloPassword controllaPassword = new ControlloPassword();
         if (ControlloPassword.contienePsw(passwordField.getText(), email)) {
             return true;
@@ -95,6 +132,7 @@ public class LoginController {
     }
     protected void login(String email, String nome, String cognome, String telefono, String codiceFiscale, String citta, String via, String provincia, int civico, int permessi) {
         UserSession session = UserSession.getInstance();
+        // Salvo la sessione corrente
         session.aggiungiTutto(
                 email,
                 nome,
@@ -123,7 +161,5 @@ public class LoginController {
         Event.fireEvent(stage, new UserLoginEvent());
         stage.close();
 
-        // Potenzialmente notifica altri componenti del cambiamento di stato
-        // Questo richiede che altri componenti 'osservino' lo stato di UserSession
     }
 }

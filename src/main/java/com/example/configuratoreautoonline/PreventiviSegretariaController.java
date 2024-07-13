@@ -25,6 +25,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.Iterator;
 import java.util.Optional;
 
+// controllore utilizzato nel fxml per vedere da parte della segretaria i preventivi
 public class PreventiviSegretariaController {
     @FXML
     private TableView<Configurazione> tableView;
@@ -72,6 +73,7 @@ public class PreventiviSegretariaController {
         addButtonToTable();
     }
 
+    // carica i preventivi dal json opportuno
     private void loadPreventivi() {
         preventivi = FXCollections.observableArrayList();
         ObjectMapper objectMapper = new ObjectMapper();
@@ -105,6 +107,7 @@ public class PreventiviSegretariaController {
         tableView.setItems(preventivi);
     }
 
+    // funzione per aggiungere il bottone per modificare la data in cui è stato creato il preventivo
     private void addButtonToTable() {
         TableColumn<Configurazione, Void> colBtn = new TableColumn<>("Azione");
 
@@ -140,6 +143,7 @@ public class PreventiviSegretariaController {
         tableView.getColumns().add(colBtn);
     }
 
+    // funzione per mostrare il dialogo in cui modificare la data di creazione del preventivo
     private void showEditDateDialog(Configurazione configurazione) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/configuratoreautoonline/edit-dialog.fxml"));
@@ -162,6 +166,7 @@ public class PreventiviSegretariaController {
         }
     }
 
+    // funzione di supporto per salvare il preventivo
     private void saveConfigurations() {
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.enable(SerializationFeature.INDENT_OUTPUT);

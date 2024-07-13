@@ -6,7 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.File;
 import java.io.IOException;
 
-public class ControlloPassword {
+public class ControlloPassword { // controlla tutti i requisiti della password
 
     public boolean formatoCorretto(String password) {
         return password.length() >= 8 && contieneMaiuscola(password) && contieneNumero(password);

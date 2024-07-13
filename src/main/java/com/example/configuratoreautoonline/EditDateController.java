@@ -7,7 +7,7 @@ import javafx.stage.Stage;
 
 import java.time.LocalDate;
 
-public class EditDateController {
+public class EditDateController { // controller per la modifica della data del preventivo
 
     @FXML
     private DatePicker datePicker;

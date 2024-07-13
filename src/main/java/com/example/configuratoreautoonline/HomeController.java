@@ -27,6 +27,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 
+// controllore della Home Page
 public class HomeController {
     public MenuItem logout;
     private List<Concessionario> concessionari;
@@ -77,30 +78,37 @@ public class HomeController {
         this.stage = stage;
     }
 
+    // fuzione per andare al pop-up di login
     @FXML
     private void handleSwitchToViewLoginClick(ActionEvent event) {
         showDialog("/com/example/configuratoreautoonline/login-view.fxml");
     }
+    //funzione per andare al pop-up per la gestione dei permessi dei dipendenti ( disponibile solo al responsabile )
     @FXML
     private void handlePopUpDipendent(ActionEvent event){
         showDialog("/com/example/configuratoreautoonline/gestisci-dipendenti.fxml");
     }
+    // per andare alla pagina dei propri ordini
     @FXML
     private void handleSwitchToMieiOrdiniClick(ActionEvent event) {
         changeScene("/com/example/configuratoreautoonline/miei-ordini.fxml");
     }
+    // per andare alla pagina dei propri preventivi
     @FXML
     private void handleSwitchToPreventiviClick(ActionEvent event) {
         changeScene("/com/example/configuratoreautoonline/preventivi.fxml");
     }
+    // per andare alla pagina in cui vendere il proprio veicolo
     @FXML
     private void handleVendiClick(ActionEvent event) {
         changeScene("/com/example/configuratoreautoonline/vendi.fxml");
     }
+    // per andare al pop up di sign in
     @FXML
     private void handleSwitchToViewSignInClick(ActionEvent event) {
         showSignInDialog();
     }
+    // per il pop up con i dettagli dell'utente
     @FXML
     private void handleViewUserDetailsClick(ActionEvent event) {
         showDialog("/com/example/configuratoreautoonline/user-details.fxml");
@@ -118,7 +126,6 @@ public class HomeController {
             // Ottieni lo Stage dalla scena corrente
             Stage currentStage = (Stage) pannelloAncora.getScene().getWindow();
 
-
             Scene scene = new Scene(root);
 
             currentStage.setScene(scene); // Usa il currentStage
@@ -129,6 +136,7 @@ public class HomeController {
             e.printStackTrace();
         }
     }
+
     private void changeScene(String fxmlFile) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlFile));
@@ -157,12 +165,17 @@ public class HomeController {
             showAlert("Error", "Cannot open the dialog, please check your configuration.");
         }
     }
+
+    // funzione di supporto per il pop up di login
     private void showSignInDialog() {
         showDialog("/com/example/configuratoreautoonline/sign-in-view.fxml");
     }
+
     public void handleLoginSuccessful() {
         updateMenuVisibility();
     }
+
+    // funzione per caricare i dati dal json
     public static void loadJsonData() {
         ObjectMapper objectMapper = new ObjectMapper();
         File jsonFile = new File("public/res/data/datiModelliAuto.json");
@@ -173,6 +186,7 @@ public class HomeController {
             e.printStackTrace();
         }
     }
+    // funzione per mostrare le marche disponibili per la configurazione
     public List<String> restituisciMarche() {
         List<String> marcheTrovate = new ArrayList<>();
 
@@ -245,16 +259,15 @@ public class HomeController {
         pannelloAncora.heightProperty().addListener((obs, oldVal, newVal) -> resizeBigImage());
     }
     private void resizeBigImage() {
-        double width = pannelloAncora.getWidth() - 20; // 10 pixels padding on each side
-        double height = pannelloAncora.getHeight() - 210; // Adjust for other components and padding
+        double width = pannelloAncora.getWidth() - 20;
+        double height = pannelloAncora.getHeight() - 210;
 
         bigImageView.setFitWidth(width);
         bigImageView.setFitHeight(height);
     }
     private void updateLayout(double width, double height) {
-        // Calculate the new sizes and positions based on the scene size
-        double newWidth = width - 20; // Example margin
-        double newHeight = (height - 210) * 0.5; // Example calculations for the big image view
+        double newWidth = width - 20;
+        double newHeight = (height - 210) * 0.5;
         bigImageView.setFitWidth(newWidth);
         bigImageView.setFitHeight(newHeight);
     }
@@ -274,6 +287,7 @@ public class HomeController {
             showAlert("Loading Error", "Failed to load image: " + path);
         }
     }
+    // aggiorna la visibilità degli elementi del menu in base all'utente che ha effetuato il login ( cliente, segretaria, responsabile )
     public void updateMenuVisibility() {
         UserSession session = UserSession.getInstance();
         if (vediDettagliUtente != null) {
@@ -360,20 +374,24 @@ public class HomeController {
             e.printStackTrace();  // Migliora la gestione degli errori in base alle necessità dell'applicazione
         }
     }
+    // per la pagina della segretaria per valutare gli usati
     public void handleSwitchToValutaUsatiClick(ActionEvent event) {
         changeScene("/com/example/configuratoreautoonline/valutaUsati.fxml");
     }
+    // per la pagina della segretaria in cui inserire un usato
     public void handleInserisciVeicoloClick(ActionEvent event) {
         changeScene("/com/example/configuratoreautoonline/inserisci-veicolo.fxml");
     }
+    // per la pagina in cui si possono vedere e mandare messaggi
     @FXML
     private void handleSwitchToMessaggiClick(ActionEvent event) {
         changeScene("/com/example/configuratoreautoonline/comunicazioni.fxml");
     }
+    // per la pagina in cui si vedono tutti gli ordini del concessionario ( per segretaria )
     public void handleSwitchToSegretariaClick(ActionEvent event) {
         changeScene("/com/example/configuratoreautoonline/segretaria.fxml");
     }
-
+    // per la pagina che mostra tutti i preventivi ( per segretaria )
     public void handleSwitchToPreventiviSegretariaClick(ActionEvent actionEvent) {
         changeScene("/com/example/configuratoreautoonline/preventivi-segretaria.fxml");
     }

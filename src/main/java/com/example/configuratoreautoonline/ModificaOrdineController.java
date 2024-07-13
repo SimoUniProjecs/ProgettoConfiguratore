@@ -7,11 +7,12 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
 
+// controllore per la pagina fxml del cliente in cui può vedere i dettagli dell'ordine e modificare la sede del concessionario
+// presso il quale vuole ricevere la vettura
 public class ModificaOrdineController {
 
     @FXML
     private ComboBox<String> concessionarioComboBox;
-
     @FXML
     private Label idLabel;
     @FXML
@@ -40,6 +41,7 @@ public class ModificaOrdineController {
         }
     }
 
+    // inizializza i campi con i dettagli della configurazione
     public void setConfigurazione(Configurazione configurazione) {
         this.configurazione = configurazione;
         idLabel.setText(String.valueOf(configurazione.getIdConfigurazione()));
@@ -55,6 +57,7 @@ public class ModificaOrdineController {
         concessionarioComboBox.setValue(configurazione.getLuogoConcessionario().getNome());
     }
 
+    // funzione di supporto per salvare le modifiche ( cambio sede )
     @FXML
     private void handleSave() {
         String selectedNome = concessionarioComboBox.getValue();

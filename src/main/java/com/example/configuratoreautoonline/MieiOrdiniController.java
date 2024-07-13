@@ -22,7 +22,9 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Optional;
 
+// controller della pagina del cliente relativa ai suoi ordini
 public class MieiOrdiniController {
+    // utilizziamo una tabella per visualizzare la lista degli ordini con i relativi dettagli
     @FXML
     private TableView<Configurazione> tableView;
     @FXML
@@ -63,6 +65,7 @@ public class MieiOrdiniController {
         addButtonToTable();
     }
 
+    // carica gli ordini dal file json
     private void loadOrdini() {
         UserSession session = UserSession.getInstance();
         String userEmail = session.getEmail();
@@ -90,6 +93,7 @@ public class MieiOrdiniController {
         tableView.setItems(ordini);
     }
 
+    // funzione per modificare l'ordine ( modificare la sede di riferimento )
     private void showEditDialog(Configurazione data) {
         Dialog<ButtonType> dialog = new Dialog<>();
         dialog.setTitle("Modifica Ordine");
@@ -120,6 +124,7 @@ public class MieiOrdiniController {
         }
     }
 
+    // funzione per aggiungere i bottoni alla tabella, per saldare il conto dell'ordine oppure modificarlo o annullarlo
     private void addButtonToTable() {
         TableColumn<Configurazione, Void> colBtnAnnulla = new TableColumn<>("Azione");
         TableColumn<Configurazione, Void> colBtnModifica = new TableColumn<>("Modifica");
@@ -223,6 +228,7 @@ public class MieiOrdiniController {
         tableView.getColumns().addAll(colBtnAnnulla, colBtnModifica, colBtnSalda);
     }
 
+    // dialogo per la conferma del saldo
     private void showConfirmPayDialog(Configurazione data) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Conferma Pagamento");
@@ -240,12 +246,14 @@ public class MieiOrdiniController {
         }
     }
 
+    // funzione per segnare che l'ordine è stato saldato
     private void markAsPaid(Configurazione data) {
         data.setPagato(true); // Esempio: assuming there's a setPaid method
         saveConfigurations();
         tableView.refresh();
     }
 
+    // conferma per l'annullamento dell'ordine
     private void showConfirmDeleteDialog(Configurazione data) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Conferma Cancellazione");
@@ -263,6 +271,7 @@ public class MieiOrdiniController {
         }
     }
 
+    // funzione per mostrare il pop-up di modifica dell'ordine
     private void showEditOrderDialog(Configurazione data) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/configuratoreautoonline/modifica-configurazione.fxml"));
@@ -284,10 +293,12 @@ public class MieiOrdiniController {
         }
     }
 
+    // funzione per eliminazione dell'ordine
     private void deleteConfiguration(Configurazione configurazione) {
         ordini.remove(configurazione);
         saveConfigurations();
     }
+
 
     private void saveConfigurations() {
         ObjectMapper objectMapper = new ObjectMapper();

@@ -79,6 +79,7 @@ public class CarConfiguratorController {
         loadJsonData();
         initializeModelComboBox();
     }
+    // Quando viene deciso di scaricare il PDF della configurazione
     public void onDownloadPdfButtonClicked(ActionEvent event) {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Save PDF");
@@ -88,7 +89,7 @@ public class CarConfiguratorController {
             generatePdf(file.getAbsolutePath());
         }
     }
-
+    // genera il PDF con i dati della configurazione
     public void generatePdf(String dest) {
         try {
             // Creare un nuovo PdfWriter
@@ -151,6 +152,7 @@ public class CarConfiguratorController {
         downloadPdfButton.setOnAction(this::onDownloadPdfButtonClicked);
     }
 
+    // Per gestire il pulsante visualizza interni ed esterni e mantenerlo coerente con l'immagine visualizzata
     @FXML
     private void onInternoCheckChanged(ActionEvent event) {
         if (interniBtn.getText().equals("Visualizza Esterni")) {
@@ -163,6 +165,7 @@ public class CarConfiguratorController {
         }
     }
 
+    // Quando l'utente seleziona un modello, aggiorna l'immagine dell'auto e la casella delle motorizzazioni
     @FXML
     private void onModelloSelected(ActionEvent event) {
         String selectedModello = modelloComboBox.getValue();
@@ -177,6 +180,7 @@ public class CarConfiguratorController {
         updateImage();
     }
 
+    // Costruisce il percorso per gli interni dell'auto
     private String generaPathInterni(String marca, String modello){
         String percorso = "";
         JsonNode marcaNode = datiModelliAuto.get(marca.toLowerCase());
@@ -198,7 +202,7 @@ public class CarConfiguratorController {
         }
         return percorso.toLowerCase();
     }
-
+    // carica immagine degli interni e mantiene coerenza con il bottone visualizza interni/esterni
     @FXML
     private void onInterniClicked(ActionEvent event){
         if(interniBtn.getText().equals("Visualizza Interni")){
@@ -252,6 +256,7 @@ public class CarConfiguratorController {
         }
     }
 
+    // disabilita tutte le checkbox degli optionals
     @FXML
     private void disableOptionalCheckboxes(boolean disable) {
         vetriCheck.setDisable(disable);
@@ -264,7 +269,6 @@ public class CarConfiguratorController {
     }
 
     // Una volta che è stato scelto il modello, si possono selezionare gli optional partendo dal colore
-
     // Richiama getMotorizzazioniForModello per ottenere le motorizzazioni del modello selezionato
     private void updateMotorizzazioneComboBox(String modello) {
         List<String> motorizzazioni = getMotorizzazioniForModello(selectedMarca, modello);
@@ -278,6 +282,7 @@ public class CarConfiguratorController {
         motorizzazioneComboBox.setOnAction(event -> onMotoSelected(event));
     }
 
+    // Per gestire gli sconti mensili
     public void updateVisibility()  {
         int mese = LocalDate.now().getMonthValue();
         if(mese == 12 || mese == 7 || mese == 10) {
@@ -287,21 +292,33 @@ public class CarConfiguratorController {
         }
     }
 
-    // Restituisci gli optional per il modello selezionato
+    // Restituisci gli optional per il modello selezionato andando a leggerli dal json
     private List<String> getOptionalsForModello(String marca, String modello) {
         List<String> optionals = new ArrayList<>();
         JsonNode marcaNode = datiModelliAuto.get(marca.toLowerCase());
+        // Verifica se il nodo della marca esiste
         if (marcaNode != null) {
+            // Iterazione su tutti i nodi di modello all'interno del nodo della marca
             for (JsonNode modelloNode : marcaNode) {
+                // Ottenimento del nodo JSON contenente i modelli
                 JsonNode modelliNode = modelloNode.get("modelli");
+
+                // Verifica se il nodo dei modelli esiste
                 if (modelliNode != null) {
+                    // Iterazione su tutti i nodi di modello all'interno del nodo dei modelli
                     for (JsonNode modNode : modelliNode) {
+                        // Ottenimento del nodo JSON per il modello specificato
                         JsonNode modelloSpecificoNode = modNode.get(modello);
+
+                        // Verifica se il nodo del modello specificato esiste e contiene gli optional
                         if (modelloSpecificoNode != null && modelloSpecificoNode.has("optionals")) {
+                            // Iterazione su tutti i nodi degli optional
                             for (JsonNode optionalNode : modelloSpecificoNode.get("optionals")) {
+                                // Aggiunta dell'optional alla lista
                                 optionals.add(optionalNode.asText());
                             }
-                            return optionals; // Trovati gli optional per il modello, interrompe il loop
+                            // Ritorno della lista degli optional, interrompendo il loop
+                            return optionals;
                         }
                     }
                 }
@@ -310,21 +327,34 @@ public class CarConfiguratorController {
         return optionals;
     }
 
-
     // popola la choicebox con i colori disponibili per il modello selezionato
     private List<String> getColoriPerModello(String marca, String modello) {
         List<String> colori = new ArrayList<>();
+
+        // Ottenimento del nodo JSON corrispondente alla marca specificata
         JsonNode marcaNode = datiModelliAuto.get(marca.toLowerCase());
+
+        // Verifica se il nodo della marca esiste
         if (marcaNode != null) {
+            // Creazione di un iteratore per iterare sugli elementi del nodo della marca
             Iterator<JsonNode> modelliIterator = marcaNode.elements();
+
+            // Iterazione su tutti i nodi di modello all'interno del nodo della marca
             while (modelliIterator.hasNext()) {
+                // Ottenimento del primo nodo del modello all'interno del nodo dei modelli
                 JsonNode modelloNode = modelliIterator.next().get("modelli").get(0);
+
+                // Ottenimento del nodo JSON per il modello specificato
                 JsonNode optionalNode = modelloNode.get(modello);
+
+                // Verifica se il nodo del modello specificato esiste e contiene i colori
                 if (optionalNode != null && optionalNode.has("colori")) {
+                    // Iterazione su tutti i nodi dei colori
                     optionalNode.get("colori").forEach(optional -> colori.add(optional.asText()));
                 }
             }
         }
+        // Ritorno della lista dei colori (vuota se non trovati)
         return colori;
     }
 
@@ -347,16 +377,30 @@ public class CarConfiguratorController {
 
     // popola la choicebox con le motorizzazioni disponibili per il modello selezionato
     private List<String> getMotorizzazioniForModello(String marca, String modello) {
+        // Creazione di una lista per memorizzare le motorizzazioni
         List<String> motorizzazioni = new ArrayList<>();
+
         JsonNode marcaNode = datiModelliAuto.get(marca.toLowerCase());
+
+        // Verifica se il nodo della marca esiste
         if (marcaNode != null) {
             Iterator<JsonNode> modelliIterator = marcaNode.elements();
+
+            // Iterazione su tutti i nodi di modello all'interno del nodo della marca
             while (modelliIterator.hasNext()) {
+                // Ottenimento del primo nodo del modello all'interno del nodo dei modelli
                 JsonNode modelloNode = modelliIterator.next().get("modelli").get(0);
+
+                // Ottenimento del nodo JSON per il modello specificato
                 JsonNode modelloSpecificoNode = modelloNode.get(modello);
+
+                // Verifica se il nodo del modello specificato esiste e contiene le motorizzazioni
                 if (modelloSpecificoNode != null && modelloSpecificoNode.has("motorizzazioni")) {
+                    // Iterazione su tutti i nodi delle motorizzazioni
                     modelloSpecificoNode.get("motorizzazioni").forEach(motorizzazione -> {
+                        // Creazione della stringa che combina alimentazione e potenza
                         String motorizzazioneStr = motorizzazione.get("alimentazione").asText() + " - " + motorizzazione.get("potenza").asText();
+                        // Aggiunta della stringa alla lista delle motorizzazioni
                         motorizzazioni.add(motorizzazioneStr);
                     });
                 }
@@ -365,7 +409,7 @@ public class CarConfiguratorController {
         return motorizzazioni;
     }
 
-    //scelta motorizzazione
+    //scelta motorizzazione vengono abilitate delle checkbox degli optional di cui il veicolo dispone
     public void onMotoSelected(ActionEvent event) {
         String selectedModello = modelloComboBox.getValue();
         if (selectedModello != null) {
@@ -394,13 +438,14 @@ public class CarConfiguratorController {
 
             updateImage();
 
+            // Aggiorna il prezzo base
             stampaPrezzo(prezzo);
-            // Aggiorna il prezzo base con quel motore
 
             // Abilita il pulsante per vedere gli interni
             interniBtn.setDisable(false);
         }
     }
+    // Data una marca e un modello vengono ritornato i dettagli delle motorizzazioni disponibili
     private List<Motorizzazione> getMotorizzazioniDetailsForModello(String marca, String modello) {
         List<Motorizzazione> motorizzazioni = new ArrayList<>();
         JsonNode marcaNode = datiModelliAuto.get(marca.toLowerCase());
@@ -426,6 +471,7 @@ public class CarConfiguratorController {
         return motorizzazioni;
     }
 
+    // quando l'utente clicca sul pulsante per salvare la configurazione
     @FXML
     private void onConfiguraButtonClicked(ActionEvent event) {
         String selectedModello = modelloComboBox.getValue();
@@ -520,16 +566,13 @@ public class CarConfiguratorController {
                             configurazioni = objectMapper.createArrayNode();
                         }
 
+                        // Creo un nuovo oggetto configurazione
                         Configurazione configurazione = new Configurazione(newId, selectedMarca, selectedModello, selectedColore, selectedMotorizzazione, selectedOptionals, finalTotalePrezzo, session.getEmail(), session.getConcessionario());
                         configurazioni.add(objectMapper.valueToTree(configurazione));
 
+                        // Scrivo la configurazione
                         objectMapper.writeValue(file, configurazioni);
                         showSuccessAlert("Successo", "Configurazione salvata con successo.");
-
-                        // Ritorno alla home page
-                       /* Node source = (Node) event.getSource();
-                        Stage currentStage = (Stage) source.getScene().getWindow();
-                        changeScene("/com/example/configuratoreautoonline/Home-view.fxml", currentStage);*/
 
                     } catch (IOException e) {
                         e.printStackTrace();

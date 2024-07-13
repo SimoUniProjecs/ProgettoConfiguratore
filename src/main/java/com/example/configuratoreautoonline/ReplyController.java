@@ -7,6 +7,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
+// controllore utilizzato per il pop-up fxml con cui si può rispondere ad un certo messaggio
 public class ReplyController {
     @FXML
     private TextField titoloField;
@@ -18,6 +19,7 @@ public class ReplyController {
     private boolean replySent = false;
     private Stage parentStage;
 
+    // funzioni per inizializzare il messaggio
     public void setComunicazione(Comunicazione comunicazione) {
         this.comunicazione = comunicazione;
         this.titoloField.setText("Re: " + comunicazione.getTitolo());
@@ -27,6 +29,7 @@ public class ReplyController {
         this.parentStage = parentStage;
     }
 
+    // funzione per creare il messaggio e gestire gli errori
     @FXML
     private void handleSendReply() {
         String titolo = titoloField.getText();

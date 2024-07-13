@@ -29,6 +29,7 @@ import java.nio.file.StandardCopyOption;
 import java.util.Iterator;
 import java.util.List;
 
+// controllore per la pagina fxml relativa al cliente in cui può inserire il suo veicolo usato
 public class InserisciVeicoloController {
     @FXML
     private TextField marcaTxt;
@@ -82,6 +83,8 @@ public class InserisciVeicoloController {
         alert.setContentText(content);
         alert.showAndWait();
     }
+
+    // funzione per caricare le immagini del veicolo
     @FXML
     private void handleImageSelection(ActionEvent event) {
         FileChooser fileChooser = new FileChooser();
@@ -112,6 +115,7 @@ public class InserisciVeicoloController {
             }
         }
     }
+    // calcola il percorso dell'immagine caricata
     private String calcolaPercorso() {
         return "src/main/resources/img/" + marcaTxt.getText().toUpperCase() + "/" + modelloTxt.getText().toUpperCase() + "/";
     }

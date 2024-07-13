@@ -19,7 +19,9 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Optional;
 
+// controllore per la pagina fxml che visualizza gli ordini da parte della Segretaria
 public class SegretariaController {
+    // utilizziamo una table view per mostrare i vari ordini con i relativi campi
     @FXML
     private TableView<Configurazione> tableView;
     @FXML
@@ -40,8 +42,6 @@ public class SegretariaController {
     private TableColumn<Configurazione, Integer> prezzoColumn;
     @FXML
     private TableColumn<Configurazione, String> dataArrivoColumn;
-    @FXML
-    private TableColumn<Configurazione, Void> actionColumn;
     @FXML
     private TableColumn<Configurazione, String> concessionarioColumn;
     @FXML
@@ -73,6 +73,7 @@ public class SegretariaController {
         addButtonToTable();
     }
 
+    // carica tutti gli ordini dal file json
     private void loadOrdini(String filtro) {
         ordini = FXCollections.observableArrayList();
         ObjectMapper objectMapper = new ObjectMapper();
@@ -97,6 +98,7 @@ public class SegretariaController {
         tableView.setItems(ordini);
     }
 
+    // controlla i filtri inseriti e modifica gli ordini mostrati
     private boolean matchesFilter(Configurazione configurazione, String filtro) {
         if (filtro == null || filtro.isEmpty()) {
             return true; // Se il filtro è vuoto, mostra tutti gli ordini
@@ -119,6 +121,7 @@ public class SegretariaController {
         }
     }
 
+    // aggiunta di due bottoni per modificare gli ordini
     private void addButtonToTable() {
         TableColumn<Configurazione, Void> colBtnAnnulla = new TableColumn<>("Azione");
         TableColumn<Configurazione, Void> colBtnModifica = new TableColumn<>("Modifica");
@@ -230,6 +233,7 @@ public class SegretariaController {
         saveConfigurations();
     }
 
+    // salva la configurazione
     private void saveConfigurations() {
         ObjectMapper objectMapper = new ObjectMapper();
 

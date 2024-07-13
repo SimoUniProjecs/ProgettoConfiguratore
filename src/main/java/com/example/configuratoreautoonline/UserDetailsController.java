@@ -6,6 +6,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
 
+// controllore del file fxml che mostra i dati dell'utente loggato
 public class UserDetailsController {
 
     @FXML
@@ -55,6 +56,7 @@ public class UserDetailsController {
         concessionarioComboBox.setValue(session.getConcessionario().getNome());
     }
 
+    // funzione di supporto per gestire il cambio del concessionario di riferimento
     @FXML
     private void handleSave() {
         String selectedNome = concessionarioComboBox.getValue();

@@ -13,6 +13,7 @@ import javafx.stage.Stage;
 import java.io.File;
 import java.io.IOException;
 
+// controllore per la pagina fxml dedicata alla pagina di sign in
 public class SignInController {
     @FXML
     private TextField nomeField;
@@ -54,6 +55,8 @@ public class SignInController {
         this.stage = stage;
     }
 
+    // funzione per prendere i dati dai campi della pagine, controllare la loro validità, e in caso siano validi li aggiunge al json con i dati
+    // degli utenti oltre ad effettuare il login e aggiungerli alla UserSession
     @FXML
     protected void onSubmit() {
         try {

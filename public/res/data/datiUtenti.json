@@ -28,8 +28,8 @@
   }, {
     "nome" : "Super",
     "cognome" : "Boss",
-    "password" : "SuperSecure123",
-    "email" : "superboss@example.com",
+    "password" : "Responsabile123",
+    "email" : "responsabile@gmail.com",
     "codiceFiscale" : "BSSSPR05A01F205Z",
     "citta" : "Roma",
     "via" : "Via Imperiale",

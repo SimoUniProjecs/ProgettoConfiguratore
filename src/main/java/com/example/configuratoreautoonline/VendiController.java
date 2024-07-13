@@ -3,7 +3,6 @@ package com.example.configuratoreautoonline;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -22,11 +21,12 @@ import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.time.LocalDate;
 
-public class VendiController extends Application {
+// controller utilizzato per gestire la pagina in cui l'utente può vendere la sua auto e richiedere una valutazione
+
+public class VendiController {
 
     @FXML
     private ImageView imageView;
-
     @FXML
     private TextField marcaTxt;
     @FXML
@@ -34,11 +34,11 @@ public class VendiController extends Application {
     @FXML
     private TextField kmTxt;
     @FXML
-    private TextField proprietariTxt;
+    private TextField proprietariTxt; // numero dei proprietari che hannno avuto l'auto
     @FXML
     private DatePicker immatricolazione;
     @FXML
-    private ChoiceBox<Integer> statoChoiceBox;
+    private ChoiceBox<Integer> statoChoiceBox; //stato dell'auto
     @FXML
     private ChoiceBox<String> trasmissioniChoiceBox;
     @FXML
@@ -46,35 +46,22 @@ public class VendiController extends Application {
 
     private String email;
 
-    private Stage stage;
-
-    public static void main(String[] args) {
-        launch(args);
-    }
-
-    @Override
-    public void start(Stage primaryStage) throws Exception {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/configuratoreautoonline/Vendi-view.fxml"));
-        Parent root = loader.load();
-        Scene scene = new Scene(root);
-        primaryStage.setScene(scene);
-        primaryStage.setTitle("Configuratore Auto Online - Vendita");
-        primaryStage.show();
-    }
+    private Stage stage; // per il cambio della scena
 
     @FXML
     public void initialize() {
         stage = new Stage();
     }
 
+    // funzione per tornare alla home page
     @FXML
     private void handleHomeButton(ActionEvent event) {
         Node source = (Node) event.getSource();
         Stage currentStage = (Stage) source.getScene().getWindow();
-
         changeScene("/com/example/configuratoreautoonline/Home-view.fxml", currentStage);
     }
 
+    // funzione di supporto per tornare alla home page
     private void changeScene(String fxmlFile, Stage currentStage) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlFile));
@@ -89,6 +76,7 @@ public class VendiController extends Application {
         }
     }
 
+    // selezionare le immagini della propria auto da vendere
     @FXML
     private void handleImageSelection(ActionEvent event) {
         FileChooser fileChooser = new FileChooser();
@@ -134,6 +122,7 @@ public class VendiController extends Application {
             ObjectMapper mapper = new ObjectMapper();
             File file = new File("public/res/data/datiAutoUsate.json");
 
+            // prendo i dati dalla sessione dello user
             UserSession session = UserSession.getInstance();
             email = session.getEmail();
 
@@ -192,6 +181,7 @@ public class VendiController extends Application {
         }
     }
 
+    // funzione per controllare i valori di json per i numeri
     private Integer safelyParseInteger(String input) {
         try {
             return Integer.parseInt(input);
@@ -203,7 +193,7 @@ public class VendiController extends Application {
 
     private void showAlert(String title, String content) {
         Alert alert = null;
-        if(title.equals("Richiesta preventivo"))
+        if (title.equals("Richiesta preventivo"))
             alert = new Alert(Alert.AlertType.INFORMATION);
         else
             alert = new Alert(Alert.AlertType.ERROR);
