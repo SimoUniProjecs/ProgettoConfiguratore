@@ -66,6 +66,7 @@ public class CarConfiguratorController {
     private String selectedMarca;
     private JsonNode datiModelliAuto;
     private int prezzoBase = 0;
+    private int sconto =0;
     private String path = "";
 
     private int prezzo = 0;
@@ -106,6 +107,7 @@ public class CarConfiguratorController {
             document.add(new Paragraph("Colore: " + coloreComboBox.getValue()));
             document.add(new Paragraph("Prezzo: " + prezzoLbl.getText()));
 
+            // aggiungere l'immagine al PDF
             document.add(new com.itextpdf.layout.element.Image(ImageDataFactory.create(path)));
             document.add(new com.itextpdf.layout.element.Image(ImageDataFactory.create(generaPathInterni(selectedMarca, modelloComboBox.getValue()))));
 
@@ -120,7 +122,7 @@ public class CarConfiguratorController {
     @FXML
     public void initialize() {
         stage = new Stage();
-
+        /*stage.setFullScreen(true);*/
         // Listener per aggiornare l'immagine quando cambia il modello
         modelloComboBox.setOnAction(event -> {
             onModelloSelected(event);
@@ -427,7 +429,7 @@ public class CarConfiguratorController {
 
 
     @FXML
-    private void onConfiguraButtonClicked() {
+    private void onConfiguraButtonClicked(ActionEvent event) {
         String selectedModello = modelloComboBox.getValue();
         String selectedColore = coloreComboBox.getValue();
         UserSession session = UserSession.getInstance();
@@ -467,18 +469,17 @@ public class CarConfiguratorController {
             int mese = LocalDate.now().getMonthValue();
 
             if (mese == 12 || mese == 7 || mese == 10) {
-                totalePrezzo =(this.prezzo )*97/100;
-            }
-            else {
+                totalePrezzo = (this.prezzo) * 97 / 100;
+                this.sconto = this.prezzo - totalePrezzo;
+            } else {
                 totalePrezzo = this.prezzo;
             }
-
 
             // Mostra il pop-up di conferma
             Alert confirmationAlert = new Alert(Alert.AlertType.CONFIRMATION);
             confirmationAlert.setTitle("Conferma Ordine");
             confirmationAlert.setHeaderText("Conferma configurazione dell'auto");
-            if(mese == 12 || mese == 7 || mese == 10)   {
+            if (mese == 12 || mese == 7 || mese == 10) {
                 confirmationAlert.setHeaderText("E' stato applicato uno sconto su questa vettura");
             }
             confirmationAlert.setContentText("Sei sicuro di voler configurare l'auto con le opzioni selezionate?\nPrezzo totale: " + totalePrezzo + " €");
@@ -526,6 +527,12 @@ public class CarConfiguratorController {
 
                         objectMapper.writeValue(file, configurazioni);
                         showSuccessAlert("Successo", "Configurazione salvata con successo.");
+
+                        // Ritorno alla home page
+                       /* Node source = (Node) event.getSource();
+                        Stage currentStage = (Stage) source.getScene().getWindow();
+                        changeScene("/com/example/configuratoreautoonline/Home-view.fxml", currentStage);*/
+
                     } catch (IOException e) {
                         e.printStackTrace();
                         showErrorAlert("Errore", "Errore durante il salvataggio della configurazione.");
@@ -679,6 +686,7 @@ public class CarConfiguratorController {
     private void handleHomeButton(ActionEvent event) {
         Node source = (Node) event.getSource();
         Stage currentStage = (Stage) source.getScene().getWindow();
+
         changeScene("/com/example/configuratoreautoonline/Home-view.fxml", currentStage);
     }
 
@@ -690,6 +698,7 @@ public class CarConfiguratorController {
 
             currentStage.setScene(scene);
             currentStage.show();
+            currentStage.setFullScreen(true);
         } catch (Exception e) {
             showAlert("Error loading scene", "Cannot load scene from file: " + fxmlFile + "\n" + e.getMessage());
             e.printStackTrace();

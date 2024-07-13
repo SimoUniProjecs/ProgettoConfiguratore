@@ -123,6 +123,7 @@ public class InserisciVeicoloController {
             Scene scene = new Scene(root);
             Stage currentStage = (Stage) motorizzazioniTxt.getScene().getWindow();
             currentStage.setScene(scene);
+            currentStage.setFullScreen(true);
             currentStage.show();
         } catch (Exception e) {
             showAlert("Error loading scene", "Cannot load scene from file: " + fxmlFile + "\n" + e.getMessage());
