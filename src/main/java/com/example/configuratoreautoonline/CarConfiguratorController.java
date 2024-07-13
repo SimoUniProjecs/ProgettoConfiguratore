@@ -426,8 +426,6 @@ public class CarConfiguratorController {
         return motorizzazioni;
     }
 
-
-
     @FXML
     private void onConfiguraButtonClicked(ActionEvent event) {
         String selectedModello = modelloComboBox.getValue();
