@@ -7,12 +7,4 @@ public class Utente extends Persona {
         super(nome, cognome, codiceFiscale, email, telefono, indirizzo);
         this.password = password;
     }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
 }
