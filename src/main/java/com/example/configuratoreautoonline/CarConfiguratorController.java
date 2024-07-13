@@ -616,7 +616,7 @@ public class CarConfiguratorController {
             if (impiantoAudioCheck.isSelected() && optional.contains("impianto Audio maggiorato")) {
                 prezzoDaAggiungere += estraiPrezzoDaStringa(optional);
             }
-            if (abbonamentoCheck.isSelected() && optional.contains("Abbonamento annuale per ricarica")) {
+            if (abbonamentoCheck.isSelected() && optional.contains("Abbonamento per ricarica")) {
                 prezzoDaAggiungere += estraiPrezzoDaStringa(optional);
             }
             // Aggiungi altre condizioni per gli optional rimanenti come necessario
