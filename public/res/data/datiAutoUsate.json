@@ -1,15 +1,1 @@
-{
-  "datiAutoUsate" : [ {
-    "marca" : "Nissan",
-    "modello" : "Microne",
-    "alimentazione" : "Plug-in Hybrid",
-    "cambio" : "Manuale",
-    "anno" : "2011-07-08",
-    "immagine" : "public/res/images/micra.jpg",
-    "km" : "150000",
-    "prezzo" : 20000,
-    "proprietari" : 1,
-    "condizioni" : 1,
-    "email" : "prova@gmail.com"
-  }]
-}
+{"datiAutoUsate":[{"marca":"Nissan","modello":"Microne","alimentazione":"Plug-in Hybrid","cambio":"Manuale","anno":"2011-07-08","immagine":"public/res/images/micra.jpg","km":"150000","prezzo":20000,"proprietari":1,"condizioni":1,"email":"prova@gmail.com"},{"marca":"nissan","modello":"gtr","alimentazione":"Diesel","cambio":"Manuale","anno":"2024-07-18","immagine":"public/res/images/Screenshot%202024-07-13%20at%2015.00.11%20(3).png","km":"10","prezzo":-1,"email":"prova@gmail.com","proprietari":1,"condizioni":7}]}

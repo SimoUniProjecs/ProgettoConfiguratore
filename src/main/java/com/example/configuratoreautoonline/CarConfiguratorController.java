@@ -74,7 +74,7 @@ public class CarConfiguratorController {
     private Motorizzazione selectedMotorizzazione;
 
     // Inizializza i dati per la marca dell'auto selezionata
-    public void initData(String marca) {
+    public void initData(String marca, JsonNode jsonNode) {
         this.selectedMarca = marca;
         loadJsonData();
         initializeModelComboBox();
@@ -224,12 +224,13 @@ public class CarConfiguratorController {
         try {
             File file = new File("public/res/data/datiModelliAuto.json");
             JsonNode root = objectMapper.readTree(file);
-            datiModelliAuto = root.get("datiModelliAuto").get(0);
+            datiModelliAuto = root.get("datiModelliAuto"); // Directly get the root object
         } catch (IOException e) {
             e.printStackTrace();
             showAlert("Errore di caricamento", "Impossibile caricare i dati del file JSON.");
         }
     }
+
 
     // Inizializza il ComboBox per i modelli dell'auto [ con visibilità o meno ]
     private void initializeModelComboBox() {
@@ -245,16 +246,11 @@ public class CarConfiguratorController {
             motorizzazioneComboBox.getItems().clear();
             carImageView.setImage(null);
 
-            // Rimuovi il listener vecchio se presente
-            modelloComboBox.setOnAction(null);
-
-            // Aggiungi nuovo listener per il cambio dinamico dell'immagine
             modelloComboBox.setOnAction(event -> onModelloSelected(event));
-
-            // Disabilita gli optional
             disableOptionalCheckboxes(true);
         }
     }
+
 
     // disabilita tutte le checkbox degli optionals
     @FXML
@@ -295,119 +291,63 @@ public class CarConfiguratorController {
     // Restituisci gli optional per il modello selezionato andando a leggerli dal json
     private List<String> getOptionalsForModello(String marca, String modello) {
         List<String> optionals = new ArrayList<>();
-        JsonNode marcaNode = datiModelliAuto.get(marca.toLowerCase());
-        // Verifica se il nodo della marca esiste
-        if (marcaNode != null) {
-            // Iterazione su tutti i nodi di modello all'interno del nodo della marca
-            for (JsonNode modelloNode : marcaNode) {
-                // Ottenimento del nodo JSON contenente i modelli
-                JsonNode modelliNode = modelloNode.get("modelli");
-
-                // Verifica se il nodo dei modelli esiste
-                if (modelliNode != null) {
-                    // Iterazione su tutti i nodi di modello all'interno del nodo dei modelli
-                    for (JsonNode modNode : modelliNode) {
-                        // Ottenimento del nodo JSON per il modello specificato
-                        JsonNode modelloSpecificoNode = modNode.get(modello);
-
-                        // Verifica se il nodo del modello specificato esiste e contiene gli optional
-                        if (modelloSpecificoNode != null && modelloSpecificoNode.has("optionals")) {
-                            // Iterazione su tutti i nodi degli optional
-                            for (JsonNode optionalNode : modelloSpecificoNode.get("optionals")) {
-                                // Aggiunta dell'optional alla lista
-                                optionals.add(optionalNode.asText());
-                            }
-                            // Ritorno della lista degli optional, interrompendo il loop
-                            return optionals;
-                        }
-                    }
-                }
-            }
+        JsonNode modelloNode = datiModelliAuto.get(marca).get("modelli").get(modello);
+        if (modelloNode != null && modelloNode.has("optionals")) {
+            modelloNode.get("optionals").forEach(optional -> optionals.add(optional.asText()));
         }
         return optionals;
     }
 
+
     // popola la choicebox con i colori disponibili per il modello selezionato
     private List<String> getColoriPerModello(String marca, String modello) {
         List<String> colori = new ArrayList<>();
-
-        // Ottenimento del nodo JSON corrispondente alla marca specificata
-        JsonNode marcaNode = datiModelliAuto.get(marca.toLowerCase());
-
-        // Verifica se il nodo della marca esiste
-        if (marcaNode != null) {
-            // Creazione di un iteratore per iterare sugli elementi del nodo della marca
-            Iterator<JsonNode> modelliIterator = marcaNode.elements();
-
-            // Iterazione su tutti i nodi di modello all'interno del nodo della marca
-            while (modelliIterator.hasNext()) {
-                // Ottenimento del primo nodo del modello all'interno del nodo dei modelli
-                JsonNode modelloNode = modelliIterator.next().get("modelli").get(0);
-
-                // Ottenimento del nodo JSON per il modello specificato
-                JsonNode optionalNode = modelloNode.get(modello);
-
-                // Verifica se il nodo del modello specificato esiste e contiene i colori
-                if (optionalNode != null && optionalNode.has("colori")) {
-                    // Iterazione su tutti i nodi dei colori
-                    optionalNode.get("colori").forEach(optional -> colori.add(optional.asText()));
-                }
-            }
+        JsonNode modelloNode = datiModelliAuto.get(marca).get("modelli").get(modello);
+        if (modelloNode != null && modelloNode.has("colori")) {
+            modelloNode.get("colori").forEach(color -> colori.add(color.asText()));
         }
-        // Ritorno della lista dei colori (vuota se non trovati)
         return colori;
     }
 
+
     // Ritorna il percorso alla cartella del modello:
     private String getPercorsoIMGPerModello(String marca, String modello) {
-        String percorso = "";
         JsonNode marcaNode = datiModelliAuto.get(marca.toLowerCase());
-        if (marcaNode != null) {
-            Iterator<JsonNode> modelliIterator = marcaNode.elements();
-            while (modelliIterator.hasNext()) {
-                JsonNode modelloNode = modelliIterator.next().get("modelli").get(0);
-                JsonNode optionalNode = modelloNode.get(modello);
-                if (optionalNode != null && optionalNode.has("percorsoImg")) {
-                    percorso = optionalNode.get("percorsoImg").asText();
-                }
-            }
+        if (marcaNode == null) {
+            System.err.println("Marca non trovata: " + marca);
+            return ""; // Marca non trovata, ritorna un percorso vuoto o gestisci l'errore come necessario
         }
-        return percorso;
+
+        JsonNode modelliNode = marcaNode.get("modelli");
+        if (modelliNode == null) {
+            System.err.println("Nessun modello trovato per la marca: " + marca);
+            return ""; // Nessun modello trovato
+        }
+
+        JsonNode modelloNode = modelliNode.get(modello);
+        if (modelloNode == null || !modelloNode.has("percorsoImg")) {
+            System.err.println("Modello o percorso immagine non trovato per: " + modello);
+            return ""; // Modello non trovato o manca 'percorsoImg'
+        }
+
+        return modelloNode.get("percorsoImg").asText();
     }
+
 
     // popola la choicebox con le motorizzazioni disponibili per il modello selezionato
     private List<String> getMotorizzazioniForModello(String marca, String modello) {
-        // Creazione di una lista per memorizzare le motorizzazioni
         List<String> motorizzazioni = new ArrayList<>();
-
-        JsonNode marcaNode = datiModelliAuto.get(marca.toLowerCase());
-
-        // Verifica se il nodo della marca esiste
-        if (marcaNode != null) {
-            Iterator<JsonNode> modelliIterator = marcaNode.elements();
-
-            // Iterazione su tutti i nodi di modello all'interno del nodo della marca
-            while (modelliIterator.hasNext()) {
-                // Ottenimento del primo nodo del modello all'interno del nodo dei modelli
-                JsonNode modelloNode = modelliIterator.next().get("modelli").get(0);
-
-                // Ottenimento del nodo JSON per il modello specificato
-                JsonNode modelloSpecificoNode = modelloNode.get(modello);
-
-                // Verifica se il nodo del modello specificato esiste e contiene le motorizzazioni
-                if (modelloSpecificoNode != null && modelloSpecificoNode.has("motorizzazioni")) {
-                    // Iterazione su tutti i nodi delle motorizzazioni
-                    modelloSpecificoNode.get("motorizzazioni").forEach(motorizzazione -> {
-                        // Creazione della stringa che combina alimentazione e potenza
-                        String motorizzazioneStr = motorizzazione.get("alimentazione").asText() + " - " + motorizzazione.get("potenza").asText();
-                        // Aggiunta della stringa alla lista delle motorizzazioni
-                        motorizzazioni.add(motorizzazioneStr);
-                    });
-                }
-            }
+        JsonNode modelloNode = datiModelliAuto.get(marca).get("modelli").get(modello);
+        if (modelloNode != null && modelloNode.has("motorizzazioni")) {
+            modelloNode.get("motorizzazioni").forEach(motorizzazione -> {
+                String motorizzazioneStr = motorizzazione.get("alimentazione").asText() + " - " + motorizzazione.get("potenza").asText();
+                motorizzazioni.add(motorizzazioneStr);
+            });
         }
         return motorizzazioni;
     }
+
+
 
     //scelta motorizzazione vengono abilitate delle checkbox degli optional di cui il veicolo dispone
     public void onMotoSelected(ActionEvent event) {
@@ -448,28 +388,24 @@ public class CarConfiguratorController {
     // Data una marca e un modello vengono ritornato i dettagli delle motorizzazioni disponibili
     private List<Motorizzazione> getMotorizzazioniDetailsForModello(String marca, String modello) {
         List<Motorizzazione> motorizzazioni = new ArrayList<>();
-        JsonNode marcaNode = datiModelliAuto.get(marca.toLowerCase());
-        if (marcaNode != null) {
-            Iterator<JsonNode> modelliIterator = marcaNode.elements();
-            while (modelliIterator.hasNext()) {
-                JsonNode modelloNode = modelliIterator.next().get("modelli").get(0);
-                JsonNode modelloSpecificoNode = modelloNode.get(modello);
-                if (modelloSpecificoNode != null && modelloSpecificoNode.has("motorizzazioni")) {
-                    modelloSpecificoNode.get("motorizzazioni").forEach(motorizzazione -> {
-                        Motorizzazione motorizzazioneObj = new Motorizzazione(
-                                motorizzazione.get("cilindrata").asText(),
-                                motorizzazione.get("potenza").asText(),
-                                motorizzazione.get("coppia").asText(),
-                                motorizzazione.get("alimentazione").asText(),
-                                motorizzazione.get("prezzo").asText()
-                        );
-                        motorizzazioni.add(motorizzazioneObj);
-                    });
-                }
-            }
+        JsonNode modelloNode = datiModelliAuto.get(marca).get("modelli").get(modello);
+        if (modelloNode != null && modelloNode.has("motorizzazioni")) {
+            modelloNode.get("motorizzazioni").forEach(motorizzazione -> {
+                Motorizzazione motorizzazioneObj = new Motorizzazione(
+                        motorizzazione.get("cilindrata").asText(),
+                        motorizzazione.get("potenza").asText(),
+                        motorizzazione.get("coppia").asText(),
+                        motorizzazione.get("alimentazione").asText(),
+                        motorizzazione.get("prezzo").asText()
+                );
+                motorizzazioni.add(motorizzazioneObj);
+            });
+        } else {
+            System.err.println("Motorizzazioni non trovate per il modello: " + modello);
         }
         return motorizzazioni;
     }
+
 
     // quando l'utente clicca sul pulsante per salvare la configurazione
     @FXML
@@ -660,7 +596,6 @@ public class CarConfiguratorController {
             if (abbonamentoCheck.isSelected() && optional.contains("Abbonamento per ricarica")) {
                 prezzoDaAggiungere += estraiPrezzoDaStringa(optional);
             }
-            // Aggiungi altre condizioni per gli optional rimanenti come necessario
         }
 
         return prezzoDaAggiungere;
@@ -690,28 +625,22 @@ public class CarConfiguratorController {
     }
 
     private void stampaPrezzo (int prezzoFinale)    {
-            this.prezzo = prezzoFinale;
-            prezzoLbl.setText(prezzoFinale + " €");
+        this.prezzo = prezzoFinale;
+        prezzoLbl.setText(prezzoFinale + " €");
     }
     // Restituisce i modelli per la marca selezionata in una LISTA di stringhe
     private List<String> getModelliForMarca(String marca) {
         List<String> modelli = new ArrayList<>();
-        JsonNode marcaNode = datiModelliAuto.get(marca.toLowerCase());
+        JsonNode marcaNode = datiModelliAuto.get(marca);
         if (marcaNode != null) {
-            Iterator<JsonNode> modelliIterator = marcaNode.elements();
-            while (modelliIterator.hasNext()) {
-                JsonNode nextNode = modelliIterator.next();
-                JsonNode modelliNode = nextNode.get("modelli");
-                if (modelliNode != null && modelliNode.isArray() && modelliNode.size() > 0) {
-                    JsonNode primoModello = modelliNode.get(0);
-                    if (primoModello != null) {
-                        primoModello.fieldNames().forEachRemaining(modelli::add);
-                    }
-                }
+            JsonNode modelliNode = marcaNode.get("modelli");
+            if (modelliNode != null) {
+                modelliNode.fieldNames().forEachRemaining(modelli::add);
             }
         }
         return modelli;
     }
+
     // DAto il percorso dell'immagine, la carica
     private void loadImage(String path) {
         try {
@@ -751,6 +680,7 @@ public class CarConfiguratorController {
         alert.setTitle(title);
         alert.setHeaderText(null);
         alert.setContentText(content);
-        alert.show();
+        alert.showAndWait();
     }
+
 }
