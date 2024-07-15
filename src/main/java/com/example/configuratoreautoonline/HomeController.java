@@ -115,20 +115,16 @@ public class HomeController {
     }
     // Metodo per cambiare la scena al configuratore per una marca specifica
     private void changeSceneToConfiguratore(String fxmlFile, String marca) {
+        System.out.println("Configurazione per la marca: " + marca);
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlFile));
             Parent root = loader.load();
-
-            // Ottieni il controller associato alla nuova scena
             CarConfiguratorController controller = loader.getController();
-            controller.initData(marca);
+            controller.initData(marca, datiModelliAuto.get(marca));  // Passa i dati specifici della marca
 
-            // Ottieni lo Stage dalla scena corrente
             Stage currentStage = (Stage) pannelloAncora.getScene().getWindow();
-
             Scene scene = new Scene(root);
-
-            currentStage.setScene(scene); // Usa il currentStage
+            currentStage.setScene(scene);
             currentStage.show();
             currentStage.setFullScreen(true);
         } catch (IOException e) {
@@ -136,6 +132,7 @@ public class HomeController {
             e.printStackTrace();
         }
     }
+
 
     private void changeScene(String fxmlFile) {
         try {
@@ -181,11 +178,13 @@ public class HomeController {
         File jsonFile = new File("public/res/data/datiModelliAuto.json");
 
         try {
-            datiModelliAuto = objectMapper.readTree(jsonFile).get("datiModelliAuto");
+            JsonNode rootNode = objectMapper.readTree(jsonFile);
+            datiModelliAuto = rootNode.get("datiModelliAuto");  // Accedi direttamente all'oggetto principale
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
+
     // funzione per mostrare le marche disponibili per la configurazione
     public List<String> restituisciMarche() {
         List<String> marcheTrovate = new ArrayList<>();
@@ -209,18 +208,20 @@ public class HomeController {
     }
     // Metodo per aggiornare dinamicamente il menu "configura" con le marche disponibili
     private void updateConfiguraMenu() {
-        List<String> marche = restituisciMarche();
+        if (datiModelliAuto == null) {
+            return;  // Gestisci l'assenza di dati
+        }
 
-        // Pulisci il menu "configura" se ci sono già elementi
+        Iterator<String> marche = datiModelliAuto.fieldNames();
         configuraMenu.getItems().clear();
-
-        // Aggiungi ogni marca come un MenuItem nel menu "configura"
-        for (String marca : marche) {
+        while (marche.hasNext()) {
+            String marca = marche.next();
             MenuItem menuItem = new MenuItem(marca);
             menuItem.setOnAction(event -> handleConfiguraMarcaClick(event, marca));
             configuraMenu.getItems().add(menuItem);
         }
     }
+
     // Metodo per gestire il click su una marca nel menu "configura"
     private void handleConfiguraMarcaClick(ActionEvent event, String marca) {
         // Cambia la scena al configuratore per la marca specificata
@@ -290,22 +291,15 @@ public class HomeController {
     // aggiorna la visibilità degli elementi del menu in base all'utente che ha effetuato il login ( cliente, segretaria, responsabile )
     public void updateMenuVisibility() {
         UserSession session = UserSession.getInstance();
-        if (vediDettagliUtente != null) {
-            vediDettagliUtente.setVisible(session.isLoggato());
-        }
-        if(userNameMenu != null) {
-            userNameMenu.setVisible(session.isLoggato());
-        }
-        if(loginVisibilityMenu != null) {
-            loginVisibilityMenu.setVisible(!session.isLoggato());
-        }
-        if(gestisciDipendenti!=null)    {
-            gestisciDipendenti.setVisible(session.getPermessi()==3);
-        }
-        if(secretaryVisibilityMenu!=null)   {
-            secretaryVisibilityMenu.setVisible(session.getPermessi()>=2);
-        }
+        boolean isLoggedIn = session.isLoggato();
+        boolean isSecretaryOrHigher = session.getPermessi() >= 2;
+
+        loginVisibilityMenu.setVisible(!isLoggedIn);
+        userNameMenu.setVisible(isLoggedIn);
+        secretaryVisibilityMenu.setVisible(isSecretaryOrHigher);
+        gestisciDipendenti.setVisible(session.getPermessi() == 3); // Solo per responsabili
     }
+
     // Stampare gli errori
     private void showAlert(String title, String content) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -322,19 +316,32 @@ public class HomeController {
         updateMenuVisibility();
     }
     // Se utente vuole sloggarsi e rimuovere dal JSON il suo userame
+    // Se l'utente vuole sloggarsi e rimuovere dal JSON il suo username
     public void handleEliminaUtenteClick(ActionEvent actionEvent) {
-        // Clear the user session
-        UserSession.getInstance().setLoggato(false);
+        // Mostra un popup di conferma prima di procedere con l'eliminazione
+        Alert confirmAlert = new Alert(Alert.AlertType.CONFIRMATION);
+        confirmAlert.setTitle("Conferma Eliminazione");
+        confirmAlert.setHeaderText(null);
+        confirmAlert.setContentText("Sei sicuro di voler eliminare il tuo utente? Questa azione è irreversibile.");
 
-        rimuoviUtente(UserSession.getInstance().getEmail());
+        // Mostra l'Alert e attendi la risposta dell'utente
+        Optional<ButtonType> result = confirmAlert.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            // L'utente ha confermato l'eliminazione
+            rimuoviUtente(UserSession.getInstance().getEmail());
 
-        // Show a success popup
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Rimozione con Successo");
-        alert.setHeaderText(null);
-        alert.setContentText("Utente rimosso con successo");
-        alert.showAndWait();
+            // Mostra un messaggio di successo
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Rimozione con Successo");
+            alert.setHeaderText(null);
+            alert.setContentText("Utente rimosso con successo.");
+            alert.showAndWait();
+
+            // Aggiorna la visibilità del menu e altre UI se necessario
+            updateMenuVisibility();
+        }
     }
+
     // Rimuovi l'utente con l'email specificata dal file JSON
     private void rimuoviUtente(String email) {
         ObjectMapper mapper = new ObjectMapper();

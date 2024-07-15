@@ -250,46 +250,36 @@ public class InserisciVeicoloController {
         try {
             File file = new File("public/res/data/datiModelliAuto.json");
             JsonNode root = objectMapper.readTree(file);
-            ArrayNode datiModelliAutoNode = (ArrayNode) root.get("datiModelliAuto");
+            ObjectNode datiModelliAutoNode = (ObjectNode) root.get("datiModelliAuto");
 
-            boolean marcaTrovata = false;
-
-            // Cerca la marca nel JSON
-            for (JsonNode node : datiModelliAutoNode) {
-                if (node.has(marca.toLowerCase())) {
-                    marcaTrovata = true;
-                    ObjectNode marcaNode = (ObjectNode) node.get(marca.toLowerCase());
-
-                    // Crea il nuovo modello da aggiungere
-                    ObjectNode nuovoModello = creaModelloNode(objectMapper, modello, colori, optionals, motorizzazioni);
-
-                    // Aggiungi il modello alla marca esistente
-                    ArrayNode modelliArray = (ArrayNode) marcaNode.get("modelli");
-                    modelliArray.add(nuovoModello);
-                    break;
-                }
+            // Check if the brand exists
+            ObjectNode marcaNode = (ObjectNode) datiModelliAutoNode.get(marca.toLowerCase());
+            if (marcaNode == null) {
+                marcaNode = objectMapper.createObjectNode();
+                datiModelliAutoNode.set(marca.toLowerCase(), marcaNode);
             }
 
-            if (!marcaTrovata) {
-                // Crea una nuova marca
-                ObjectNode nuovaMarca = objectMapper.createObjectNode();
-                ArrayNode modelliArray = objectMapper.createArrayNode();
+            // Prepare the model node
+            ObjectNode modelloNode = marcaNode.with("modelli").objectNode();
 
-                // Crea il nuovo modello da aggiungere
-                ObjectNode nuovoModello = creaModelloNode(objectMapper, modello, colori, optionals, motorizzazioni);
-                modelliArray.add(nuovoModello);
-
-                nuovaMarca.set("modelli", modelliArray);
-
-                // Aggiungi la nuova marca alla radice del JSON
-                ObjectNode nuovaMarcaContainer = objectMapper.createObjectNode();
-                nuovaMarcaContainer.set(marca.toLowerCase(), nuovaMarca);
-
-                // Aggiungi la nuova marca all'array principale
-                datiModelliAutoNode.add(nuovaMarcaContainer);
+            modelloNode.set("colori", objectMapper.valueToTree(colori));
+            modelloNode.set("optionals", objectMapper.valueToTree(optionals));
+            ArrayNode motorizzazioniArray = modelloNode.putArray("motorizzazioni");
+            for (String motorizzazione : motorizzazioni) {
+                String[] parts = motorizzazione.split(", ");
+                ObjectNode motorizzazioneNode = motorizzazioniArray.addObject();
+                motorizzazioneNode.put("cilindrata", parts[0].trim());
+                motorizzazioneNode.put("potenza", parts[1].trim());
+                motorizzazioneNode.put("coppia", parts[2].trim());
+                motorizzazioneNode.put("alimentazione", parts[3].trim());
+                motorizzazioneNode.put("prezzo", parts[4].trim());
             }
+            modelloNode.put("percorsoImg", pathRadice + modello.toUpperCase() + "/");
 
-            // Scrivi i cambiamenti nel file JSON
+            // Insert the model node into the brand node
+            marcaNode.with("modelli").set(modello, modelloNode);
+
+            // Write changes back to the JSON file
             objectMapper.writerWithDefaultPrettyPrinter().writeValue(file, root);
 
         } catch (IOException e) {
@@ -297,6 +287,7 @@ public class InserisciVeicoloController {
             showAlert("Errore", "Impossibile scrivere i dati nel file JSON.");
         }
     }
+
 
     private ObjectNode creaModelloNode(ObjectMapper objectMapper, String modello, List<String> colori, List<String> optionals, List<String> motorizzazioni) {
         ObjectNode modelloNode = objectMapper.createObjectNode();

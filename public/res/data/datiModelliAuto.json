@@ -1,204 +1,124 @@
 {
-  "datiModelliAuto": [
-    {
-      "bmw": [
-        {
-          "modelli": [
-            {
-              "M2": {
-                "optionals": [
-                  "cerchi maggiorati €500",
-                  "vetri oscurati €800",
-                  "interni pelle €2590"
-                ],
-                "colori": [
-                  "Azzurro €400",
-                  "Grigio €500",
-                  "Rosso €800"
-                ],
-                "motorizzazioni": [
-                  {
-                    "cilindrata": "3.0 L",
-                    "potenza": "410 CV",
-                    "coppia": "550 Nm",
-                    "alimentazione": "Diesel",
-                    "prezzo": "70.000 EUR"
-                  },
-                  {
-                    "cilindrata": "3.0 L",
-                    "potenza": "450 CV",
-                    "coppia": "550 Nm",
-                    "alimentazione": "Benzina",
-                    "prezzo": "75.000 EUR"
-                  }
-                ],
-                "percorsoImg": "src/main/resources/img/BMW/M2/"
-              },
-              "XM": {
-                "optionals": [
-                  "cerchi neri €1000",
-                  "freni rossi €800",
-                  "impianto audio HarmanCardon €1500",
-                  "Abbonamento per ricarica €500"
-                ],
-                "colori": [
-                  "grigio €2000"
-                ],
-                "motorizzazioni": [
-                  {
-                    "cilindrata": "4.4 L",
-                    "potenza": "653 CV",
-                    "coppia": "800 Nm",
-                    "alimentazione": "Ibrida Plug-in",
-                    "prezzo": "150.000 EUR"
-                  },
-                  {
-                    "cilindrata": "3.2 L",
-                    "potenza": "150 CV",
-                    "coppia": "600 Nm",
-                    "alimentazione": "Elettrica",
-                    "prezzo": "130.000 EUR"
-                  }
-                ],
-                "percorsoImg": "src/main/resources/img/BMW/XM/"
-              }
-            }
-          ]
+  "datiModelliAuto" : {
+    "bmw" : {
+      "modelli" : {
+        "M2" : {
+          "optionals" : [ "cerchi maggiorati €500", "vetri oscurati €800", "interni pelle €2590" ],
+          "colori" : [ "Azzurro €400", "Grigio €500", "Rosso €800" ],
+          "motorizzazioni" : [ {
+            "cilindrata" : "3.0 L",
+            "potenza" : "410 CV",
+            "coppia" : "550 Nm",
+            "alimentazione" : "Diesel",
+            "prezzo" : "70.000 EUR"
+          }, {
+            "cilindrata" : "3.0 L",
+            "potenza" : "450 CV",
+            "coppia" : "550 Nm",
+            "alimentazione" : "Benzina",
+            "prezzo" : "75.000 EUR"
+          } ],
+          "percorsoImg" : "src/main/resources/img/BMW/M2/"
+        },
+        "XM" : {
+          "optionals" : [ "cerchi neri €1000", "freni rossi €800", "impianto audio HarmanCardon €1500", "Abbonamento per ricarica €500" ],
+          "colori" : [ "grigio €2000" ],
+          "motorizzazioni" : [ {
+            "cilindrata" : "4.4 L",
+            "potenza" : "653 CV",
+            "coppia" : "800 Nm",
+            "alimentazione" : "Ibrida Plug-in",
+            "prezzo" : "150.000 EUR"
+          }, {
+            "cilindrata" : "3.2 L",
+            "potenza" : "150 CV",
+            "coppia" : "600 Nm",
+            "alimentazione" : "Elettrica",
+            "prezzo" : "130.000 EUR"
+          } ],
+          "percorsoImg" : "src/main/resources/img/BMW/XM/"
         }
-      ],
-      "audi": [
-        {
-          "modelli": [
-            {
-              "RS3": {
-                "optionals": [
-                  "interni pelle €2500",
-                  "cerchi neri €1200",
-                  "vetri oscurati €400"
-                ],
-                "colori": [
-                  "giallo €1000",
-                  "grigio €1500",
-                  "nero €2000",
-                  "verde €1800"
-                ],
-                "motorizzazioni": [
-                  {
-                    "cilindrata": "2.5 L",
-                    "potenza": "400 CV",
-                    "coppia": "500 Nm",
-                    "alimentazione": "Benzina",
-                    "prezzo": "65.000 EUR"
-                  },
-                  {
-                    "cilindrata": "2.5 L",
-                    "potenza": "420 CV",
-                    "coppia": "500 Nm",
-                    "alimentazione": "Benzina",
-                    "prezzo": "68.000 EUR"
-                  }
-                ],
-                "percorsoImg": "src/main/resources/img/AUDI/RS3/"
-              },
-              "RS4": {
-                "optionals": [
-                  "interni pelle €2500",
-                  "cerchi neri €1200",
-                  "vetri oscurati €400"
-                ],
-                "colori": [
-                  "bianco €1000",
-                  "blu €1500",
-                  "grigio €2000"
-                ],
-                "motorizzazioni": [
-                  {
-                    "cilindrata": "2.9 L",
-                    "potenza": "450 CV",
-                    "coppia": "600 Nm",
-                    "alimentazione": "Benzina",
-                    "prezzo": "90.000 EUR"
-                  },
-                  {
-                    "cilindrata": "2.9 L",
-                    "potenza": "500 CV",
-                    "coppia": "600 Nm",
-                    "alimentazione": "Benzina",
-                    "prezzo": "95.000 EUR"
-                  }
-                ],
-                "percorsoImg": "src/main/resources/img/AUDI/RS4/"
-              }
-            }
-          ]
+      }
+    },
+    "audi" : {
+      "modelli" : {
+        "RS3" : {
+          "optionals" : [ "interni pelle €2500", "cerchi neri €1200", "vetri oscurati €400" ],
+          "colori" : [ "giallo €1000", "grigio €1500", "nero €2000", "verde €1800" ],
+          "motorizzazioni" : [ {
+            "cilindrata" : "2.5 L",
+            "potenza" : "400 CV",
+            "coppia" : "500 Nm",
+            "alimentazione" : "Benzina",
+            "prezzo" : "65.000 EUR"
+          }, {
+            "cilindrata" : "2.5 L",
+            "potenza" : "420 CV",
+            "coppia" : "500 Nm",
+            "alimentazione" : "Benzina",
+            "prezzo" : "68.000 EUR"
+          } ],
+          "percorsoImg" : "src/main/resources/img/AUDI/RS3/"
+        },
+        "RS4" : {
+          "optionals" : [ "interni pelle €2500", "cerchi neri €1200", "vetri oscurati €400" ],
+          "colori" : [ "bianco €1000", "blu €1500", "grigio €2000" ],
+          "motorizzazioni" : [ {
+            "cilindrata" : "2.9 L",
+            "potenza" : "450 CV",
+            "coppia" : "600 Nm",
+            "alimentazione" : "Benzina",
+            "prezzo" : "90.000 EUR"
+          }, {
+            "cilindrata" : "2.9 L",
+            "potenza" : "500 CV",
+            "coppia" : "600 Nm",
+            "alimentazione" : "Benzina",
+            "prezzo" : "95.000 EUR"
+          } ],
+          "percorsoImg" : "src/main/resources/img/AUDI/RS4/"
         }
-      ],
-      "alfa romeo": [
-        {
-          "modelli": [
-            {
-              "GIULIA": {
-                "optionals": [
-                  "cerchi maggiorati €1000",
-                  "freni rossi €800"
-                ],
-                "colori": [
-                  "grigio €1200",
-                  "rosso €1800",
-                  "verde €1600"
-                ],
-                "motorizzazioni": [
-                  {
-                    "cilindrata": "2.9 L",
-                    "potenza": "510 CV",
-                    "coppia": "600 Nm",
-                    "alimentazione": "Benzina",
-                    "prezzo": "85.000 EUR"
-                  },
-                  {
-                    "cilindrata": "2.0 L",
-                    "potenza": "280 CV",
-                    "coppia": "400 Nm",
-                    "alimentazione": "Benzina",
-                    "prezzo": "50.000 EUR"
-                  }
-                ],
-                "percorsoImg": "src/main/resources/img/ALFA/GIULIA/"
-              },
-              "STELVIO": {
-                "optionals": [
-                  "cerchi maggiorati €1000",
-                  "freni rossi €800",
-                  "interni pelle €3000",
-                  "Abbonamento per ricarica €500"
-                ],
-                "colori": [
-                  "blu €1500",
-                  "rosso €1800",
-                  "verde €1600"
-                ],
-                "motorizzazioni": [
-                  {
-                    "cilindrata": "2.9 L",
-                    "potenza": "510 CV",
-                    "coppia": "600 Nm",
-                    "alimentazione": "Elettrica",
-                    "prezzo": "95.000 EUR"
-                  },
-                  {
-                    "cilindrata": "2.0 L",
-                    "potenza": "280 CV",
-                    "coppia": "400 Nm",
-                    "alimentazione": "Benzina",
-                    "prezzo": "70.000 EUR"
-                  }
-                ],
-                "percorsoImg": "src/main/resources/img/ALFA/STELVIO/"
-              }
-            }
-          ]
+      }
+    },
+    "alfa romeo" : {
+      "modelli" : {
+        "GIULIA" : {
+          "optionals" : [ "cerchi maggiorati €1000", "freni rossi €800" ],
+          "colori" : [ "grigio €1200", "rosso €1800", "verde €1600" ],
+          "motorizzazioni" : [ {
+            "cilindrata" : "2.9 L",
+            "potenza" : "510 CV",
+            "coppia" : "600 Nm",
+            "alimentazione" : "Benzina",
+            "prezzo" : "85.000 EUR"
+          }, {
+            "cilindrata" : "2.0 L",
+            "potenza" : "280 CV",
+            "coppia" : "400 Nm",
+            "alimentazione" : "Benzina",
+            "prezzo" : "50.000 EUR"
+          } ],
+          "percorsoImg" : "src/main/resources/img/ALFA/GIULIA/"
+        },
+        "STELVIO" : {
+          "optionals" : [ "cerchi maggiorati €1000", "freni rossi €800", "interni pelle €3000", "Abbonamento per ricarica €500" ],
+          "colori" : [ "blu €1500", "rosso €1800", "verde €1600" ],
+          "motorizzazioni" : [ {
+            "cilindrata" : "2.9 L",
+            "potenza" : "510 CV",
+            "coppia" : "600 Nm",
+            "alimentazione" : "Elettrica",
+            "prezzo" : "95.000 EUR"
+          }, {
+            "cilindrata" : "2.0 L",
+            "potenza" : "280 CV",
+            "coppia" : "400 Nm",
+            "alimentazione" : "Benzina",
+            "prezzo" : "70.000 EUR"
+          } ],
+          "percorsoImg" : "src/main/resources/img/ALFA/STELVIO/"
         }
-      ]
+      }
     }
-  ]
+  }
 }
