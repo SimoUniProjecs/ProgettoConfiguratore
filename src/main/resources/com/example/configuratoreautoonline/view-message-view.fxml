@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox xmlns:fx="http://javafx.com/fxml" fx:controller="com.example.configuratoreautoonline.ViewMessageController" spacing="10" alignment="TOP_CENTER" style="-fx-padding: 20;">
+    <Label fx:id="mittenteLabel" text="Mittente: "/>
+    <Label fx:id="titoloLabel" text="Titolo: "/>
+    <TextArea fx:id="testoArea" editable="false"/>
+    <HBox spacing="10">
+        <Button text="Elimina" onAction="#handleDeleteMessage"/>
+        <Button text="Rispondi" onAction="#handleReplyMessage"/>
+        <Button text="Chiudi" onAction="#handleClose"/>
+    </HBox>
+</VBox>
